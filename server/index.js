@@ -5,7 +5,7 @@ const app = express();
 
 async function getData(app) {
     var pool = await conn;
-    const response = await pool.request().query("select * from Customer");
+    const response = await pool.request().query("select * from Disk");
     console.log(response.recordset);
 }
 
