@@ -11,7 +11,10 @@ const conn = new sql.ConnectionPool({
     },
 }).connect();
 
-module.exports = {
-    conn,
-    sql,
-};
+async function sqlQuery(query) {
+    const pool = await conn;
+    const response = await pool.request().query(query);
+    return response;
+}
+
+module.exports = sqlQuery;
