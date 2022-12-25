@@ -26,6 +26,15 @@ class Customer {
         const response = await sqlQuery(query);
         return response;
     }
+
+    async searchByName(name) {
+        const query = `
+            SELECT * FROM Customer
+            WHERE name LIKE '%${name}%'
+        `;
+        const response = await sqlQuery(query);
+        return response;
+    }
 }
 
 module.exports = Customer;

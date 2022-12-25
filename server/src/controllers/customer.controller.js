@@ -18,3 +18,20 @@ exports.createCustomer = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.searchCustomersByName = async (req, res, next) => {
+    try {
+        const { type, message, statusCode, customers } =
+            await customerService.searchCustomersByName(req.query.name);
+        if (type === statusType.error)
+            return next(new CustomerErrorHandler(statusCode, message));
+
+        return res.status(statusCode).json({
+            type,
+            message,
+            customers,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
