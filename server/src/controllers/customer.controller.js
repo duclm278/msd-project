@@ -52,3 +52,19 @@ exports.getCustomerById = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.deleteCustomer = async (req, res, next) => {
+    try {
+        const { type, message, statusCode } =
+            await customerService.deleteCustomer(req.params.id);
+        if (type === statusType.error)
+            return next(new CustomerErrorHandler(statusCode, message));
+
+        return res.status(statusCode).json({
+            type,
+            message,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
