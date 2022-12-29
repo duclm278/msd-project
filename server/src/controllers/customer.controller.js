@@ -35,3 +35,20 @@ exports.searchCustomersByName = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.getCustomerById = async (req, res, next) => {
+    try {
+        const { type, message, statusCode, customer } =
+            await customerService.getCustomerById(req.params.id);
+        if (type === statusType.error)
+            return next(new CustomerErrorHandler(statusCode, message));
+
+        return res.status(statusCode).json({
+            type,
+            message,
+            customer,
+        });
+    } catch (err) {
+        next(err);
+    }
+};

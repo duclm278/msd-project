@@ -1,0 +1,20 @@
+{
+  "name": "msd-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts client/start && nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmd278/msd-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lmd278/msd-project/issues"
+  },
+  "homepage": "https://github.com/lmd278/msd-project#readme"
+}

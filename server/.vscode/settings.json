@@ -1,0 +1,42 @@
+{
+    "sqltools.connections": [
+        {
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 1433,
+            "driver": "MSSQL",
+            "name": "Local sql server",
+            "database": "Restaurant",
+            "username": "sa",
+            "password": "251209"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Local mysql",
+            "database": "testdb",
+            "username": "mysqluser",
+            "password": "Quang251209"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "dellstore3",
+            "password": "251209",
+            "username": "postgres",
+            "name": "dellstore"
+        }
+    ]
+}

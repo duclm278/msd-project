@@ -2,11 +2,9 @@ const statusType = require("../constants/statusType");
 const Customer = require("../models/Customer");
 
 exports.createCustomer = async (body) => {
-    const customer = new Customer();
+    const email = await Customer.checkEmailExisted(body);
 
-    const email = await customer.checkEmailExisted(body);
-
-    if (email.recordset.length > 0) {
+    if (email.length > 0) {
         return {
             type: statusType.error,
             message: "Email is existed!",
@@ -14,7 +12,8 @@ exports.createCustomer = async (body) => {
         };
     }
 
-    const response = await customer.create(body);
+    await Customer.create(body);
+    
     return {
         type: statusType.success,
         message: "Create customer successfully!",
@@ -23,11 +22,9 @@ exports.createCustomer = async (body) => {
 };
 
 exports.searchCustomersByName = async (name) => {
-    const customer = new Customer();
+    const customers = await Customer.searchByName(name);
 
-    const response = await customer.searchByName(name);
-
-    if (response.recordset.length < 1) {
+    if (customers.length < 1) {
         return {
             type: statusType.error,
             message: "Customer is not existed!",
@@ -38,6 +35,16 @@ exports.searchCustomersByName = async (name) => {
         type: statusType.success,
         message: "Create customer successfully!",
         statusCode: 200,
-        customers: response.recordset,
+        customers: customers,
+    };
+};
+
+exports.getCustomerById = async (id) => {
+    const customer = await Customer.getCustomerById(id);
+    return {
+        type: statusType.success,
+        message: "Get customer detail successfully!",
+        statusCode: 200,
+        customer: customer[0],
     };
 };
