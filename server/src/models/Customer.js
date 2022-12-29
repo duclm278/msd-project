@@ -10,6 +10,7 @@ class Customer {
         return response;
     }
 
+
     async create(data) {
         const query = `
             INSERT INTO Customer (name, email, phone)
@@ -31,6 +32,15 @@ class Customer {
     async getCustomerById(id) {
         const query = `
             SELECT * FROM Customer
+            WHERE customer_id = ${id}
+        `;
+        const response = await sqlQuery(query);
+        return response;
+    }
+
+    async deleteCustomerById(id) {
+        const query = `
+            DELETE FROM Customer
             WHERE customer_id = ${id}
         `;
         const response = await sqlQuery(query);
