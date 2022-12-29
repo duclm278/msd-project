@@ -14,7 +14,7 @@ const conn = new sql.ConnectionPool({
 async function sqlQuery(query) {
     const pool = await conn;
     const response = await pool.request().query(query);
-    return response;
+    return response.recordset;
 }
 
 module.exports = sqlQuery;

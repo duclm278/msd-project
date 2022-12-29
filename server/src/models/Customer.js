@@ -1,14 +1,6 @@
 const sqlQuery = require("../database/connect");
 
 class Customer {
-    constructor(name, email, phone, point = null, rankId = null) {
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.point = point;
-        this.rankId = rankId;
-    }
-
     async checkEmailExisted({ email }) {
         const query = `
             SELECT * FROM Customer
@@ -29,12 +21,21 @@ class Customer {
 
     async searchByName(name) {
         const query = `
-            SELECT * FROM Customer
+            SELECT customer_id, name FROM Customer
             WHERE name LIKE '%${name}%'
+        `;
+        const response = await sqlQuery(query);
+        return response;
+    }
+
+    async getCustomerById(id) {
+        const query = `
+            SELECT * FROM Customer
+            WHERE customer_id = ${id}
         `;
         const response = await sqlQuery(query);
         return response;
     }
 }
 
-module.exports = Customer;
+module.exports = new Customer();
