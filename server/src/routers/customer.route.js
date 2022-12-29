@@ -4,6 +4,9 @@ const customerController = require("../controllers/customer.controller");
 
 router.post("/create", customerController.createCustomer);
 router.get("/search", customerController.searchCustomersByName);
-router.get("/:id", customerController.getCustomerById);
+router
+    .route("/:id")
+    .get(customerController.getCustomerById)
+    .delete(customerController.deleteCustomer);
 
 module.exports = router;
