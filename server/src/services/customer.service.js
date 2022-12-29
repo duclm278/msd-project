@@ -13,7 +13,7 @@ exports.createCustomer = async (body) => {
     }
 
     await Customer.create(body);
-    
+
     return {
         type: statusType.success,
         message: "Create customer successfully!",
@@ -31,6 +31,7 @@ exports.searchCustomersByName = async (name) => {
             statusCode: 400,
         };
     }
+
     return {
         type: statusType.success,
         message: "Create customer successfully!",
@@ -40,11 +41,30 @@ exports.searchCustomersByName = async (name) => {
 };
 
 exports.getCustomerById = async (id) => {
-    const customer = await Customer.getCustomerById(id);
+    const customers = await Customer.getCustomerById(id);
+
+    if (customers.length < 1) {
+        return {
+            type: statusType.error,
+            message: "Customer not found!",
+            statusCode: 400,
+        };
+    }
+
     return {
         type: statusType.success,
         message: "Get customer detail successfully!",
         statusCode: 200,
-        customer: customer[0],
+        customer: customers[0],
     };
 };
+
+exports.deleteCustomer = async (id) => {
+    await Customer.deleteCustomerById(id);
+
+    return {
+        type: statusType.success,
+        message: "Delete customer successfully!",
+        statusCode: 200,
+    };
+}
