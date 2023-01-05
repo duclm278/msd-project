@@ -22,7 +22,7 @@ import Radio from "@mui/joy/Radio";
 import Slider from "@mui/joy/Slider";
 import Sheet from "@mui/joy/Sheet";
 
-// Icons import
+// Icons
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";

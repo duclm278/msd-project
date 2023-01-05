@@ -11,7 +11,7 @@ import AspectRatio from "@mui/joy/AspectRatio";
 import Divider from "@mui/joy/Divider";
 import Avatar from "@mui/joy/Avatar";
 
-// Icons import
+// Icons
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import ForwardToInboxRoundedIcon from "@mui/icons-material/ForwardToInboxRounded";
 import FolderIcon from "@mui/icons-material/Folder";

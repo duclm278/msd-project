@@ -6,7 +6,7 @@ import Typography from "@mui/joy/Typography";
 import Input from "@mui/joy/Input";
 import IconButton from "@mui/joy/IconButton";
 
-// Icons import
+// Icons
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
