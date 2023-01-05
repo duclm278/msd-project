@@ -10,7 +10,6 @@ class Customer {
         return response;
     }
 
-
     async create(data) {
         const query = `
             INSERT INTO Customer (name, email, phone)
@@ -43,6 +42,34 @@ class Customer {
             DELETE FROM Customer
             WHERE customer_id = ${id}
         `;
+        const response = await sqlQuery(query);
+        return response;
+    }
+
+    async updateCustomerById(id, body) {
+        let query = `
+            UPDATE Customer
+            SET
+        `;
+        if (body.name) {
+            query += `name = '${body.name}',`;
+        }
+        if (body.email) {
+            query += `email = '${body.email}',`;
+        }
+        if (body.phone) {
+            query += `phone = '${body.phone}',`;
+        }
+        if (body.point) {
+            query += `point = ${body.point},`;
+        }
+        if (body.rank_id) {
+            query += `rank_id = ${body.rank_id},`;
+        }
+
+        query = query.substring(0, query.length - 1);
+        query += ` WHERE customer_id = ${id}`;
+        
         const response = await sqlQuery(query);
         return response;
     }

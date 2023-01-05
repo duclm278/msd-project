@@ -1,11 +1,11 @@
 const statusType = require("../constants/statusType");
-const customerService = require("../services/customer.service");
+const employeeService = require("../services/Employee.service");
 const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
 
-exports.createCustomer = async (req, res, next) => {
+exports.createEmployee = async (req, res, next) => {
     try {
         const { type, message, statusCode } =
-            await customerService.createCustomer(req.body);
+            await employeeService.createEmployee(req.body);
 
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
@@ -19,44 +19,27 @@ exports.createCustomer = async (req, res, next) => {
     }
 };
 
-exports.searchCustomersByName = async (req, res, next) => {
+exports.getEmployeeById = async (req, res, next) => {
     try {
-        const { type, message, statusCode, customers } =
-            await customerService.searchCustomersByName(req.query.name);
+        const { type, message, statusCode, employee } =
+            await employeeService.getEmployeeById(req.params.id);
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
 
         return res.status(statusCode).json({
             type,
             message,
-            customers,
+            employee,
         });
     } catch (err) {
         next(err);
     }
 };
 
-exports.getCustomerById = async (req, res, next) => {
-    try {
-        const { type, message, statusCode, customer } =
-            await customerService.getCustomerById(req.params.id);
-        if (type === statusType.error)
-            return next(new CustomErrorHandler(statusCode, message));
-
-        return res.status(statusCode).json({
-            type,
-            message,
-            customer,
-        });
-    } catch (err) {
-        next(err);
-    }
-};
-
-exports.deleteCustomer = async (req, res, next) => {
+exports.deleteEmployee = async (req, res, next) => {
     try {
         const { type, message, statusCode } =
-            await customerService.deleteCustomer(req.params.id);
+            await employeeService.deleteEmployee(req.params.id);
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
 
@@ -69,10 +52,10 @@ exports.deleteCustomer = async (req, res, next) => {
     }
 };
 
-exports.updateCustomer = async (req, res, next) => {
+exports.updateEmployee = async (req, res, next) => {
     try {
         const { type, message, statusCode } =
-            await customerService.updateCustomer(req.params.id, req.body);
+            await employeeService.updateEmployee(req.params.id, req.body);
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
 
