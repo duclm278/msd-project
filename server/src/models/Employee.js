@@ -1,9 +1,9 @@
 const sqlQuery = require("../database/connect");
 
-class Customer {
+class Employee {
     async checkEmailExisted({ email }) {
         const query = `
-            SELECT * FROM Customer
+            SELECT * FROM Employee
             WHERE email = '${email}'
         `;
         const response = await sqlQuery(query);
@@ -12,43 +12,34 @@ class Customer {
 
     async create(data) {
         const query = `
-            INSERT INTO Customer (name, email, phone)
-            VALUES ('${data.name}', '${data.email}', '${data.phone}')
+            INSERT INTO Employee (name, email, phone, address, password)
+            VALUES ('${data.name}', '${data.email}', '${data.phone}', '${data.address}', '${data.password}')
         `;
         const response = await sqlQuery(query);
         return response;
     }
 
-    async searchByName(name) {
+    async getEmployeeById(id) {
         const query = `
-            SELECT customer_id, name FROM Customer
-            WHERE name LIKE '%${name}%'
+            SELECT * FROM Employee
+            WHERE employee_id = ${id}
         `;
         const response = await sqlQuery(query);
         return response;
     }
 
-    async getCustomerById(id) {
+    async deleteEmployeeById(id) {
         const query = `
-            SELECT * FROM Customer
-            WHERE customer_id = ${id}
+            DELETE FROM Employee
+            WHERE employee_id = ${id}
         `;
         const response = await sqlQuery(query);
         return response;
     }
 
-    async deleteCustomerById(id) {
-        const query = `
-            DELETE FROM Customer
-            WHERE customer_id = ${id}
-        `;
-        const response = await sqlQuery(query);
-        return response;
-    }
-
-    async updateCustomerById(id, body) {
+    async updateEmployeeById(id, body) {
         let query = `
-            UPDATE Customer
+            UPDATE Employee
             SET
         `;
         if (body.name) {
@@ -60,19 +51,19 @@ class Customer {
         if (body.phone) {
             query += `phone = '${body.phone}',`;
         }
-        if (body.point) {
-            query += `point = ${body.point},`;
+        if (body.password) {
+            query += `password = '${body.password}',`;
         }
-        if (body.rank_id) {
-            query += `rank_id = ${body.rank_id},`;
+        if (body.address) {
+            query += `address = ${body.address},`;
         }
 
         query = query.substring(0, query.length - 1);
-        query += ` WHERE customer_id = ${id}`;
-        
+        query += ` WHERE employee_id = ${id}`;
+
         const response = await sqlQuery(query);
         return response;
     }
 }
 
-module.exports = new Customer();
+module.exports = new Employee();

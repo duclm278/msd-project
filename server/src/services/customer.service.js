@@ -34,7 +34,7 @@ exports.searchCustomersByName = async (name) => {
 
     return {
         type: statusType.success,
-        message: "Create customer successfully!",
+        message: "Search customer successfully!",
         statusCode: 200,
         customers: customers,
     };
@@ -67,4 +67,14 @@ exports.deleteCustomer = async (id) => {
         message: "Delete customer successfully!",
         statusCode: 200,
     };
-}
+};
+
+exports.updateCustomer = async (id, body) => {
+    await Customer.updateCustomerById(id, body);
+
+    return {
+        type: statusType.success,
+        message: "Update customer successfully!",
+        statusCode: 200,
+    };
+};

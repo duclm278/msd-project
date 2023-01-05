@@ -7,6 +7,7 @@ router.get("/search", customerController.searchCustomersByName);
 router
     .route("/:id")
     .get(customerController.getCustomerById)
+    .patch(customerController.updateCustomer)
     .delete(customerController.deleteCustomer);
 
 module.exports = router;
