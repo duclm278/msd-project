@@ -1,6 +1,5 @@
 import Box from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
-import React from "react";
 
 function Root(props) {
   return (
@@ -101,7 +100,7 @@ function Main(props) {
       component="main"
       className="Main"
       {...props}
-      sx={[{ p: 2 }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}
+      sx={[{ p: 4 }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}
     />
   );
 }
