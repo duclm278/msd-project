@@ -1,20 +1,22 @@
-const sql = require("mssql/msnodesqlv8");
 const config = require("../configs");
 
-const conn = new sql.ConnectionPool({
-    server: config.db.host_server,
-    driver: "msnodesqlv8",
+const Pool = require("pg").Pool;
+const pool = new Pool({
+    user: config.db.username,
+    host: config.db.host_server,
     database: config.db.database,
+    password: config.db.password,
     port: config.db.db_port,
-    options: {
-        trustedConnection: true,
-    },
-}).connect();
+});
 
-async function sqlQuery(query) {
-    const pool = await conn;
-    const response = await pool.request().query(query);
-    return response.recordset;
-}
+const sqlQuery = async (query) => {
+    const response = await pool.query(query);
+    return response.rows;
+};
+
+// const sqlQuery = async (query, params) => {
+//     const response = await pool.query(query, params);
+//     return response.rows;
+// };
 
 module.exports = sqlQuery;

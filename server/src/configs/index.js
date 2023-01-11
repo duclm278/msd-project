@@ -6,18 +6,11 @@ const config = {
         port: process.env.PORT,
     },
     db: {
-        host_server: process.env.HOST_SERVER,
+        host_server: process.env.DB_HOST_SERVER,
         database: process.env.DATABASE,
         db_port: process.env.DB_PORT,
-    },
-    jwt: {
-        jwt_secret: process.env.JWT_SECRET,
-        jwt_access_expiration_minutes: process.env.JWT_ACCES_EXPIRATION_MINUTES,
-        jwt_refresh_expiration_days: process.env.JWT_REFRESH_EXPIRATION_DAYS,
-        jwt_reset_password_expiration_minutes:
-            process.env.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
-        jwt_verify_email_expiration_minutes:
-            process.env.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD
     },
     email: {
         email_host: process.env.EMAIL_HOST,

@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-const config = require('../config/config');
+const config = require('../configs');
 const streamifier = require('streamifier');
 
 cloudinary.config({
