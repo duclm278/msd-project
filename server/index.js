@@ -3,8 +3,6 @@ const cors = require("cors");
 const xss = require("xss-clean");
 const compression = require("compression");
 const helmet = require("helmet");
-// const bodyParser = require("body-parser");
-// const methodOverride = require("method-override");
 const errorHandler = require("./src/middlewares/errorHandler");
 const config = require("./src/configs");
 
