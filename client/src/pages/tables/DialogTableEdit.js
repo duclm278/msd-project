@@ -93,9 +93,9 @@ export default function DialogTableEdit({
               </Button>
               <Button
                 type="button"
-                color="danger"
+                variant="soft"
+                color=""
                 onClick={(e) => handleDelete(e)}
-                // variant="soft"
                 startDecorator={<DeleteForeverRoundedIcon />}
                 sx={{ flex: 1 }}
               >
