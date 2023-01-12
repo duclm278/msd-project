@@ -14,15 +14,16 @@ class Customer {
         const query = `
             INSERT INTO Customer (name, email, phone)
             VALUES ('${data.name}', '${data.email}', '${data.phone}')
+            RETURNING *
         `;
         const response = await sqlQuery(query);
-        return response;
+        return response[0];
     }
 
     async searchByName(name) {
         const query = `
             SELECT customer_id, name FROM Customer
-            WHERE name LIKE '%${name}%'
+            WHERE lower(name) LIKE lower('%${name}%')
         `;
         const response = await sqlQuery(query);
         return response;
@@ -46,32 +47,35 @@ class Customer {
         return response;
     }
 
-    async updateCustomerById(id, body) {
+    async updateCustomerById(id, data) {
         let query = `
             UPDATE Customer
             SET
         `;
-        if (body.name) {
-            query += `name = '${body.name}',`;
+        if (data.name) {
+            query += `name = '${data.name}',`;
         }
-        if (body.email) {
-            query += `email = '${body.email}',`;
+        if (data.email) {
+            query += `email = '${data.email}',`;
         }
-        if (body.phone) {
-            query += `phone = '${body.phone}',`;
+        if (data.phone) {
+            query += `phone = '${data.phone}',`;
         }
-        if (body.point) {
-            query += `point = ${body.point},`;
+        if (data.point) {
+            query += `point = ${data.point},`;
         }
-        if (body.rank_id) {
-            query += `rank_id = ${body.rank_id},`;
+        if (data.rank_id) {
+            query += `rank_id = ${data.rank_id},`;
         }
 
         query = query.substring(0, query.length - 1);
-        query += ` WHERE customer_id = ${id}`;
-        
+        query += ` 
+            WHERE customer_id = ${id}
+            RETURNING *
+        `;
+
         const response = await sqlQuery(query);
-        return response;
+        return response[0];
     }
 }
 

@@ -5,5 +5,10 @@ const { uploadSingleFile } = require("../utils/multer");
 
 router.post("/create", uploadSingleFile("image"), diskController.createDisk);
 router.get("/", diskController.getListOfDisk);
+router.get("/search", diskController.searchDisk);
+router
+    .route("/:id")
+    .delete(diskController.deleteDisk)
+    .patch(uploadSingleFile("image"), diskController.updateDisk);
 
 module.exports = router;

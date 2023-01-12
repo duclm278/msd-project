@@ -4,7 +4,7 @@ const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
 
 exports.createEmployee = async (req, res, next) => {
     try {
-        const { type, message, statusCode } =
+        const { type, message, statusCode, employee } =
             await employeeService.createEmployee(req.body);
 
         if (type === statusType.error)
@@ -13,6 +13,7 @@ exports.createEmployee = async (req, res, next) => {
         return res.status(statusCode).json({
             type,
             message,
+            employee,
         });
     } catch (err) {
         next(err);
@@ -54,7 +55,7 @@ exports.deleteEmployee = async (req, res, next) => {
 
 exports.updateEmployee = async (req, res, next) => {
     try {
-        const { type, message, statusCode } =
+        const { type, message, statusCode, employee } =
             await employeeService.updateEmployee(req.params.id, req.body);
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
@@ -62,6 +63,7 @@ exports.updateEmployee = async (req, res, next) => {
         return res.status(statusCode).json({
             type,
             message,
+            employee,
         });
     } catch (err) {
         next(err);

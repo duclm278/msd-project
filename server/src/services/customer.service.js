@@ -12,12 +12,13 @@ exports.createCustomer = async (body) => {
         };
     }
 
-    await Customer.create(body);
+    const customer = await Customer.create(body);
 
     return {
         type: statusType.success,
         message: "Create customer successfully!",
         statusCode: 200,
+        customer,
     };
 };
 
@@ -70,11 +71,19 @@ exports.deleteCustomer = async (id) => {
 };
 
 exports.updateCustomer = async (id, body) => {
-    await Customer.updateCustomerById(id, body);
+    const customer = await Customer.updateCustomerById(id, body);
+
+    if (!customer)
+        return {
+            type: statusType.error,
+            message: "No customer found!",
+            statusCode: 200,
+        };
 
     return {
         type: statusType.success,
         message: "Update customer successfully!",
         statusCode: 200,
+        customer,
     };
 };

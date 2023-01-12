@@ -14,9 +14,10 @@ class Employee {
         const query = `
             INSERT INTO Employee (name, email, phone, address, password)
             VALUES ('${data.name}', '${data.email}', '${data.phone}', '${data.address}', '${data.password}')
+            RETURNING *
         `;
         const response = await sqlQuery(query);
-        return response;
+        return response[0];
     }
 
     async getEmployeeById(id) {
@@ -59,10 +60,13 @@ class Employee {
         }
 
         query = query.substring(0, query.length - 1);
-        query += ` WHERE employee_id = ${id}`;
+        query += ` 
+            WHERE employee_id = ${id}
+            RETURNING *    
+        `;
 
         const response = await sqlQuery(query);
-        return response;
+        return response[0];
     }
 }
 

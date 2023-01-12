@@ -10,12 +10,13 @@ exports.createTable = async (id, numberOfSeats) => {
             statusCode: 400,
         };
 
-    await Table.create(id, numberOfSeats);
+    const newTable = await Table.create(id, numberOfSeats);
 
     return {
         type: statusType.success,
         message: "Create table successfully!",
         statusCode: 200,
+        table: newTable,
     };
 };
 
@@ -29,12 +30,13 @@ exports.updateTable = async (id, body) => {
             statusCode: 404,
         };
 
-    await Table.update(id, body);
+    const newTable = await Table.update(id, body);
 
     return {
         type: statusType.success,
         message: "Update table successfully!",
         statusCode: 200,
+        table: newTable,
     };
 };
 

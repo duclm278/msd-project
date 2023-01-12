@@ -12,12 +12,13 @@ exports.createEmployee = async (body) => {
         };
     }
 
-    await Employee.create(body);
+    const employee = await Employee.create(body);
 
     return {
         type: statusType.success,
         message: "Create employee successfully!",
         statusCode: 200,
+        employee,
     };
 };
 
@@ -51,11 +52,19 @@ exports.deleteEmployee = async (id) => {
 };
 
 exports.updateEmployee = async (id, body) => {
-    await Employee.updateEmployeeById(id, body);
+    const employee = await Employee.updateEmployeeById(id, body);
+
+    if (!employee)
+        return {
+            type: statusType.error,
+            message: "No employee found!",
+            statusCode: 404,
+        };
 
     return {
         type: statusType.success,
         message: "Update employee successfully!",
         statusCode: 200,
+        employee,
     };
 };
