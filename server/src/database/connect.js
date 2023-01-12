@@ -14,9 +14,4 @@ const sqlQuery = async (query) => {
     return response.rows;
 };
 
-// const sqlQuery = async (query, params) => {
-//     const response = await pool.query(query, params);
-//     return response.rows;
-// };
-
 module.exports = sqlQuery;

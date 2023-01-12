@@ -16,12 +16,13 @@ class Table {
             SET IDENTITY_INSERT "Table" ON; 
 
             INSERT INTO "Table" (table_id, number_of_seats)
-            VALUES (${id}, ${numberOfSeats});
+            VALUES (${id}, ${numberOfSeats})
+            RETURNING *;
 
             SET IDENTITY_INSERT "Table" OFF; 
         `;
 
-        await sqlQuery(query);
+        return (await sqlQuery(query))[0];
     }
 
     async update(id, body) {
@@ -37,10 +38,13 @@ class Table {
         }
 
         query = query.substring(0, query.length - 1);
-        query += ` WHERE table_id = ${id}`;
+        query += ` 
+            WHERE table_id = ${id}
+            RETURNING *    
+        `;
 
         const response = await sqlQuery(query);
-        return response;
+        return response[0];
     }
 
     async delete(id) {

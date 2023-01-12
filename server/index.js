@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const errorHandler = require("./src/middlewares/errorHandler");
-const config = require("./src/configs");
 const xss = require("xss-clean");
 const compression = require("compression");
 const helmet = require("helmet");
+const errorHandler = require("./src/middlewares/errorHandler");
+const config = require("./src/configs");
 
 const mainRouter = require("./src/routers");
 
@@ -19,12 +19,12 @@ app.use(helmet());
 
 // Set body parser --> read data from body into req.body
 app.use(express.json());
+// app.use(methodOverride("_method"));
 app.use(
     express.urlencoded({
         extended: true,
     })
 );
-
 // Implement CORS
 app.use(cors());
 
@@ -33,7 +33,7 @@ app.use(xss());
 
 app.use(compression());
 
-app.use('/api/v1', mainRouter);
+app.use("/api/v1", mainRouter);
 
 // Handle if occur error
 app.use(errorHandler);

@@ -4,10 +4,8 @@ const tableService = require("../services/table.service");
 
 exports.createTable = async (req, res, next) => {
     try {
-        const { type, message, statusCode } = await tableService.createTable(
-            req.body.id,
-            req.body.numberOfSeats
-        );
+        const { type, message, statusCode, table } =
+            await tableService.createTable(req.body.id, req.body.numberOfSeats);
 
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
@@ -15,6 +13,7 @@ exports.createTable = async (req, res, next) => {
         res.status(statusCode).json({
             type,
             message,
+            table,
         });
     } catch (err) {
         next(err);
@@ -23,10 +22,8 @@ exports.createTable = async (req, res, next) => {
 
 exports.updateTable = async (req, res, next) => {
     try {
-        const { type, statusCode, message } = await tableService.updateTable(
-            req.params.id,
-            req.body
-        );
+        const { type, statusCode, message, table } =
+            await tableService.updateTable(req.params.id, req.body);
 
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
@@ -34,6 +31,7 @@ exports.updateTable = async (req, res, next) => {
         res.status(statusCode).json({
             type,
             message,
+            table,
         });
     } catch (err) {
         next(err);
