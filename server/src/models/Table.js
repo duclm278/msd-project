@@ -13,13 +13,9 @@ class Table {
 
     async create(id, numberOfSeats, tableStatus) {
         const query = `
-            SET IDENTITY_INSERT "Table" ON; 
-
             INSERT INTO "Table" (table_id, number_of_seats, table_status)
             VALUES (${id}, ${numberOfSeats}, '${tableStatus}')
             RETURNING *;
-
-            SET IDENTITY_INSERT "Table" OFF; 
         `;
 
         return (await sqlQuery(query))[0];
