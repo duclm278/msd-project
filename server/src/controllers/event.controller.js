@@ -1,15 +1,11 @@
+const eventService = require("../services/event.service");
 const statusType = require("../constants/statusType");
 const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
-const tableService = require("../services/table.service");
 
-exports.createTable = async (req, res, next) => {
+exports.createEvent = async (req, res, next) => {
     try {
-        const { type, message, statusCode, table } =
-            await tableService.createTable(
-                req.body.id,
-                req.body.numberOfSeats,
-                req.body.tableStatus
-            );
+        const { type, message, statusCode, event } =
+            await eventService.createEvent(req.body, req.file);
 
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
@@ -17,17 +13,17 @@ exports.createTable = async (req, res, next) => {
         res.status(statusCode).json({
             type,
             message,
-            table,
+            event,
         });
     } catch (err) {
         next(err);
     }
 };
 
-exports.updateTable = async (req, res, next) => {
+exports.getEventById = async (req, res, next) => {
     try {
-        const { type, statusCode, message, table } =
-            await tableService.updateTable(req.params.id, req.body);
+        const { type, message, statusCode, event } =
+            await eventService.getEventById(req.params.id);
 
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
@@ -35,17 +31,17 @@ exports.updateTable = async (req, res, next) => {
         res.status(statusCode).json({
             type,
             message,
-            table,
+            event,
         });
     } catch (err) {
         next(err);
     }
 };
 
-exports.getTableDetail = async (req, res, next) => {
+exports.updateEvent = async (req, res, next) => {
     try {
-        const { type, statusCode, message, table } =
-            await tableService.getTableDetail(req.params.id);
+        const { type, message, statusCode, event } =
+            await eventService.updateEvent(req.params.id, req.body, req.file);
 
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
@@ -53,16 +49,16 @@ exports.getTableDetail = async (req, res, next) => {
         res.status(statusCode).json({
             type,
             message,
-            table,
+            event,
         });
     } catch (err) {
         next(err);
     }
 };
 
-exports.deleteTable = async (req, res, next) => {
+exports.deleteEvent = async (req, res, next) => {
     try {
-        const { type, statusCode, message } = await tableService.deleteTable(
+        const { type, message, statusCode } = await eventService.deleteEvent(
             req.params.id
         );
 

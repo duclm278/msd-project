@@ -1,7 +1,7 @@
 const statusType = require("../constants/statusType");
 const Table = require("../models/Table");
 
-exports.createTable = async (id, numberOfSeats) => {
+exports.createTable = async (id, numberOfSeats, tableStatus) => {
     const table = await Table.checkTableIdExisted(id);
     if (table.length > 0)
         return {
@@ -10,7 +10,7 @@ exports.createTable = async (id, numberOfSeats) => {
             statusCode: 400,
         };
 
-    const newTable = await Table.create(id, numberOfSeats);
+    const newTable = await Table.create(id, numberOfSeats, tableStatus);
 
     return {
         type: statusType.success,
