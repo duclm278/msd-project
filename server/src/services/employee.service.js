@@ -1,10 +1,37 @@
 const statusType = require("../constants/statusType");
 const Employee = require("../models/Employee");
 
-exports.createEmployee = async (body) => {
-    const email = await Employee.checkEmailExisted(body);
+exports.employeeLogin = async (email, password) => {
+    const emailDoc = await Employee.checkEmailExisted(email);
 
-    if (email.length > 0) {
+    if (!emailDoc) {
+        return {
+            type: statusType.error,
+            message: "Email is not existed!",
+            statusCode: 404,
+        };
+    }
+
+    const response = await Employee.login({ email, password });
+
+    if (!response)
+        return {
+            type: statusType.error,
+            message: "Password is wrong!",
+            statusCode: 400,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Login!",
+        statusCode: 200,
+    };
+};
+
+exports.createEmployee = async (body) => {
+    const email = await Employee.checkEmailExisted(body.email);
+
+    if (email) {
         return {
             type: statusType.error,
             message: "Email is existed!",

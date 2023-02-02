@@ -35,7 +35,7 @@ class Customer {
             WHERE customer_id = ${id}
         `;
         const response = await sqlQuery(query);
-        return response;
+        return response[0];
     }
 
     async deleteCustomerById(id) {

@@ -71,16 +71,16 @@ exports.searchDisk = async (name) => {
 };
 
 exports.deleteDisk = async (id) => {
-    const disks = await Disk.getById(id);
+    const disk = await Disk.getById(id);
 
-    if (disks.length < 1)
+    if (!disk)
         return {
             type: statusType.error,
             message: "No disk found!",
             statusCode: 404,
         };
 
-    await destroyFileCloudinary(disks[0].image_id);
+    await destroyFileCloudinary(disk.image_id);
 
     await Disk.delete(id);
 
@@ -92,9 +92,9 @@ exports.deleteDisk = async (id) => {
 };
 
 exports.updateDisk = async (id, body, image) => {
-    const disks = await Disk.getById(id);
+    const disk = await Disk.getById(id);
 
-    if (disks.length < 1)
+    if (!disk)
         return {
             type: statusType.error,
             message: "No disk found!",
@@ -104,11 +104,11 @@ exports.updateDisk = async (id, body, image) => {
     const data = { ...body };
 
     if (image) {
-        await destroyFileCloudinary(disks[0].image_id);
+        await destroyFileCloudinary(disk.image_id);
         const folder = `Disks/${
             body.name
                 ? body.name.trim().split(" ").join("-")
-                : disks[0].disk_name.trim().split(" ").join("-")
+                : disk.disk_name.trim().split(" ").join("-")
         }`;
         const uploadImageResponse = await uploadFileCloudinary(
             image.buffer,
