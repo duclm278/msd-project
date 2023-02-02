@@ -7,11 +7,11 @@ import CloseRounded from "@mui/icons-material/CloseRounded";
 import FilterListRoundedIcon from "@mui/icons-material/FilterListRounded";
 
 // Custom
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-export default function SelectFilter({ filterOpts }) {
+export default function SelectFilter({ filterOpt, setFilterOpt, filterOpts }) {
   const filterRef = useRef(null);
-  const [filterOpt, setFilterOpt] = useState(null);
+
   return (
     <Select
       action={filterRef}
@@ -39,10 +39,11 @@ export default function SelectFilter({ filterOpts }) {
         indicator: null,
       })}
     >
-      <Option value="0">{filterOpts[0]}</Option>
-      <Option value="1">{filterOpts[1]}</Option>
-      <Option value="2">{filterOpts[2]}</Option>
-      <Option value="3">{filterOpts[3]}</Option>
+      {filterOpts.map((filterOpt) => (
+        <Option key={filterOpt} value={filterOpt}>
+          {filterOpt}
+        </Option>
+      ))}
     </Select>
   );
 }

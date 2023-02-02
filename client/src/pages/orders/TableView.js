@@ -1,37 +1,37 @@
 import TableFull from "./TableFull";
-import TableMini from "./TableMini";
 
 const rows = [
   {
     id: 100,
-    name: "Bill Gates",
     phone: "0123456789",
-    points: "100",
-    rank: "Bronze",
+    table: 1,
+    money: 100000,
+    status: "Canceled",
   },
   {
     id: 200,
-    name: "Elon Musk",
     phone: "0123456789",
-    points: "300",
-    rank: "Diamond",
+    table: 2,
+    money: 300000,
+    status: "Paid",
   },
   {
     id: 300,
-    name: "Jeff Bezos",
     phone: "0123456789",
-    points: "200",
-    rank: "Gold",
+    table: 3,
+    money: 200000,
+    status: "Paid",
   },
 ];
 
 const cols = [
   { field: "edit", headerName: "" },
+  { field: "no", headerName: "NO." },
   { field: "id", headerName: "ID" },
-  { field: "name", headerName: "NAME" },
   { field: "phone", headerName: "PHONE" },
-  { field: "points", headerName: "POINTS" },
-  { field: "rank", headerName: "RANK" },
+  { field: "table", headerName: "TABLE" },
+  { field: "money", headerName: "MONEY" },
+  { field: "status", headerName: "STATUS" },
 ];
 
 export default function TableView({ filterOpt }) {
@@ -42,7 +42,6 @@ export default function TableView({ filterOpt }) {
 
   return (
     <>
-      <TableMini rows={filterRows} />
       <TableFull rows={filterRows} cols={cols} />
     </>
   );

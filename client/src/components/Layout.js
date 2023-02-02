@@ -7,9 +7,14 @@ function Root(props) {
       {...props}
       sx={[
         {
-          display: "grid",
+          display: {
+            // xs: "flex",
+            xs: "grid",
+            sm: "grid",
+          },
+          // flexDirection: "column",
           gridTemplateColumns: {
-            xs: "1fr",
+            xs: "minmax(0, 1fr)",
             sm: "minmax(64px, 200px) minmax(450px, 1fr)",
             md: "minmax(160px, 300px) minmax(300px, 1fr)",
           },
@@ -99,6 +104,7 @@ function Main(props) {
     <Box
       component="main"
       className="Main"
+      flex={1}
       {...props}
       sx={[{ p: 4 }, ...(Array.isArray(props.sx) ? props.sx : [props.sx])]}
     />

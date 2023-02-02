@@ -2,36 +2,36 @@ import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
+import Input from "@mui/joy/Input";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Option from "@mui/joy/Option";
 import Select from "@mui/joy/Select";
 import Stack from "@mui/joy/Stack";
-import TextField from "@mui/joy/TextField";
 import Typography from "@mui/joy/Typography";
 
 // Icons
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
 // Custom
+import { useState } from "react";
 import { filterOpts } from ".";
 
-export default function DialogTableEdit({
-  name,
-  capacity,
-  status,
-  open,
-  setOpen,
-}) {
+export default function TableDialogEdit(props) {
+  const { open, setOpen } = props;
+  const [id, setId] = useState(props.id);
+  const [numberOfSeats, setNumberOfSeats] = useState(props.numberOfSeats);
+  const [tableStatus, setTableStatus] = useState(props.tableStatus);
+
   const handleSave = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     setOpen(() => false);
   };
 
   const handleDelete = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     setOpen(() => false);
   };
 
@@ -57,28 +57,38 @@ export default function DialogTableEdit({
         <form>
           <Stack>
             <Stack spacing={2}>
-              <TextField
-                name="name"
-                value={name}
-                label="Name"
-                placeholder="Name"
-                autoFocus
-                required
-              />
-              <TextField
-                name="capacity"
-                value={capacity}
-                label="Capacity"
-                placeholder="Number of seats"
-                required
-              />
+              <FormControl required>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  name="name"
+                  placeholder="Name"
+                  autoFocus
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
+              </FormControl>
+              <FormControl required>
+                <FormLabel>Capacity</FormLabel>
+                <Input
+                  name="capacity"
+                  placeholder="Number of seats"
+                  value={numberOfSeats}
+                  onChange={(e) => setNumberOfSeats(e.target.value)}
+                />
+              </FormControl>
               <FormControl>
                 <FormLabel>Status</FormLabel>
-                <Select defaultValue={status}>
-                  <Option value={filterOpts[0]}>{filterOpts[0]}</Option>
-                  <Option value={filterOpts[1]}>{filterOpts[1]}</Option>
-                  <Option value={filterOpts[2]}>{filterOpts[2]}</Option>
-                  <Option value={filterOpts[3]}>{filterOpts[3]}</Option>
+                <Select
+                  value={tableStatus}
+                  onChange={(e, newTableStatus) =>
+                    setTableStatus(newTableStatus)
+                  }
+                >
+                  {filterOpts.map((filterOpt) => (
+                    <Option key={filterOpt} value={filterOpt}>
+                      {filterOpt}
+                    </Option>
+                  ))}
                 </Select>
               </FormControl>
             </Stack>
@@ -94,7 +104,7 @@ export default function DialogTableEdit({
               <Button
                 type="button"
                 variant="soft"
-                color=""
+                color="danger"
                 onClick={(e) => handleDelete(e)}
                 startDecorator={<DeleteForeverRoundedIcon />}
                 sx={{ flex: 1 }}

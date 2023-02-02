@@ -10,9 +10,9 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 // Custom
 import { useState } from "react";
-import DialogTableEdit from "./DialogTableEdit";
+import TableDialogEdit from "./TableDialogEdit";
 
-export default function Table({ name, capacity, status }) {
+export default function Table({ id, numberOfSeats, tableStatus }) {
   const [openEdit, setOpenEdit] = useState(false);
 
   return (
@@ -39,14 +39,14 @@ export default function Table({ name, capacity, status }) {
               color: "primary.plainColor",
             }}
           >
-            {name}
+            {id}
           </Typography>
         </AspectRatio>
       </CardOverflow>
       <Box sx={{ pt: 2, display: "flex", alignItems: "center" }}>
         <Box sx={{ flex: 1 }}>
-          <Typography>Seats: {capacity}</Typography>
-          <Typography color="success">{status}</Typography>
+          <Typography>Seats: {numberOfSeats}</Typography>
+          <Typography sx={{ color: "success.400" }}>{tableStatus}</Typography>
         </Box>
         <IconButton
           variant="plain"
@@ -55,10 +55,10 @@ export default function Table({ name, capacity, status }) {
         >
           <EditOutlinedIcon />
         </IconButton>
-        <DialogTableEdit
-          name={name}
-          capacity={capacity}
-          status={status}
+        <TableDialogEdit
+          id={id}
+          numberOfSeats={numberOfSeats}
+          tableStatus={tableStatus}
           open={openEdit}
           setOpen={setOpenEdit}
         />

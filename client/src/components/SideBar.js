@@ -1,9 +1,6 @@
 import IconButton from "@mui/joy/IconButton";
 import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
-import ListItemButton from "@mui/joy/ListItemButton";
-import ListItemContent from "@mui/joy/ListItemContent";
-import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import ListSubheader from "@mui/joy/ListSubheader";
 
 // Icons
@@ -11,35 +8,7 @@ import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 // Custom
-import { NavLink } from "react-router-dom";
-
-function SideItem({ text, path, icon: ListItemIcon }) {
-  return (
-    <NavLink to={path} style={{ textDecoration: "none" }}>
-      {({ isActive }) =>
-        isActive ? (
-          <ListItem>
-            <ListItemButton variant="soft" color="primary">
-              <ListItemDecorator sx={{ color: "inherit" }}>
-                <ListItemIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{text}</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-        ) : (
-          <ListItem>
-            <ListItemButton>
-              <ListItemDecorator sx={{ color: "neutral.500" }}>
-                <ListItemIcon fontSize="small" />
-              </ListItemDecorator>
-              <ListItemContent>{text}</ListItemContent>
-            </ListItemButton>
-          </ListItem>
-        )
-      }
-    </NavLink>
-  );
-}
+import SideEntry from "./SideEntry";
 
 export default function SideBar() {
   return (
@@ -71,13 +40,13 @@ export default function SideBar() {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          <SideItem
+          <SideEntry
             text="Tables"
             path="/tables"
             icon={AssignmentIndRoundedIcon}
           />
-          <SideItem text="Menu" path="/menu" icon={AssignmentIndRoundedIcon} />
-          <SideItem
+          <SideEntry text="Menu" path="/menu" icon={AssignmentIndRoundedIcon} />
+          <SideEntry
             text="Orders"
             path="/orders"
             icon={AssignmentIndRoundedIcon}
@@ -102,19 +71,20 @@ export default function SideBar() {
             "& .JoyListItemButton-root": { p: "8px" },
           }}
         >
-          <SideItem
+          <SideEntry
             text="Events"
             path="/events"
             icon={AssignmentIndRoundedIcon}
           />
-          <SideItem
+          <SideEntry
             text="Members"
             path="/members"
             icon={AssignmentIndRoundedIcon}
           />
-          <SideItem
+          <SideEntry
             text="Report"
             path="/report"
+            isBeta
             icon={AssignmentIndRoundedIcon}
           />
         </List>

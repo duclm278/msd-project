@@ -9,14 +9,18 @@ import Add from "@mui/icons-material/Add";
 import { useContext, useState } from "react";
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
+import SelectFilter from "../../components/SelectFilter";
 import SideBar from "../../components/SideBar";
 import SideDrawer, { SideDrawerContext } from "../../components/SideDrawer";
-import DialogMemberAdd from "./DialogMemberAdd";
+import MemberDialogAdd from "./MemberDialogAdd";
 import TableView from "./TableView";
+
+export const filterOpts = ["Bronze", "Silver", "Gold", "Diamond"];
 
 export default function Members() {
   const { drawerOpen } = useContext(SideDrawerContext);
   const [openAdd, setOpenAdd] = useState(false);
+  const [currentOpt, setCurrentOpt] = useState(null);
 
   return (
     <>
@@ -62,16 +66,22 @@ export default function Members() {
               sx={{
                 my: 2,
                 display: "flex",
-                alignItems: "center",
+                flexDirection: { xs: "column", sm: "row" },
+                gap: 1,
                 justifyContent: "space-between",
               }}
             >
+              <SelectFilter
+                filterOpt={currentOpt}
+                setFilterOpt={setCurrentOpt}
+                filterOpts={filterOpts}
+              />
               <Button startDecorator={<Add />} onClick={() => setOpenAdd(true)}>
                 Add member
               </Button>
-              <DialogMemberAdd open={openAdd} setOpen={setOpenAdd} />
+              <MemberDialogAdd open={openAdd} setOpen={setOpenAdd} />
             </Box>
-            <TableView />
+            <TableView filterOpt={currentOpt} />
           </Box>
         </Layout.Main>
       </Layout.Root>

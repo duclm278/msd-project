@@ -10,17 +10,18 @@ import Add from "@mui/icons-material/Add";
 import { useContext, useState } from "react";
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
+import SelectFilter from "../../components/SelectFilter";
 import SideBar from "../../components/SideBar";
 import SideDrawer, { SideDrawerContext } from "../../components/SideDrawer";
-import DialogTableAdd from "./DialogTableAdd";
-import SelectFilter from "./SelectFilter";
 import Table from "./Table";
+import TableDialogAdd from "./TableDialogAdd";
 
 export const filterOpts = ["Available", "Reserved", "Occupied", "Out of Order"];
 
 export default function Tables() {
   const { drawerOpen } = useContext(SideDrawerContext);
   const [openAdd, setOpenAdd] = useState(false);
+  const [filterOpt, setFilterOpt] = useState(null);
 
   return (
     <>
@@ -70,17 +71,22 @@ export default function Tables() {
                 justifyContent: "space-between",
               }}
             >
-              <SelectFilter filterOpts={filterOpts} />
+              <SelectFilter
+                filterOpt={filterOpt}
+                setFilterOpt={setFilterOpt}
+                filterOpts={filterOpts}
+              />
               <Button startDecorator={<Add />} onClick={() => setOpenAdd(true)}>
                 Add table
               </Button>
-              <DialogTableAdd open={openAdd} setOpen={setOpenAdd} />
+              <TableDialogAdd open={openAdd} setOpen={setOpenAdd} />
             </Box>
             <Divider />
           </Box>
           <Box
             sx={{
               mt: 3,
+              px: 0.25,
               display: "grid",
               gridTemplateColumns: {
                 xs: "repeat(auto-fill, minmax(160px, 1fr))",
@@ -92,7 +98,7 @@ export default function Tables() {
           >
             {[...Array(12).keys()].map((index) => (
               <div key={index}>
-                <Table name="A1" capacity={4} status="Available" />
+                <Table id="01" numberOfSeats={4} tableStatus={filterOpts[0]} />
               </div>
             ))}
           </Box>
