@@ -22,7 +22,7 @@ class Disk {
             SELECT * FROM Disk
             WHERE disk_id = ${id}
         `;
-        return await sqlQuery(query);
+        return (await sqlQuery(query))[0];
     }
 
     async searchByName(name) {

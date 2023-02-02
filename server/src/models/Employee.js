@@ -1,13 +1,22 @@
 const sqlQuery = require("../database/connect");
 
 class Employee {
-    async checkEmailExisted({ email }) {
+    async login({ email, password }) {
+        const query = `
+            SELECT * FROM Employee
+            WHERE email = '${email}' and password = '${password}'
+        `;
+        const response = await sqlQuery(query);
+        return response[0];
+    }
+
+    async checkEmailExisted(email) {
         const query = `
             SELECT * FROM Employee
             WHERE email = '${email}'
         `;
         const response = await sqlQuery(query);
-        return response;
+        return response[0];
     }
 
     async create(data) {

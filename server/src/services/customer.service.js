@@ -42,9 +42,9 @@ exports.searchCustomersByName = async (name) => {
 };
 
 exports.getCustomerById = async (id) => {
-    const customers = await Customer.getCustomerById(id);
+    const customer = await Customer.getCustomerById(id);
 
-    if (customers.length < 1) {
+    if (!customer) {
         return {
             type: statusType.error,
             message: "Customer not found!",
@@ -56,7 +56,7 @@ exports.getCustomerById = async (id) => {
         type: statusType.success,
         message: "Get customer detail successfully!",
         statusCode: 200,
-        customer: customers[0],
+        customer: customer,
     };
 };
 
