@@ -7,7 +7,6 @@ const categoryRouter = require("./category.route");
 const eventRouter = require("./event.route");
 const comboRouter = require("./combo.route");
 const orderRouter = require("./order.route");
-const discountRouter = require("./discount.route");
 const router = express.Router();
 
 router.use("/customer", customerRouter);
@@ -18,6 +17,5 @@ router.use("/category", categoryRouter);
 router.use("/event", eventRouter);
 router.use("/combo", comboRouter);
 router.use("/order", orderRouter);
-router.use("/discount", discountRouter);
 
 module.exports = router;

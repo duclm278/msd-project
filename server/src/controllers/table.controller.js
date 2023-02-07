@@ -60,6 +60,24 @@ exports.getTableDetail = async (req, res, next) => {
     }
 };
 
+exports.getTableList = async (req, res, next) => {
+    try {
+        const { type, statusCode, message, tables } =
+            await tableService.getTableList();
+
+        if (type === statusType.error)
+            return next(new CustomErrorHandler(statusCode, message));
+
+        res.status(statusCode).json({
+            type,
+            message,
+            tables,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
 exports.deleteTable = async (req, res, next) => {
     try {
         const { type, statusCode, message } = await tableService.deleteTable(

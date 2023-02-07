@@ -11,6 +11,16 @@ class Table {
         return response;
     }
 
+    async getTableList() {
+        const query = `
+            SELECT * FROM "Table"
+            ORDER BY table_id
+        `;
+
+        const response = await sqlQuery(query);
+        return response;
+    }
+
     async create(id, numberOfSeats, tableStatus) {
         const query = `
             INSERT INTO "Table" (table_id, number_of_seats, table_status)
@@ -24,19 +34,11 @@ class Table {
     async update(id, body) {
         let query = `
             UPDATE "Table"
-            SET
-        `;
-        if (body.numberOfSeats) {
-            query += `number_of_seats = '${body.numberOfSeats}',`;
-        }
-        if (body.status) {
-            query += `table_status = '${body.status}',`;
-        }
-
-        query = query.substring(0, query.length - 1);
-        query += ` 
+            SET 
+                number_of_seats = '${body.numberOfSeats}',
+                table_status = '${body.tableStatus}'
             WHERE table_id = ${id}
-            RETURNING *    
+            RETURNING *
         `;
 
         const response = await sqlQuery(query);
@@ -44,7 +46,7 @@ class Table {
     }
 
     async delete(id) {
-        let query = `
+        const query = `
             DELETE FROM "Table"
             WHERE table_id = ${id}
         `;

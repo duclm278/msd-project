@@ -1,28 +1,32 @@
 import httpRequest from "./httpRequest";
 
-const PREFIX = "table";
+const PREFIX = "combo";
 
-const tableApi = {
-    createTable: (data) => {
+const comboApi = {
+    create(data) {
         const url = `${PREFIX}/create`;
         return httpRequest.post(url, data);
     },
-    updateTable: (id, data) => {
-        const url = `${PREFIX}/${id}`;
-        return httpRequest.patch(url, data);
+    search(name) {
+        const url = `${PREFIX}/search`;
+        return httpRequest.get(url, { params: { name } });
     },
-    getTableById: (id) => {
+    getComboById(id) {
         const url = `${PREFIX}/${id}`;
         return httpRequest.get(url);
     },
-    getTableList: () => {
+    getListOfCombo() {
         const url = `${PREFIX}`;
         return httpRequest.get(url);
     },
-    deleteTableById: (id) => {
+    delete(id) {
         const url = `${PREFIX}/${id}`;
         return httpRequest.delete(url);
     },
+    update(id, data) {
+        const url = `${PREFIX}/${id}`;
+        return httpRequest.patch(url, data);
+    },
 };
 
-export default tableApi;
+export default comboApi;

@@ -25,6 +25,7 @@ exports.employeeLogin = async (email, password) => {
         type: statusType.success,
         message: "Login!",
         statusCode: 200,
+        employee: response
     };
 };
 

@@ -49,6 +49,8 @@ exports.deleteOrder = async (orderId) => {
             statusCode: 404,
         };
 
+    await Order.deleteDisk(orderId);
+    await Order.deleteCombo(orderId);
     await Order.delete(orderId);
 
     return {

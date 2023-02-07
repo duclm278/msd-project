@@ -9,6 +9,7 @@ router.get("/search", diskController.searchDisk);
 router
     .route("/:id")
     .delete(diskController.deleteDisk)
-    .patch(uploadSingleFile("image"), diskController.updateDisk);
+    .patch(uploadSingleFile("image"), diskController.updateDisk)
+    .get(diskController.getDiskDetail);
 
 module.exports = router;

@@ -52,6 +52,24 @@ exports.getListOfDisks = async () => {
     };
 };
 
+exports.getDiskDetail = async (id) => {
+    const disk = await Disk.getById(id);
+
+    if (!disk)
+        return {
+            type: statusType.error,
+            message: "No disk found!",
+            statusCode: 404,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Disk found!",
+        statusCode: 200,
+        disk,
+    };
+};
+
 exports.searchDisk = async (name) => {
     const disks = await Disk.searchByName(name);
 

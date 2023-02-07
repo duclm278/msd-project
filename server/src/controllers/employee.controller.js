@@ -4,7 +4,7 @@ const CustomErrorHandler = require("../middlewares/CustomErrorHandler");
 
 exports.login = async (req, res, next) => {
     try {
-        const { type, message, statusCode } =
+        const { type, message, statusCode, employee } =
             await employeeService.employeeLogin(
                 req.body.email,
                 req.body.password
@@ -16,6 +16,7 @@ exports.login = async (req, res, next) => {
         return res.status(statusCode).json({
             type,
             message,
+            employee,
         });
     } catch (err) {
         next(err);
