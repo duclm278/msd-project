@@ -35,6 +35,15 @@ class Category {
 
         await sqlQuery(query);
     }
+
+    async checkId(name) {
+        const query = `
+            SELECT category_id FROM Category
+            WHERE lower(category_name) like lower('%${name}%')
+        `;
+
+        return (await sqlQuery(query))[0].category_id;
+    }
 }
 
 module.exports = new Category();

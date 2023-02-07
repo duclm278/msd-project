@@ -12,8 +12,6 @@ import { useRef } from "react";
 export default function SelectFilter({ filterOpt, setFilterOpt, filterOpts }) {
     const filterRef = useRef(null);
 
-    console.log(filterOpts);
-
     return (
         <Select
             action={filterRef}

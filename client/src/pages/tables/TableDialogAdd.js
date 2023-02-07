@@ -17,7 +17,6 @@ import { useState } from "react";
 import { filterOpts } from ".";
 import tableApi from "../../api/tableApi";
 import status from "../../constants/status";
-import Loading from "../../components/Loading";
 
 export default function TableDialogAdd({
     open,

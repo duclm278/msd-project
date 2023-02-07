@@ -1,4 +1,5 @@
 const statusType = require("../constants/statusType");
+const Category = require("../models/Category");
 const Disk = require("../models/Disk");
 const {
     uploadFileCloudinary,
@@ -20,6 +21,10 @@ exports.createDisk = async (data, image) => {
         folder
     );
 
+    data.categoryId = await Category.checkId(data.category);
+
+    console.log(data.categoryId);
+
     const disk = await Disk.create(
         data,
         imageUploadResponse.secure_url,
@@ -28,7 +33,7 @@ exports.createDisk = async (data, image) => {
 
     return {
         type: statusType.success,
-        message: "Create disk successfully!",
+        message: "Disk created!",
         statusCode: 200,
         disk,
     };
@@ -46,7 +51,7 @@ exports.getListOfDisks = async () => {
 
     return {
         type: statusType.success,
-        message: "Get list of disk!",
+        message: "Disk found!",
         statusCode: 200,
         disks,
     };
