@@ -8,19 +8,19 @@ function Menu({ control, menus, id }) {
   const buttonRef = useRef(null);
   const menuActions = useRef(null);
 
-  const handleButtonClick = (event) => {
+  const handleButtonClick = (e) => {
     if (isOpen) {
       setAnchorEl(null);
     } else {
-      setAnchorEl(event.currentTarget);
+      setAnchorEl(e.currentTarget);
     }
   };
 
-  const handleButtonKeyDown = (event) => {
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-      event.preventDefault();
-      setAnchorEl(event.currentTarget);
-      if (event.key === "ArrowUp") {
+  const handleButtonKeyDown = (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      setAnchorEl(e.currentTarget);
+      if (e.key === "ArrowUp") {
         menuActions.current?.highlightLastItem();
       }
     }

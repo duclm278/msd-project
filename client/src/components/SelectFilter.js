@@ -25,8 +25,8 @@ export default function SelectFilter({ filterOpt, setFilterOpt, filterOpts }) {
             size="sm"
             variant="plain"
             color="neutral"
-            onMouseDown={(event) => {
-              event.stopPropagation();
+            onMouseDown={(e) => {
+              e.stopPropagation();
             }}
             onClick={() => {
               setFilterOpt(null);

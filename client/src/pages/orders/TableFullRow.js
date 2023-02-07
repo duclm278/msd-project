@@ -6,7 +6,13 @@ import Typography from "@mui/joy/Typography";
 // Icons
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
+// Custom
+import { useState } from "react";
+import OrderDialogEdit from "./OrderDialogEdit";
+
 export default function TableFullRow({ no, data }) {
+  const [openEdit, setOpenEdit] = useState(false);
+
   return (
     <>
       <Box>
@@ -14,11 +20,20 @@ export default function TableFullRow({ no, data }) {
           size="md"
           variant="plain"
           color="neutral"
-          // onClick={() => setOpenEdit(true)}
+          onClick={() => setOpenEdit(true)}
           sx={{ color: "#fff" }}
         >
           <EditOutlinedIcon color="primary" />
         </IconButton>
+        <OrderDialogEdit
+          id={data.id}
+          phone={data.phone}
+          table={data.table}
+          eventName={data.eventName}
+          reservedTime={data.reservedTime}
+          open={openEdit}
+          setOpen={setOpenEdit}
+        />
       </Box>
       <Stack justifyContent="center">
         <Typography level="body2">{no}</Typography>
