@@ -1,0 +1,4 @@
+/* Fix autocomplete component */
+ul[role="listbox"] {
+  z-index: 9999;
+}

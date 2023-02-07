@@ -9,8 +9,13 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 
 // Custom
 import SideEntry from "./SideEntry";
+import { useState } from "react";
 
 export default function SideBar() {
+  // TODO: Support global state
+  const [open1, setOpen1] = useState(true);
+  const [open2, setOpen2] = useState(true);
+
   return (
     <List
       size="sm"
@@ -29,29 +34,40 @@ export default function SideBar() {
             size="sm"
             variant="plain"
             color="primary"
+            onClick={() => setOpen1(!open1)}
             sx={{ "--IconButton-size": "24px", ml: "auto" }}
           >
-            <KeyboardArrowDownRoundedIcon fontSize="small" color="primary" />
+            <KeyboardArrowDownRoundedIcon
+              fontSize="small"
+              color="primary"
+              sx={{ transform: open1 ? "initial" : "rotate(-90deg)" }}
+            />
           </IconButton>
         </ListSubheader>
-        <List
-          aria-labelledby="nav-list-browse"
-          sx={{
-            "& .JoyListItemButton-root": { p: "8px" },
-          }}
-        >
-          <SideEntry
-            text="Tables"
-            path="/tables"
-            icon={AssignmentIndRoundedIcon}
-          />
-          <SideEntry text="Menu" path="/menu" icon={AssignmentIndRoundedIcon} />
-          <SideEntry
-            text="Orders"
-            path="/orders"
-            icon={AssignmentIndRoundedIcon}
-          />
-        </List>
+        {open1 && (
+          <List
+            aria-labelledby="nav-list-browse"
+            sx={{
+              "& .JoyListItemButton-root": { p: "8px" },
+            }}
+          >
+            <SideEntry
+              text="Tables"
+              path="/tables"
+              icon={AssignmentIndRoundedIcon}
+            />
+            <SideEntry
+              text="Menu"
+              path="/menu"
+              icon={AssignmentIndRoundedIcon}
+            />
+            <SideEntry
+              text="Orders"
+              path="/orders"
+              icon={AssignmentIndRoundedIcon}
+            />
+          </List>
+        )}
       </ListItem>
       <ListItem nested sx={{ mt: 2 }}>
         <ListSubheader>
@@ -60,34 +76,41 @@ export default function SideBar() {
             size="sm"
             variant="plain"
             color="primary"
+            onClick={() => setOpen2(!open2)}
             sx={{ "--IconButton-size": "24px", ml: "auto" }}
           >
-            <KeyboardArrowDownRoundedIcon fontSize="small" color="primary" />
+            <KeyboardArrowDownRoundedIcon
+              fontSize="small"
+              color="primary"
+              sx={{ transform: open2 ? "initial" : "rotate(-90deg)" }}
+            />
           </IconButton>
         </ListSubheader>
-        <List
-          aria-labelledby="nav-list-browse"
-          sx={{
-            "& .JoyListItemButton-root": { p: "8px" },
-          }}
-        >
-          <SideEntry
-            text="Events"
-            path="/events"
-            icon={AssignmentIndRoundedIcon}
-          />
-          <SideEntry
-            text="Members"
-            path="/members"
-            icon={AssignmentIndRoundedIcon}
-          />
-          <SideEntry
-            text="Report"
-            path="/report"
-            isBeta
-            icon={AssignmentIndRoundedIcon}
-          />
-        </List>
+        {open2 && (
+          <List
+            aria-labelledby="nav-list-browse"
+            sx={{
+              "& .JoyListItemButton-root": { p: "8px" },
+            }}
+          >
+            <SideEntry
+              text="Events"
+              path="/events"
+              icon={AssignmentIndRoundedIcon}
+            />
+            <SideEntry
+              text="Members"
+              path="/members"
+              icon={AssignmentIndRoundedIcon}
+            />
+            <SideEntry
+              text="Report"
+              path="/report"
+              isBeta
+              icon={AssignmentIndRoundedIcon}
+            />
+          </List>
+        )}
       </ListItem>
     </List>
   );
