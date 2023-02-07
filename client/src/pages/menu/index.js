@@ -3,12 +3,13 @@ import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+import Loading from "../../components/Loading";
 
 // Icons
 import Add from "@mui/icons-material/Add";
 
 // Custom
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
 import SelectFilter from "../../components/SelectFilter";
@@ -18,13 +19,16 @@ import ComboDialogAdd from "./ComboDialogAdd";
 import ComboGroup from "./ComboGroup";
 import DiskDialogAdd from "./DiskDialogAdd";
 import DiskGroup from "./DiskGroup";
+import comboApi from "../../api/comboApi";
+import diskApi from "../../api/diskApi";
+import status from "../../constants/status";
 
-export const comboOpt = "Combo";
+const comboOpt = "Combo";
 
 export const diskOpts = [
-    "Appetizer",
+    "Appetize/Starters",
     "Breakfast",
-    "Main Menu",
+    "Main Menu (Lunch/Dinner)",
     "Dessert",
     "Beverage",
 ];
@@ -36,6 +40,37 @@ export default function Menu() {
     const [openDiskAdd, setOpenDiskAdd] = useState(false);
     const [openComboAdd, setOpenComboAdd] = useState(false);
     const [currentOpt, setCurrentOpt] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [disks, setDisks] = useState([]);
+    const [combos, setCombos] = useState([]);
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const response = await comboApi.getListOfCombo();
+            if (response?.data?.type === status.success) {
+                setCombos(response?.data?.combos);
+            }
+        } catch (err) {
+            console.log(err.response?.data?.message);
+        }
+
+        try {
+            const response = await diskApi.getListOfDisk();
+            if (response?.data?.type === status.success) {
+                setDisks(response?.data?.disks);
+            }
+        } catch (err) {
+            console.log(err.response?.data?.message);
+        }
+
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchData();
+        // eslint-disable-next-line
+    }, []);
 
     return (
         <>
@@ -105,6 +140,8 @@ export default function Menu() {
                                 <DiskDialogAdd
                                     open={openDiskAdd}
                                     setOpen={setOpenDiskAdd}
+                                    setLoading={setLoading}
+                                    fetchData={fetchData}
                                 />
                                 <Button
                                     startDecorator={<Add />}
@@ -120,24 +157,43 @@ export default function Menu() {
                         </Stack>
                         <Divider />
                     </Box>
-                    <Box px={0.25}>
-                        {currentOpt === null ? (
-                            filterOpts.map((filterOpt) =>
-                                filterOpt === comboOpt ? (
-                                    <ComboGroup key={filterOpt} />
-                                ) : (
-                                    <DiskGroup
-                                        key={filterOpt}
-                                        category={filterOpt}
-                                    />
+                    {loading && <Loading />}
+                    {!loading && (
+                        <Box px={0.25}>
+                            {currentOpt === null ? (
+                                filterOpts.map((filterOpt) =>
+                                    filterOpt === comboOpt ? (
+                                        <ComboGroup
+                                            key={filterOpt}
+                                            combos={combos}
+                                            fetchData={fetchData}
+                                            setLoading={setLoading}
+                                        />
+                                    ) : (
+                                        <DiskGroup
+                                            key={filterOpt}
+                                            category={filterOpt}
+                                            disks={disks}
+                                            fetchData={fetchData}
+                                            setLoading={setLoading}
+                                        />
+                                    )
                                 )
-                            )
-                        ) : currentOpt === comboOpt ? (
-                            <ComboGroup key={currentOpt} />
-                        ) : (
-                            <DiskGroup key={currentOpt} category={currentOpt} />
-                        )}
-                    </Box>
+                            ) : currentOpt === comboOpt ? (
+                                <ComboGroup
+                                    key={currentOpt}
+                                    combos={combos}
+                                    fetchData={fetchData}
+                                />
+                            ) : (
+                                <DiskGroup
+                                    key={currentOpt}
+                                    category={currentOpt}
+                                    fetchData={fetchData}
+                                />
+                            )}
+                        </Box>
+                    )}
                 </Layout.Main>
             </Layout.Root>
         </>

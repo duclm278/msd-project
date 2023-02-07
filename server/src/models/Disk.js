@@ -3,8 +3,8 @@ const sqlQuery = require("../database/connect");
 class Disk {
     async create(data, image, image_id) {
         const query = `
-            INSERT INTO Disk (disk_name, description, disk_status, price, image, image_id, category_id)
-            VALUES ('${data.name}', '${data.description}', '${data.status}', ${data.price}, '${image}', '${image_id}', ${data.categoryId})
+            INSERT INTO Disk (disk_name, description, price, image, image_id, category_id)
+            VALUES ('${data.name}', '${data.description}', ${data.price}, '${image}', '${image_id}', ${data.categoryId})
             RETURNING *
         `;
         return (await sqlQuery(query))[0];
@@ -12,7 +12,10 @@ class Disk {
 
     async get() {
         const query = `
-            SELECT * FROM Disk
+            SELECT D.*, C.category_name
+            FROM Disk D
+            inner join Category C
+                on D.category_id = C.category_id
         `;
         return await sqlQuery(query);
     }
@@ -52,9 +55,6 @@ class Disk {
         }
         if (data.description) {
             query += `description = '${data.description}',`;
-        }
-        if (data.status) {
-            query += `disk_status = '${data.status}',`;
         }
         if (data.price) {
             query += `price = ${data.price},`;
