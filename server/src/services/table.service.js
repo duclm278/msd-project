@@ -20,6 +20,23 @@ exports.createTable = async (id, numberOfSeats, tableStatus) => {
     };
 };
 
+exports.getTableList = async () => {
+    const tables = await Table.getTableList();
+    if (tables.length < 1)
+        return {
+            type: statusType.error,
+            message: "Table existed!",
+            statusCode: 400,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Create table successfully!",
+        statusCode: 200,
+        tables: tables,
+    };
+};
+
 exports.updateTable = async (id, body) => {
     const table = await Table.checkTableIdExisted(id);
 

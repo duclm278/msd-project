@@ -3,8 +3,8 @@ const sqlQuery = require("../database/connect");
 class Event {
     async create(data) {
         const query = `
-            INSERT INTO Event (event_name, description, event_status, poster, poster_id, begin_time, end_time)
-            VALUES ('${data.name}', '${data.description}', '${data.status}', '${data.poster}', '${data.posterId}', '${data.beginTime}', '${data.endTime}')
+            INSERT INTO Event (event_name, description, event_status, poster, poster_id, begin_time, end_time, discount, min_cost)
+            VALUES ('${data.name}', '${data.description}', '${data.status}', '${data.poster}', '${data.posterId}', '${data.beginTime}', '${data.endTime}', ${data.discount}, ${data.minCost})
             RETURNING *
         `;
 
@@ -48,6 +48,12 @@ class Event {
         if (data.endTime) {
             query += `end_time = '${data.endTime}',`;
         }
+        if (data.discount) {
+            query += `discount = '${data.discount}',`;
+        }
+        if (data.minCost) {
+            query += `min_cost = '${data.minCost}',`;
+        }
         query = query.substring(0, query.length - 1);
 
         query += ` 
@@ -67,6 +73,14 @@ class Event {
         `;
 
         await sqlQuery(query);
+    }
+
+    async getEventList() {
+        const query = `
+            SELECT * FROM Event
+        `;
+
+        return await sqlQuery(query);
     }
 }
 

@@ -9,4 +9,5 @@ router
     .patch(tableController.updateTable)
     .delete(tableController.deleteTable);
 
+router.get("/", tableController.getTableList);
 module.exports = router;

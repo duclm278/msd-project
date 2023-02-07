@@ -38,6 +38,24 @@ exports.getListOfDisk = async (req, res, next) => {
     }
 };
 
+exports.getDiskDetail = async (req, res, next) => {
+    try {
+        const { type, message, statusCode, disk } =
+            await diskService.getDiskDetail(req.params.id);
+
+        if (type === statusType.error)
+            return next(new CustomErrorHandler(statusCode, message));
+
+        res.status(statusCode).json({
+            type,
+            message,
+            disk,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
 exports.searchDisk = async (req, res, next) => {
     try {
         const { type, message, statusCode, disks } =

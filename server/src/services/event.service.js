@@ -28,6 +28,24 @@ exports.createEvent = async (body, image) => {
     };
 };
 
+exports.getEventList = async () => {
+    const events = await Event.getEventList();
+
+    if (events.length < 1)
+        return {
+            type: statusType.error,
+            message: "No event found!",
+            statusCode: 404,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Event found!",
+        statusCode: 200,
+        events,
+    };
+};
+
 exports.getEventById = async (id) => {
     const event = await Event.getEventById(id);
 

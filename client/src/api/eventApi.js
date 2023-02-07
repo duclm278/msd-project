@@ -1,28 +1,28 @@
 import httpRequest from "./httpRequest";
 
-const PREFIX = "table";
+const PREFIX = "event";
 
-const tableApi = {
-    createTable: (data) => {
+const eventApi = {
+    create(data) {
         const url = `${PREFIX}/create`;
         return httpRequest.post(url, data);
     },
-    updateTable: (id, data) => {
-        const url = `${PREFIX}/${id}`;
-        return httpRequest.patch(url, data);
-    },
-    getTableById: (id) => {
+    getEventById(id) {
         const url = `${PREFIX}/${id}`;
         return httpRequest.get(url);
     },
-    getTableList: () => {
+    getListOfEvent() {
         const url = `${PREFIX}`;
         return httpRequest.get(url);
     },
-    deleteTableById: (id) => {
+    delete(id) {
         const url = `${PREFIX}/${id}`;
         return httpRequest.delete(url);
     },
+    update(id, data) {
+        const url = `${PREFIX}/${id}`;
+        return httpRequest.patch(url, data);
+    },
 };
 
-export default tableApi;
+export default eventApi;

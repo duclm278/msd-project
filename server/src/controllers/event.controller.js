@@ -20,6 +20,24 @@ exports.createEvent = async (req, res, next) => {
     }
 };
 
+exports.getEventList = async (req, res, next) => {
+    try {
+        const { type, message, statusCode, events } =
+            await eventService.getEventList();
+
+        if (type === statusType.error)
+            return next(new CustomErrorHandler(statusCode, message));
+
+        res.status(statusCode).json({
+            type,
+            message,
+            events,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
 exports.getEventById = async (req, res, next) => {
     try {
         const { type, message, statusCode, event } =

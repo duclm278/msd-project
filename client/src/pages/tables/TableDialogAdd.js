@@ -16,108 +16,125 @@ import { useState } from "react";
 import { filterOpts } from ".";
 import tableApi from "../../api/tableApi";
 import status from "../../constants/status";
+import Loading from "../../components/Loading";
 
 export default function TableDialogAdd({ open, setOpen }) {
-  const [id, setId] = useState("");
-  const [numberOfSeats, setNumberOfSeats] = useState("");
-  const [tableStatus, setTableStatus] = useState(filterOpts[0]);
+    const [id, setId] = useState("");
+    const [numberOfSeats, setNumberOfSeats] = useState("");
+    const [tableStatus, setTableStatus] = useState(filterOpts[0].status);
+    const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    console.log({ id, numberOfSeats, tableStatus });
+    const handleSubmit = () => {
+        const submit = async () => {
+            setLoading(true);
+            try {
+                const response = await tableApi.createTable({
+                    id,
+                    numberOfSeats,
+                    tableStatus,
+                });
+                if (response?.data?.type === status.success) {
+                    setLoading(false);
+                    alert("Add table successfully!");
+                }
+            } catch (err) {
+                console.log(err);
+                setLoading(false);
+                alert(err.response.data.message);
+            }
+            setId("");
+            setNumberOfSeats("");
+            setTableStatus(filterOpts[0].status);
+            window.location.reload();
+        };
 
-    const submit = async () => {
-      const response = await tableApi.createTable({
-        id,
-        numberOfSeats,
-        tableStatus,
-      });
-
-      console.log(response);
-
-      // TODO: Handle response
-      if (response?.data?.type === status.error) {
-        console.log("Error!");
-      }
-
-      if (response?.data?.type === status.success) {
-        console.log("Success!");
-      }
+        submit();
     };
 
-    submit();
-  };
-
-  return (
-    <Modal open={open} onClose={() => setOpen(false)}>
-      <ModalDialog
-        sx={{
-          maxWidth: 500,
-          borderRadius: "md",
-          p: 3,
-          boxShadow: "lg",
-        }}
-      >
-        <ModalClose />
-        <Typography
-          component="h2"
-          level="inherit"
-          fontSize="1.25em"
-          mb="0.25em"
-        >
-          Add new table
-        </Typography>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-            setOpen(false);
-          }}
-        >
-          <Stack>
-            <Stack spacing={2}>
-              <FormControl required>
-                <FormLabel>ID</FormLabel>
-                <Input
-                  name="id"
-                  placeholder="ID"
-                  autoFocus
-                  value={id}
-                  onChange={(e) => setId(e.target.value)}
-                />
-              </FormControl>
-              <FormControl required>
-                <FormLabel>Capacity</FormLabel>
-                <Input
-                  name="capacity"
-                  placeholder="Number of seats"
-                  value={numberOfSeats}
-                  onChange={(e) => setNumberOfSeats(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  value={tableStatus}
-                  onChange={(e, newTableStatus) => {
-                    setTableStatus(newTableStatus);
-                  }}
+    return (
+        <>
+            {loading && <Loading />}
+            <Modal open={open} onClose={() => setOpen(false)}>
+                <ModalDialog
+                    sx={{
+                        maxWidth: 500,
+                        borderRadius: "md",
+                        p: 3,
+                        boxShadow: "lg",
+                    }}
                 >
-                  {filterOpts.map((filterOpt) => (
-                    <Option key={filterOpt} value={filterOpt}>
-                      {filterOpt}
-                    </Option>
-                  ))}
-                </Select>
-              </FormControl>
-            </Stack>
-            <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
-              <Button type="submit" sx={{ flex: 1 }}>
-                Save
-              </Button>
-            </Box>
-          </Stack>
-        </form>
-      </ModalDialog>
-    </Modal>
-  );
+                    <ModalClose />
+                    <Typography
+                        component="h2"
+                        level="inherit"
+                        fontSize="1.25em"
+                        mb="0.25em"
+                    >
+                        Add new table
+                    </Typography>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSubmit();
+                            setOpen(false);
+                        }}
+                    >
+                        <Stack>
+                            <Stack spacing={2}>
+                                <FormControl required>
+                                    <FormLabel>ID</FormLabel>
+                                    <Input
+                                        name="id"
+                                        placeholder="ID"
+                                        autoFocus
+                                        value={id}
+                                        onChange={(e) => setId(e.target.value)}
+                                    />
+                                </FormControl>
+                                <FormControl required>
+                                    <FormLabel>Capacity</FormLabel>
+                                    <Input
+                                        name="capacity"
+                                        placeholder="Number of seats"
+                                        value={numberOfSeats}
+                                        onChange={(e) =>
+                                            setNumberOfSeats(e.target.value)
+                                        }
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <FormLabel>Status</FormLabel>
+                                    <Select
+                                        value={tableStatus}
+                                        onChange={(e, newTableStatus) => {
+                                            setTableStatus(newTableStatus);
+                                        }}
+                                    >
+                                        {filterOpts.map((filterOpt) => (
+                                            <Option
+                                                key={filterOpt}
+                                                value={filterOpt.status}
+                                            >
+                                                {filterOpt.status}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Stack>
+                            <Box
+                                mt={3}
+                                display="flex"
+                                gap={2}
+                                sx={{ width: "100%" }}
+                            >
+                                <Button type="submit" sx={{ flex: 1 }}>
+                                    Save
+                                </Button>
+                            </Box>
+                        </Stack>
+                    </form>
+                </ModalDialog>
+            </Modal>
+        </>
+    );
 }

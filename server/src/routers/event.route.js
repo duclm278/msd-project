@@ -10,4 +10,6 @@ router
     .patch(uploadSingleFile("image"), eventController.updateEvent)
     .delete(eventController.deleteEvent);
 
+router.get("/", eventController.getEventList)
+
 module.exports = router;
