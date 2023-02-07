@@ -19,14 +19,12 @@ import { useState } from "react";
 import { filterOpts } from ".";
 import tableApi from "../../api/tableApi";
 import status from "../../constants/status";
-import Loading from "../../components/Loading";
 
 export default function TableDialogEdit(props) {
-    const { open, setOpen } = props;
+    const { open, setOpen, setLoading, fetchData } = props;
     const [id, setId] = useState(props.id);
     const [numberOfSeats, setNumberOfSeats] = useState(props.numberOfSeats);
     const [tableStatus, setTableStatus] = useState(props.tableStatus);
-    const [loading, setLoading] = useState(false);
 
     const handleSave = (e) => {
         e.preventDefault();
@@ -40,22 +38,21 @@ export default function TableDialogEdit(props) {
 
                 if (response?.data?.type === status.success) {
                     setLoading(false);
+                    fetchData();
                     alert(response?.data?.message);
                 }
             } catch (err) {
                 setLoading(false);
                 alert(err.response.data.message);
             }
+            setOpen(false);
         };
 
         fetch();
-        window.location.reload();
-        setOpen(false);
     };
 
     return (
         <>
-            {loading && <Loading />}
             <Modal open={open} onClose={() => setOpen(false)}>
                 <ModalDialog
                     sx={{

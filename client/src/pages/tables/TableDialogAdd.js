@@ -10,6 +10,7 @@ import Option from "@mui/joy/Option";
 import Select from "@mui/joy/Select";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+import { useSnackbar } from "notistack";
 
 // Custom
 import { useState } from "react";
@@ -18,11 +19,16 @@ import tableApi from "../../api/tableApi";
 import status from "../../constants/status";
 import Loading from "../../components/Loading";
 
-export default function TableDialogAdd({ open, setOpen }) {
+export default function TableDialogAdd({
+    open,
+    setOpen,
+    setLoading,
+    fetchData,
+}) {
     const [id, setId] = useState("");
     const [numberOfSeats, setNumberOfSeats] = useState("");
     const [tableStatus, setTableStatus] = useState(filterOpts[0].status);
-    const [loading, setLoading] = useState(false);
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleSubmit = () => {
         const submit = async () => {
@@ -34,18 +40,21 @@ export default function TableDialogAdd({ open, setOpen }) {
                     tableStatus,
                 });
                 if (response?.data?.type === status.success) {
+                    fetchData();
                     setLoading(false);
-                    alert("Add table successfully!");
+                    enqueueSnackbar(response?.data?.message, {
+                        variant: "success",
+                    });
                 }
             } catch (err) {
-                console.log(err);
                 setLoading(false);
-                alert(err.response.data.message);
+                enqueueSnackbar(err.response?.data?.message, {
+                    variant: "error",
+                });
             }
             setId("");
             setNumberOfSeats("");
             setTableStatus(filterOpts[0].status);
-            window.location.reload();
         };
 
         submit();
@@ -53,7 +62,6 @@ export default function TableDialogAdd({ open, setOpen }) {
 
     return (
         <>
-            {loading && <Loading />}
             <Modal open={open} onClose={() => setOpen(false)}>
                 <ModalDialog
                     sx={{

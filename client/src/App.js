@@ -12,6 +12,7 @@ import Loading from "./components/Loading";
 import employeeApi from "./api/employeeApi";
 import authentication from "./utils/authentication";
 import status from "./constants/status";
+import { Backdrop } from "@mui/material";
 
 function App() {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -46,20 +47,32 @@ function App() {
     }, []);
 
     return (
-        <div className="app">
-            <CssVarsProvider
-                disableTransitionOnChange
-                theme={deepmerge(muiTheme, joyTheme)}
-            >
-                <SideDrawerContext.Provider
-                    value={{ drawerOpen, setDrawerOpen }}
+        <>
+            <div className="app">
+                <CssVarsProvider
+                    disableTransitionOnChange
+                    theme={deepmerge(muiTheme, joyTheme)}
                 >
-                    <CssBaseline />
-                    <Router />
-                </SideDrawerContext.Provider>
-            </CssVarsProvider>
-            {loading && <Loading />}
-        </div>
+                    <SideDrawerContext.Provider
+                        value={{ drawerOpen, setDrawerOpen }}
+                    >
+                        <CssBaseline />
+                        {loading && (
+                            <Backdrop
+                                open={true}
+                                sx={{
+                                    color: "transparent",
+                                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                                }}
+                            >
+                                <Loading />
+                            </Backdrop>
+                        )}
+                        {!loading && <Router />}
+                    </SideDrawerContext.Provider>
+                </CssVarsProvider>
+            </div>
+        </>
     );
 }
 
