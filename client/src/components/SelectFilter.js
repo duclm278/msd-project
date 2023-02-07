@@ -41,7 +41,7 @@ export default function SelectFilter({ filterOpt, setFilterOpt, filterOpts }) {
     >
       {filterOpts.map((filterOpt) => (
         <Option key={filterOpt} value={filterOpt}>
-          {filterOpt}
+          {filterOpt.status}
         </Option>
       ))}
     </Select>

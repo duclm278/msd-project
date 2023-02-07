@@ -9,6 +9,6 @@ router
     .delete(orderController.deleteOrder)
     .patch(orderController.updateOrder);
 
-router.post("/cost/:orderId", orderController.updateCost);
+router.patch("/cost/:orderId", orderController.updateCost);
 
 module.exports = router;

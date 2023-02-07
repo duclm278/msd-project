@@ -59,7 +59,7 @@ function Menu({ control, menus, id }) {
             <MenuItem
               selected={active}
               variant={active ? "soft" : "plain"}
-              onClick={close}
+              onClick={item.onClick}
               {...item}
             >
               {label}
