@@ -58,14 +58,14 @@ export default function Login() {
 
     return (
         <>
-            {loading && <Loading />}
-            {!loading && (
-                <Box
-                    sx={{
-                        height: "100vh",
-                        overflow: "hidden",
-                    }}
-                >
+            <Box
+                sx={{
+                    height: "100vh",
+                    overflow: "hidden",
+                }}
+            >
+                {loading && <Loading />}
+                {!loading && (
                     <div onKeyDown={handleLoginEnter}>
                         <Sheet
                             variant="outlined"
@@ -129,8 +129,8 @@ export default function Login() {
                             </Typography>
                         </Sheet>
                     </div>
-                </Box>
-            )}
+                )}
+            </Box>
         </>
     );
 }

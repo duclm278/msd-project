@@ -13,11 +13,16 @@ import { useState } from "react";
 import TableDialogEdit from "./TableDialogEdit";
 import status from "../../constants/status";
 import tableApi from "../../api/tableApi";
-import Loading from "../../components/Loading";
 
-export default function Table({ id, numberOfSeats, tableStatus, statusColor }) {
+export default function Table({
+    id,
+    numberOfSeats,
+    tableStatus,
+    statusColor,
+    setLoading,
+    fetchData,
+}) {
     const [openEdit, setOpenEdit] = useState(false);
-    const [loading, setLoading] = useState(false);
 
     const handleDelete = (e) => {
         const fetch = async () => {
@@ -26,6 +31,7 @@ export default function Table({ id, numberOfSeats, tableStatus, statusColor }) {
                 const response = await tableApi.deleteTableById(id);
 
                 if (response?.data?.type === status.success) {
+                    fetchData();
                     setLoading(false);
                     alert(response?.data?.message);
                 }
@@ -36,12 +42,10 @@ export default function Table({ id, numberOfSeats, tableStatus, statusColor }) {
         };
 
         fetch();
-        window.location.reload();
     };
 
     return (
         <>
-            {loading && <Loading />}
             <Card
                 variant="outlined"
                 sx={{
@@ -96,6 +100,8 @@ export default function Table({ id, numberOfSeats, tableStatus, statusColor }) {
                         tableStatus={tableStatus}
                         open={openEdit}
                         setOpen={setOpenEdit}
+                        setLoading={setLoading}
+                        fetchData={fetchData}
                     />
                 </Box>
             </Card>

@@ -9,13 +9,13 @@ import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <StyledEngineProvider injectFirst>
-    <BrowserRouter>
-      <SnackbarProvider maxSnack={5}>
-        <UserProvider>
-          <App />
-        </UserProvider>
-      </SnackbarProvider>
-    </BrowserRouter>
-  </StyledEngineProvider>
+    <StyledEngineProvider injectFirst>
+        <BrowserRouter>
+            <SnackbarProvider maxSnack={5}>
+                <UserProvider>
+                    <App />
+                </UserProvider>
+            </SnackbarProvider>
+        </BrowserRouter>
+    </StyledEngineProvider>
 );

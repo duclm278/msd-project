@@ -8,6 +8,7 @@ import Add from "@mui/icons-material/Add";
 
 // Custom
 import { useContext, useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
 import SelectFilter from "../../components/SelectFilter";
@@ -33,26 +34,30 @@ export default function Tables() {
     const [loading, setLoading] = useState(false);
     const [tables, setTables] = useState([]);
 
-    useEffect(() => {
-        const fetch = async () => {
-            setLoading(true);
-            try {
-                const response = await tableApi.getTableList();
-                if (response?.data?.type === status.success) {
-                    setTables(response?.data?.tables);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-            setLoading(false);
-        };
+    const { enqueueSnackbar } = useSnackbar();
 
-        fetch();
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const response = await tableApi.getTableList();
+            if (response?.data?.type === status.success) {
+                setTables(response?.data?.tables);
+            }
+        } catch (err) {
+            enqueueSnackbar(err.response?.data?.message, {
+                variant: "error",
+            });
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchData();
+        // eslint-disable-next-line
     }, []);
 
     return (
         <>
-            {loading && <Loading />}
             {drawerOpen && <SideDrawer />}
             <Layout.Root
                 sx={{
@@ -119,10 +124,13 @@ export default function Tables() {
                             <TableDialogAdd
                                 open={openAdd}
                                 setOpen={setOpenAdd}
+                                setLoading={setLoading}
+                                fetchData={fetchData}
                             />
                         </Box>
                         <Divider />
                     </Box>
+                    {loading && <Loading />}
                     <Box
                         sx={{
                             mt: 3,
@@ -136,16 +144,25 @@ export default function Tables() {
                             gap: 3,
                         }}
                     >
-                        {tables.map((table) => (
-                            <div key={table.table_id}>
-                                <Table
-                                    id={table.table_id}
-                                    numberOfSeats={table.number_of_seats}
-                                    tableStatus={table.table_status}
-                                    statusColor={filterOpts.find(item => item.status === table.table_status).color}
-                                />
-                            </div>
-                        ))}
+                        {!loading &&
+                            tables.map((table) => (
+                                <div key={table.table_id}>
+                                    <Table
+                                        id={table.table_id}
+                                        numberOfSeats={table.number_of_seats}
+                                        tableStatus={table.table_status}
+                                        statusColor={
+                                            filterOpts.find(
+                                                (item) =>
+                                                    item.status ===
+                                                    table.table_status
+                                            ).color
+                                        }
+                                        setLoading={setLoading}
+                                        fetchData={fetchData}
+                                    />
+                                </div>
+                            ))}
                     </Box>
                 </Layout.Main>
             </Layout.Root>
