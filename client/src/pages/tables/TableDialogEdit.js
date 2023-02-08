@@ -109,8 +109,8 @@ export default function TableDialogEdit(props) {
                     }}
                   >
                     {filterOpts.map((filterOpt) => (
-                      <Option key={filterOpt} value={filterOpt.status}>
-                        {filterOpt.status}
+                      <Option key={filterOpt} value={filterOpt}>
+                        {filterOpt}
                       </Option>
                     ))}
                   </Select>
