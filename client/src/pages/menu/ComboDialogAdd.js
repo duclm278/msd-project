@@ -231,8 +231,8 @@ export default function ComboDialogAdd({
                   {image && (
                     <AspectRatio
                       objectFit="cover"
-                      ratio="2.5"
-                      sx={{ marginTop: "2px" }}
+                      ratio="4 / 3"
+                      sx={{ marginTop: 1 }}
                     >
                       <img src={preview} alt="Preview" />
                     </AspectRatio>
