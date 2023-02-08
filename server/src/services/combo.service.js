@@ -164,6 +164,9 @@ exports.updateCombo = async (id, data, image) => {
 
         data.image = imageUploadResponse.secure_url;
         data.imageId = imageUploadResponse.public_id;
+    } else {
+        data.image = combo.image;
+        data.imageId = combo.image_id;
     }
 
     if (data.disks) {

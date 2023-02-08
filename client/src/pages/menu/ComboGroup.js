@@ -5,7 +5,7 @@ import Typography from "@mui/joy/Typography";
 import React from "react";
 import Combo from "./Combo";
 
-export default function ComboGroup({ combos }) {
+export default function ComboGroup({ combos, fetchData, setLoading }) {
     return (
         <>
             <Box
@@ -36,10 +36,14 @@ export default function ComboGroup({ combos }) {
                 {combos.map((combo) => (
                     <React.Fragment key={combo.combo_id}>
                         <Combo
+                            id={combo.combo_id}
                             name={combo.combo_name}
                             description={combo.description}
                             price={combo.combo_price}
                             image={combo.image}
+                            disks={combo.disks}
+                            fetchData={fetchData}
+                            setLoading={setLoading}
                         />
                     </React.Fragment>
                 ))}

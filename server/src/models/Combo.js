@@ -83,9 +83,9 @@ class Combo {
         const query = `
             UPDATE Combo 
             SET 
-                combo_name = '${data.comboName}',
+                combo_name = '${data.name}',
                 description = '${data.description}',
-                price = ${data.price}
+                combo_price = ${data.price},
                 image = '${data.image}',
                 image_id = '${data.imageId}'
             WHERE combo_id = ${id};

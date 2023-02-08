@@ -27,7 +27,9 @@ const comboApi = {
     },
     update(id, data) {
         const url = `${PREFIX}/${id}`;
-        return httpRequest.patch(url, data);
+        return httpRequest.patch(url, data, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
     },
 };
 

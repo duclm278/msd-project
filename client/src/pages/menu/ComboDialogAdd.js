@@ -18,8 +18,14 @@ import { useDebounce } from "../../hooks";
 import diskApi from "../../api/diskApi";
 import status from "../../constants/status";
 import { AspectRatio } from "@mui/joy";
+import comboApi from "../../api/comboApi";
 
-export default function ComboDialogAdd({ open, setOpen }) {
+export default function ComboDialogAdd({
+    open,
+    setOpen,
+    setLoading,
+    fetchData,
+}) {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
@@ -32,7 +38,31 @@ export default function ComboDialogAdd({ open, setOpen }) {
     const { enqueueSnackbar } = useSnackbar();
 
     const handleSubmit = () => {
-        // TODO: Handle response
+        const save = async () => {
+            setLoading(true);
+            try {
+                const response = await comboApi.create({
+                    name,
+                    description,
+                    price,
+                    image,
+                    disks: selectedDisks,
+                });
+                if (response?.data?.type === status.success) {
+                    fetchData();
+                    enqueueSnackbar(response?.data?.message, {
+                        variant: "success",
+                    });
+                }
+            } catch (err) {
+                setLoading(false);
+                enqueueSnackbar(err.response?.data?.message, {
+                    variant: "error",
+                });
+            }
+        };
+
+        save();
     };
 
     const debouncedValue = useDebounce(search, 500);
