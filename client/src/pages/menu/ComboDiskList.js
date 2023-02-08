@@ -56,27 +56,30 @@ export default function ComboDiskList({
                                         ),
                                     ]);
 
-                                    setSelectedDisks((prev) => {
-                                        const itemIndex = prev.findIndex(
-                                            (diskIsSelectd) =>
-                                                diskIsSelectd.id ===
-                                                diskItem.disk_id
-                                        );
-                                        if (itemIndex >= 0) {
-                                            if (
-                                                prev[itemIndex].quantity === 1
-                                            ) {
-                                                return prev.filter(
-                                                    (i) =>
-                                                        i.id !==
-                                                        diskItem.disk_id
-                                                );
+                                    if (setSelectedDisks)
+                                        setSelectedDisks((prev) => {
+                                            const itemIndex = prev.findIndex(
+                                                (diskIsSelectd) =>
+                                                    diskIsSelectd.id ===
+                                                    diskItem.disk_id
+                                            );
+                                            if (itemIndex >= 0) {
+                                                if (
+                                                    prev[itemIndex].quantity ===
+                                                    1
+                                                ) {
+                                                    return prev.filter(
+                                                        (i) =>
+                                                            i.id !==
+                                                            diskItem.disk_id
+                                                    );
+                                                }
+                                                prev[itemIndex].quantity =
+                                                    prev[itemIndex].quantity -
+                                                    1;
                                             }
-                                            prev[itemIndex].quantity =
-                                                prev[itemIndex].quantity - 1;
-                                        }
-                                        return prev;
-                                    });
+                                            return prev;
+                                        });
                                 }}
                             >
                                 <Remove />
@@ -102,32 +105,30 @@ export default function ComboDiskList({
                                                 : item
                                         ),
                                     ]);
+                                    if (setSelectedDisks)
+                                        setSelectedDisks((prev) => {
+                                            const itemIndex = prev.findIndex(
+                                                (diskIsSelectd) =>
+                                                    diskIsSelectd.id ===
+                                                    diskItem.disk_id
+                                            );
 
-                                    setSelectedDisks((prev) => {
-                                        console.log(diskItem.disk_id);
-                                        const itemIndex = prev.findIndex(
-                                            (diskIsSelectd) =>
-                                                diskIsSelectd.id ===
-                                                diskItem.disk_id
-                                        );
+                                            if (itemIndex < 0) {
+                                                return [
+                                                    ...prev,
+                                                    {
+                                                        id: diskItem.disk_id,
+                                                        quantity: 1,
+                                                    },
+                                                ];
+                                            } else {
+                                                prev[itemIndex].quantity =
+                                                    prev[itemIndex].quantity +
+                                                    1;
 
-                                        if (itemIndex < 0) {
-                                            return [
-                                                ...prev,
-                                                {
-                                                    id: diskItem.disk_id,
-                                                    quantity: 1,
-                                                },
-                                            ];
-                                        } else {
-                                            prev[itemIndex].quantity =
-                                                prev[itemIndex].quantity + 1;
-
-                                            return prev;
-                                        }
-
-                                        return prev;
-                                    });
+                                                return prev;
+                                            }
+                                        });
                                 }}
                             >
                                 <Add />
