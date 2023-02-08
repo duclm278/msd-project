@@ -82,7 +82,6 @@ export default function OrderDialogAdd({ open, setOpen }) {
     <Modal open={open} onClose={() => setOpen(false)}>
       <ModalDialog
         sx={{
-          width: "90%",
           maxHeight: "95vh",
           overflowY: "auto",
           maxWidth: 500,
