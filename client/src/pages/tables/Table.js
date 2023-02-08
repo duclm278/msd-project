@@ -3,108 +3,147 @@ import Box from "@mui/joy/Box";
 import Card from "@mui/joy/Card";
 import CardOverflow from "@mui/joy/CardOverflow";
 import IconButton from "@mui/joy/IconButton";
+import ListItemDecorator from "@mui/joy/ListItemDecorator";
+import Menu from "@mui/joy/Menu";
+import MenuItem from "@mui/joy/MenuItem";
 import Typography from "@mui/joy/Typography";
 
 // Icons
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
+import DeleteForever from "@mui/icons-material/DeleteForever";
+import Edit from "@mui/icons-material/Edit";
+import MoreVert from "@mui/icons-material/MoreVert";
+
 // Custom
+import { useSnackbar } from "notistack";
 import { useState } from "react";
-import TableDialogEdit from "./TableDialogEdit";
-import status from "../../constants/status";
 import tableApi from "../../api/tableApi";
+import status from "../../constants/status";
+import TableDialogEdit from "./TableDialogEdit";
 
 export default function Table({
-    id,
-    numberOfSeats,
-    tableStatus,
-    statusColor,
-    setLoading,
-    fetchData,
+  id,
+  numberOfSeats,
+  tableStatus,
+  statusColor,
+  setLoading,
+  fetchData,
 }) {
-    const [openEdit, setOpenEdit] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const [openEdit, setOpenEdit] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openMore = Boolean(anchorEl);
 
-    const handleDelete = (e) => {
-        const fetch = async () => {
-            setLoading(true);
-            try {
-                const response = await tableApi.deleteTableById(id);
+  const handleMoreClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
 
-                if (response?.data?.type === status.success) {
-                    fetchData();
-                    setLoading(false);
-                    alert(response?.data?.message);
-                }
-            } catch (err) {
-                setLoading(false);
-                alert(err.response.data.message);
-            }
-        };
+  const handleMoreClose = () => {
+    setAnchorEl(null);
+  };
 
-        fetch();
+  const handleDelete = (e) => {
+    const fetch = async () => {
+      setLoading(true);
+      try {
+        const response = await tableApi.deleteTableById(id);
+
+        if (response?.data?.type === status.success) {
+          fetchData();
+          setLoading(false);
+          enqueueSnackbar(response.data.message, {
+            variant: "success",
+          });
+        }
+      } catch (err) {
+        setLoading(false);
+        enqueueSnackbar(err.response.data.message, {
+          variant: "error",
+        });
+      }
     };
 
-    return (
-        <>
-            <Card
-                variant="outlined"
-                sx={{
-                    "--Card-radius": (theme) => theme.vars.radius.sm,
-                    boxShadow: "none",
-                }}
+    fetch();
+  };
+
+  return (
+    <>
+      <Card
+        variant="outlined"
+        sx={{
+          "--Card-radius": (theme) => theme.vars.radius.sm,
+          boxShadow: "none",
+        }}
+      >
+        <CardOverflow
+          sx={{
+            borderBottom: "1px solid",
+            borderColor: "neutral.outlinedBorder",
+          }}
+        >
+          <AspectRatio ratio="2" color="primary">
+            <Typography
+              level="h3"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "primary.plainColor",
+              }}
             >
-                <CardOverflow
-                    sx={{
-                        borderBottom: "1px solid",
-                        borderColor: "neutral.outlinedBorder",
-                    }}
-                >
-                    <AspectRatio ratio="2" color="primary">
-                        <Typography
-                            level="h3"
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "primary.plainColor",
-                            }}
-                        >
-                            {id}
-                        </Typography>
-                    </AspectRatio>
-                </CardOverflow>
-                <Box sx={{ pt: 2, display: "flex", alignItems: "center" }}>
-                    <Box sx={{ flex: 1 }}>
-                        <Typography>Seats: {numberOfSeats}</Typography>
-                        <Typography sx={{ color: statusColor }}>
-                            {tableStatus}
-                        </Typography>
-                    </Box>
-                    <IconButton
-                        variant="plain"
-                        color="neutral"
-                        onClick={() => setOpenEdit(true)}
-                    >
-                        <EditOutlinedIcon />
-                    </IconButton>
-                    <IconButton
-                        variant="plain"
-                        color="danger"
-                        onClick={handleDelete}
-                    >
-                        <DeleteOutlineRoundedIcon />
-                    </IconButton>
-                    <TableDialogEdit
-                        id={id}
-                        numberOfSeats={numberOfSeats}
-                        tableStatus={tableStatus}
-                        open={openEdit}
-                        setOpen={setOpenEdit}
-                        setLoading={setLoading}
-                        fetchData={fetchData}
-                    />
-                </Box>
-            </Card>
-        </>
-    );
+              {id}
+            </Typography>
+          </AspectRatio>
+        </CardOverflow>
+        <Box sx={{ pt: 2, display: "flex", alignItems: "center" }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography>Seats: {numberOfSeats}</Typography>
+            <Typography color={statusColor}>{tableStatus}</Typography>
+          </Box>
+          <Box>
+            <IconButton
+              id="positioned-button"
+              aria-controls={openMore ? "positioned-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openMore ? "true" : undefined}
+              variant="plain"
+              color="neutral"
+              onClick={handleMoreClick}
+            >
+              <MoreVert />
+            </IconButton>
+            <Menu
+              id="positioned-menu"
+              anchorEl={anchorEl}
+              open={openMore}
+              onClose={handleMoreClose}
+              aria-labelledby="positioned-button"
+              placement="bottom-end"
+            >
+              <MenuItem onClick={() => setOpenEdit(true)}>
+                <ListItemDecorator>
+                  <Edit />
+                </ListItemDecorator>
+                Edit table
+              </MenuItem>
+              <MenuItem onClick={handleDelete} variant="soft" color="danger">
+                <ListItemDecorator sx={{ color: "inherit" }}>
+                  <DeleteForever />
+                </ListItemDecorator>
+                Delete table
+              </MenuItem>
+            </Menu>
+          </Box>
+          <TableDialogEdit
+            id={id}
+            numberOfSeats={numberOfSeats}
+            tableStatus={tableStatus}
+            open={openEdit}
+            setOpen={setOpenEdit}
+            setLoading={setLoading}
+            fetchData={fetchData}
+          />
+        </Box>
+      </Card>
+    </>
+  );
 }
