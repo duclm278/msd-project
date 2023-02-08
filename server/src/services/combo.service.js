@@ -7,7 +7,7 @@ const {
 } = require("../utils/cloudinary");
 
 exports.createCombo = async (data, image) => {
-    data.disks = JSON.parse(data.disks);
+    // data.disks = JSON.parse(data.disks);
 
     if (!image)
         return {
@@ -25,6 +25,7 @@ exports.createCombo = async (data, image) => {
     const combo = await Combo.create(
         data.name,
         data.description,
+        data.price,
         imageUploadResponse.secure_url,
         imageUploadResponse.public_id
     );

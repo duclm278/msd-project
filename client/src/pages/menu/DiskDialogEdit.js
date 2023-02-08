@@ -23,7 +23,6 @@ import { diskOpts } from ".";
 import { AspectRatio } from "@mui/joy";
 import diskApi from "../../api/diskApi";
 import status from "../../constants/status";
-import Loading from "../../components/Loading";
 
 export default function DiskDialogEdit(props) {
     const { id, open, setOpen, fetchData, setLoading } = props;

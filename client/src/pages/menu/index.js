@@ -152,6 +152,8 @@ export default function Menu() {
                                 <ComboDialogAdd
                                     open={openComboAdd}
                                     setOpen={setOpenComboAdd}
+                                    fetchData={fetchData}
+                                    setLoading={setLoading}
                                 />
                             </Stack>
                         </Stack>
