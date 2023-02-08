@@ -1,10 +1,10 @@
 const sqlQuery = require("../database/connect");
 
 class Combo {
-    async create(name, description = "", image, imageId) {
+    async create(name, description = "", price, image, imageId) {
         const query = `
             INSERT INTO Combo (combo_name, combo_price, description, image, image_id)
-            values ('${name}', 0, '${description}', '${image}', '${imageId}')
+            values ('${name}', ${price}, '${description}', '${image}', '${imageId}')
             returning *
         `;
 
@@ -85,6 +85,7 @@ class Combo {
             SET 
                 combo_name = '${data.comboName}',
                 description = '${data.description}',
+                price = ${data.price}
                 image = '${data.image}',
                 image_id = '${data.imageId}'
             WHERE combo_id = ${id};

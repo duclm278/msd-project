@@ -58,7 +58,7 @@ export default function Disk({
                         mt={0.5}
                         textColor="rgba(255,255,255,0.72)"
                     >
-                        Price: {price.toLocaleString()}
+                        Price: {price.toLocaleString()} đ
                     </Typography>
                 </Box>
                 <IconButton
