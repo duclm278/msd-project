@@ -90,6 +90,9 @@ exports.updateEvent = async (id, body, image) => {
 
         data.poster = uploadImageResponse.secure_url;
         data.posterId = uploadImageResponse.public_id;
+    } else {
+        data.poster = event.poster;
+        data.posterId = event.poster_id;
     }
 
     const newEvent = await Event.update(id, data);
@@ -122,3 +125,4 @@ exports.deleteEvent = async (id) => {
         statusCode: 200,
     };
 };
+

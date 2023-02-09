@@ -91,6 +91,14 @@ export default function EventDialogAdd({
         };
 
         submit();
+        setName("");
+        setDescription("");
+        setEventStatus("");
+        setDiscount("");
+        setMinCost("");
+        setBeginTime(today);
+        setEndTime(today);
+        setPoster("");
     };
 
     return (

@@ -18,6 +18,7 @@ export default function Event({
     description,
     status,
     discount,
+    minCost,
     poster,
     beginTime,
     endTime,
@@ -79,6 +80,7 @@ export default function Event({
                     description={description}
                     status={status}
                     discount={discount}
+                    minCost={minCost}
                     poster={poster}
                     beginTime={beginTime}
                     endTime={endTime}

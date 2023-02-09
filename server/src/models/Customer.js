@@ -20,11 +20,22 @@ class Customer {
         return response[0];
     }
 
-    async searchByName(name) {
-        const query = `
-            SELECT customer_id, name FROM Customer
-            WHERE lower(name) LIKE lower('%${name}%')
+    async search({ name, rank }) {
+        let query;
+
+        if (rank) {
+            query = `
+            SELECT customer_id, name 
+            FROM Customer C
+            WHERE lower(C.name) LIKE lower('%${name}%') and rank_id = ${rank}
         `;
+        } else {
+            query = `
+                SELECT customer_id, name 
+                FROM Customer C
+                WHERE lower(C.name) LIKE lower('%${name}%')
+            `;
+        }
         const response = await sqlQuery(query);
         return response;
     }

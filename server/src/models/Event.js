@@ -23,40 +23,18 @@ class Event {
     }
 
     async update(id, data) {
-        let query = `
+        const query = `
             UPDATE Event
             SET
-        `;
-        if (data.name) {
-            query += `event_name = '${data.name}',`;
-        }
-        if (data.description) {
-            query += `description = '${data.description}',`;
-        }
-        if (data.status) {
-            query += `event_status = '${data.status}',`;
-        }
-        if (data.poster) {
-            query += `poster = '${data.poster}',`;
-        }
-        if (data.posterId) {
-            query += `poster_id = '${data.posterId}',`;
-        }
-        if (data.beginTime) {
-            query += `begin_time = '${data.beginTime}',`;
-        }
-        if (data.endTime) {
-            query += `end_time = '${data.endTime}',`;
-        }
-        if (data.discount) {
-            query += `discount = '${data.discount}',`;
-        }
-        if (data.minCost) {
-            query += `min_cost = '${data.minCost}',`;
-        }
-        query = query.substring(0, query.length - 1);
-
-        query += ` 
+                event_name = '${data.name}',
+                description = '${data.description}',
+                event_status = '${data.status}',
+                poster = '${data.poster}',
+                poster_id = '${data.posterId}',
+                begin_time = '${data.beginTime}',
+                end_time = '${data.endTime}',
+                discount = '${data.discount}',
+                min_cost = '${data.minCost}'
             WHERE event_id = ${id}
             RETURNING *
         `;

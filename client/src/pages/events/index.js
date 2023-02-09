@@ -125,22 +125,25 @@ export default function Events() {
                                 gap: 3,
                             }}
                         >
-                            {events.map((event) => (
-                                <React.Fragment key={event.event_id}>
-                                    <Event
-                                        id={event.event_id}
-                                        name={event.event_name}
-                                        description={event.description}
-                                        status="Due"
-                                        discount={event.discount}
-                                        beginTime={event.begin_time}
-                                        endTime={event.end_time}
-                                        poster={event.poster}
-                                        setLoading={setLoading}
-                                        fetchData={fetchData}
-                                    />
-                                </React.Fragment>
-                            ))}
+                            {events.length === 0
+                                ? "No event!"
+                                : events.map((event) => (
+                                      <React.Fragment key={event.event_id}>
+                                          <Event
+                                              id={event.event_id}
+                                              name={event.event_name}
+                                              description={event.description}
+                                              status={event.event_status}
+                                              discount={event.discount}
+                                              minCost={event.min_cost}
+                                              beginTime={event.begin_time}
+                                              endTime={event.end_time}
+                                              poster={event.poster}
+                                              setLoading={setLoading}
+                                              fetchData={fetchData}
+                                          />
+                                      </React.Fragment>
+                                  ))}
                         </Box>
                     )}
                 </Layout.Main>

@@ -3,7 +3,7 @@ const router = express.Router();
 const customerController = require("../controllers/customer.controller");
 
 router.post("/create", customerController.createCustomer);
-router.get("/search", customerController.searchCustomersByName);
+router.get("/search", customerController.searchCustomersByNameOrRank);
 router
     .route("/:id")
     .get(customerController.getCustomerById)

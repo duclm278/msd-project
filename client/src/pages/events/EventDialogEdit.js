@@ -17,22 +17,87 @@ import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
 // Custom
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import eventApi from "../../api/eventApi";
 import status from "../../constants/status";
+import { AspectRatio } from "@mui/joy";
 
 export default function EventDialogEdit(props) {
     const { id, open, setOpen, setLoading, fetchData } = props;
     const [name, setName] = useState(props.name);
     const [description, setDescription] = useState(props.description);
+    const [eventStatus, setEventStatus] = useState(props.status);
     const [poster, setPoster] = useState(props.poster);
+    const [minCost, setMinCost] = useState(props.minCost);
     const [discount, setDiscount] = useState(props.discount);
-    const [beginTime, setBeginTime] = useState(props.beginTime);
-    const [endTime, setEndTime] = useState(props.endTime);
+    const [beginTime, setBeginTime] = useState(
+        new Date(props.beginTime).toISOString().replace(/:\d{2}.\d{3}Z$/, "")
+    );
+    const [endTime, setEndTime] = useState(
+        new Date(props.endTime).toISOString().replace(/:\d{2}.\d{3}Z$/, "")
+    );
+    const [posterChanged, setPosterChanged] = useState(false);
+    const [preview, setPreview] = useState();
     const { enqueueSnackbar } = useSnackbar();
+
+    useEffect(() => {
+        setPreview(poster);
+        // eslint-disable-next-line
+    }, []);
+
+    const onSelectFile = (e) => {
+        setPosterChanged(true);
+        if (!e.target.files || e.target.files.length === 0) {
+            setPoster(undefined);
+            return;
+        }
+        // I've kept this example simple by using the first poster instead of multiple
+        setPoster(e.target.files[0]);
+        const objectUrl = URL.createObjectURL(e.target.files[0]);
+        setPreview(objectUrl);
+    };
 
     const handleSave = (e) => {
         e.preventDefault();
+        const save = async () => {
+            setLoading(true);
+            try {
+                const data = posterChanged
+                    ? {
+                          name,
+                          description,
+                          status: eventStatus,
+                          discount,
+                          minCost,
+                          beginTime,
+                          endTime,
+                          image: poster,
+                      }
+                    : {
+                          name,
+                          description,
+                          status: eventStatus,
+                          discount,
+                          minCost,
+                          beginTime,
+                          endTime,
+                      };
+                const response = await eventApi.update(id, data);
+                if (response?.data?.type === status.success) {
+                    fetchData();
+                    enqueueSnackbar(response?.data?.message, {
+                        variant: "success",
+                    });
+                }
+            } catch (err) {
+                setLoading(false);
+                enqueueSnackbar(err.response?.data?.message, {
+                    variant: "error",
+                });
+            }
+        };
+
+        save();
         setOpen(() => false);
     };
 
@@ -54,7 +119,7 @@ export default function EventDialogEdit(props) {
                 });
             }
         };
-        
+
         remove();
         setOpen(() => false);
     };
@@ -94,7 +159,7 @@ export default function EventDialogEdit(props) {
                             />
                         </FormControl>
                         <FormControl>
-                            <FormLabel>Desc.</FormLabel>
+                            <FormLabel>Description</FormLabel>
                             <Textarea
                                 name="description"
                                 minRows={2}
@@ -104,18 +169,38 @@ export default function EventDialogEdit(props) {
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </FormControl>
+                        <FormControl>
+                            <FormLabel>Status</FormLabel>
+                            <Input
+                                name="status"
+                                placeholder="Status"
+                                value={eventStatus}
+                                onChange={(e) => setEventStatus(e.target.value)}
+                            />
+                        </FormControl>
                         <FormControl required>
                             <FormLabel>Discount</FormLabel>
                             <Input
+                                type="number"
                                 name="discount"
                                 placeholder="50000"
                                 value={discount}
                                 onChange={(e) => setDiscount(e.target.value)}
                             />
                         </FormControl>
+                        <FormControl required>
+                            <FormLabel>Min price</FormLabel>
+                            <Input
+                                type="number"
+                                name="Min price"
+                                placeholder="50000"
+                                value={minCost}
+                                onChange={(e) => setMinCost(e.target.value)}
+                            />
+                        </FormControl>
                         <TextField
                             required
-                            label="Start Time"
+                            label="Begin Time"
                             type="datetime-local"
                             value={beginTime}
                             onChange={(e) => setBeginTime(e.target.value)}
@@ -128,13 +213,22 @@ export default function EventDialogEdit(props) {
                             onChange={(e) => setEndTime(e.target.value)}
                         />
                         <FormControl>
-                            <FormLabel>Image</FormLabel>
+                            <FormLabel>Poster</FormLabel>
                             <Input
-                                name="image"
-                                placeholder="Image"
-                                value={poster}
-                                onChange={(e) => setPoster(e.target.value)}
+                                name="poster"
+                                placeholder="poster"
+                                type="file"
+                                onChange={onSelectFile}
                             />
+                            {poster && (
+                                <AspectRatio
+                                    objectFit="cover"
+                                    ratio="4/3"
+                                    sx={{ marginTop: 1 }}
+                                >
+                                    <img src={preview} alt="Preview" />
+                                </AspectRatio>
+                            )}
                         </FormControl>
                     </Stack>
                     <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
