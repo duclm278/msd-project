@@ -7,6 +7,7 @@ const {
 } = require("../utils/cloudinary");
 
 exports.createDisk = async (data, image) => {
+    console.log(data);
     if (!image)
         return {
             type: statusType.error,
@@ -20,10 +21,6 @@ exports.createDisk = async (data, image) => {
         image.buffer,
         folder
     );
-
-    data.categoryId = await Category.checkId(data.category);
-
-    console.log(data.categoryId);
 
     const disk = await Disk.create(
         data,

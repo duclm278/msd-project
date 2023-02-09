@@ -10,48 +10,51 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useState } from "react";
 import MemberDialogEdit from "./MemberDialogEdit";
 
-export default function TableFullRow({ data }) {
-  const [openEdit, setOpenEdit] = useState(false);
+export default function TableFullRow({ data , setLoading, fetchData}) {
+    const [openEdit, setOpenEdit] = useState(false);
 
-  return (
-    <>
-      <Box>
-        <IconButton
-          size="md"
-          variant="plain"
-          color="neutral"
-          onClick={() => setOpenEdit(true)}
-          sx={{ color: "#fff" }}
-        >
-          <EditOutlinedIcon color="primary" />
-        </IconButton>
-        <MemberDialogEdit
-          id={data.id}
-          name={data.name}
-          phone={data.phone}
-          points={data.points}
-          rank={data.rank}
-          open={openEdit}
-          setOpen={setOpenEdit}
-        />
-      </Box>
-      <Stack justifyContent="center">
-        <Typography level="body2">{data.id}</Typography>
-      </Stack>
-      <Stack justifyContent="center">
-        <Typography level="body2">{data.name}</Typography>
-      </Stack>
-      <Stack justifyContent="center">
-        <Typography level="body2">{data.phone}</Typography>
-      </Stack>
-      <Stack justifyContent="center">
-        <Typography level="body2" sx={{ color: "success.400" }}>
-          {data.points}
-        </Typography>
-      </Stack>
-      <Stack justifyContent="center">
-        <Typography level="body2">{data.rank}</Typography>
-      </Stack>
-    </>
-  );
+    return (
+        <>
+            <Box>
+                <IconButton
+                    size="md"
+                    variant="plain"
+                    color="neutral"
+                    onClick={() => setOpenEdit(true)}
+                    sx={{ color: "#fff" }}
+                >
+                    <EditOutlinedIcon color="primary" />
+                </IconButton>
+                <MemberDialogEdit
+                    id={data.id}
+                    name={data.name}
+                    email={data.email}
+                    phone={data.phone}
+                    point={data.point}
+                    rank={data.rank}
+                    open={openEdit}
+                    setOpen={setOpenEdit}
+                    setLoading={setLoading}
+                    fetchData={fetchData}
+                />
+            </Box>
+            {/* <Stack justifyContent="center">
+                <Typography level="body2">{data.id}</Typography>
+            </Stack> */}
+            <Stack justifyContent="center">
+                <Typography level="body2">{data.name}</Typography>
+            </Stack>
+            <Stack justifyContent="center">
+                <Typography level="body2">{data.phone}</Typography>
+            </Stack>
+            <Stack justifyContent="center">
+                <Typography level="body2" sx={{ color: "success.400" }}>
+                    {data.point}
+                </Typography>
+            </Stack>
+            <Stack justifyContent="center">
+                <Typography level="body2">{data.rank}</Typography>
+            </Stack>
+        </>
+    );
 }

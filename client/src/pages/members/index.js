@@ -6,7 +6,7 @@ import Typography from "@mui/joy/Typography";
 import Add from "@mui/icons-material/Add";
 
 // Custom
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
 import SelectFilter from "../../components/SelectFilter";
@@ -14,6 +14,9 @@ import SideBar from "../../components/SideBar";
 import SideDrawer, { SideDrawerContext } from "../../components/SideDrawer";
 import MemberDialogAdd from "./MemberDialogAdd";
 import TableView from "./TableView";
+import status from "../../constants/status";
+import Loading from "../../components/Loading";
+import customerApi from "../../api/customerApi";
 
 export const filterOpts = ["Bronze", "Silver", "Gold", "Platinum", "Diamond"];
 
@@ -21,6 +24,33 @@ export default function Members() {
     const { drawerOpen } = useContext(SideDrawerContext);
     const [openAdd, setOpenAdd] = useState(false);
     const [currentOpt, setCurrentOpt] = useState(null);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const rankIndex = filterOpts.findIndex(
+                (item) => item === currentOpt
+            );
+            const response = await customerApi.searchByNameOrRank({
+                name: "",
+                rank: rankIndex !== -1 ? rankIndex + 1 : "",
+            });
+
+            if (response?.data?.type === status.success) {
+                setData(response?.data?.customers);
+            }
+        } catch (err) {
+            setData([]);
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        fetchData();
+        // eslint-disable-next-line
+    }, [currentOpt]);
 
     return (
         <>
@@ -89,9 +119,24 @@ export default function Members() {
                             <MemberDialogAdd
                                 open={openAdd}
                                 setOpen={setOpenAdd}
+                                setLoading={setLoading}
+                                fetchData={fetchData}
                             />
                         </Box>
-                        <TableView filterOpt={currentOpt} />
+                        {loading && <Loading />}
+                        {!loading && (
+                            <>
+                                {data.length === 0 ? (
+                                    "No customer!"
+                                ) : (
+                                    <TableView
+                                        data={data}
+                                        setLoading={setLoading}
+                                        fetchData={fetchData}
+                                    />
+                                )}
+                            </>
+                        )}
                     </Box>
                 </Layout.Main>
             </Layout.Root>
