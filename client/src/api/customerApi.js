@@ -2,14 +2,14 @@ import httpRequest from "./httpRequest";
 
 const PREFIX = "customer";
 
-const cutomerApi = {
+const customerApi = {
     create(data) {
         const url = `${PREFIX}/create`;
         return httpRequest.post(url, data);
     },
-    searchByName(name) {
+    searchByNameOrRank({ name, rank }) {
         const url = `${PREFIX}/search`;
-        return httpRequest.get(url, { params: { name } });
+        return httpRequest.get(url, { params: { name, rank } });
     },
     getCustomerById(id) {
         const url = `${PREFIX}/${id}`;
@@ -25,4 +25,4 @@ const cutomerApi = {
     },
 };
 
-export default cutomerApi;
+export default customerApi;

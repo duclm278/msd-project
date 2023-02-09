@@ -20,10 +20,10 @@ exports.createCustomer = async (req, res, next) => {
     }
 };
 
-exports.searchCustomersByName = async (req, res, next) => {
+exports.searchCustomersByNameOrRank = async (req, res, next) => {
     try {
         const { type, message, statusCode, customers } =
-            await customerService.searchCustomersByName(req.query.name);
+            await customerService.searchCustomersByNameOrRank(req.query);
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
 
@@ -36,6 +36,7 @@ exports.searchCustomersByName = async (req, res, next) => {
         next(err);
     }
 };
+
 
 exports.getCustomerById = async (req, res, next) => {
     try {
