@@ -1,7 +1,9 @@
+import AspectRatio from "@mui/joy/AspectRatio";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
+import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -9,16 +11,18 @@ import ModalDialog from "@mui/joy/ModalDialog";
 import Stack from "@mui/joy/Stack";
 import Textarea from "@mui/joy/Textarea";
 import Typography from "@mui/joy/Typography";
-import { useSnackbar } from "notistack";
+
+// Icons
+import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
 
 // Custom
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import ComboDiskList from "./ComboDiskList";
-import { useDebounce } from "../../hooks";
+import comboApi from "../../api/comboApi";
 import diskApi from "../../api/diskApi";
 import status from "../../constants/status";
-import { AspectRatio } from "@mui/joy";
-import comboApi from "../../api/comboApi";
+import { useDebounce } from "../../hooks";
+import ComboDiskList from "./ComboDiskList";
 
 export default function ComboDialogAdd({
   open,
@@ -113,7 +117,10 @@ export default function ComboDialogAdd({
     <Modal open={open} onClose={() => setOpen(false)}>
       <ModalDialog
         sx={{
-          maxWidth: 500,
+          width: "95%",
+          maxWidth: 550,
+          maxHeight: "95vh",
+          overflowY: "auto",
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
@@ -222,16 +229,14 @@ export default function ComboDialogAdd({
                 </FormControl>
                 <FormControl>
                   <FormLabel>Image</FormLabel>
-                  <Input
-                    name="image"
-                    placeholder="Image"
-                    type="file"
-                    onChange={onSelectFile}
-                  />
+                  <IconButton component="label">
+                    <AddPhotoAlternateRoundedIcon />
+                    <input type="file" hidden onChange={onSelectFile} />
+                  </IconButton>
                   {image && (
                     <AspectRatio
-                      objectFit="cover"
                       ratio="4 / 3"
+                      objectFit="cover"
                       sx={{ marginTop: 1 }}
                     >
                       <img src={preview} alt="Preview" />
