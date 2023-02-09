@@ -19,9 +19,9 @@ const customerApi = {
         const url = `${PREFIX}/${id}`;
         return httpRequest.delete(url);
     },
-    updateCustomerById(id) {
+    updateCustomerById(id, data) {
         const url = `${PREFIX}/${id}`;
-        return httpRequest.patch(url);
+        return httpRequest.patch(url, data);
     },
 };
 

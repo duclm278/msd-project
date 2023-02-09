@@ -5,7 +5,7 @@ import Typography from "@mui/joy/Typography";
 import * as React from "react";
 import TableFullRow from "./TableFullRow";
 
-export default function TableFull({ rows, cols }) {
+export default function TableFull({ rows, cols, setLoading, fetchData }) {
     return (
         <Sheet
             variant="outlined"
@@ -15,7 +15,7 @@ export default function TableFull({ rows, cols }) {
                 gridColumn: "1/-1",
                 display: { xs: "none", sm: "grid" },
                 gridTemplateColumns:
-                    "45px minmax(75px, 1fr) minmax(140px, 1fr) minmax(115px, 1fr) minmax(75px, 1fr) minmax(100px, 1fr)",
+                    "60px minmax(140px, 1fr) minmax(115px, 1fr) minmax(75px, 1fr) minmax(100px, 1fr)",
                 "& > *": {
                     p: 2,
                     [`&:nth-of-type(n):not(:nth-last-child(-n+${cols.length}))`]:
@@ -36,7 +36,11 @@ export default function TableFull({ rows, cols }) {
 
             {rows.map((row, i) => (
                 <React.Fragment key={i}>
-                    <TableFullRow data={row} />
+                    <TableFullRow
+                        data={row}
+                        setLoading={setLoading}
+                        fetchData={fetchData}
+                    />
                 </React.Fragment>
             ))}
         </Sheet>

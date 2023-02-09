@@ -27,7 +27,7 @@ export default function TableMiniRow({ data }) {
               {data.name}
             </Typography>
             <Typography level="body2" sx={{ color: "success.400" }}>
-              {data.points}
+              {data.point}
             </Typography>
           </Box>
           <Box
