@@ -15,6 +15,7 @@ export default function AlertDialog({
   normalText,
   open,
   setOpen,
+  handleConfirm,
 }) {
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
@@ -40,7 +41,14 @@ export default function AlertDialog({
           >
             {normalText}
           </Button>
-          <Button variant="solid" color="danger" onClick={() => setOpen(false)}>
+          <Button
+            variant="solid"
+            color="danger"
+            onClick={() => {
+              setOpen(false);
+              handleConfirm();
+            }}
+          >
             {dangerText}
           </Button>
         </Box>

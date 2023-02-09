@@ -16,16 +16,16 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
 // Custom
 import { useSnackbar } from "notistack";
-import { useState } from "react";
 import { filterOpts } from ".";
 import tableApi from "../../api/tableApi";
 import status from "../../constants/status";
+import { usePropState } from "../../hooks";
 
 export default function TableDialogEdit(props) {
   const { open, setOpen, setLoading, fetchData } = props;
-  const [id, setId] = useState(props.id);
-  const [numberOfSeats, setNumberOfSeats] = useState(props.numberOfSeats);
-  const [tableStatus, setTableStatus] = useState(props.tableStatus);
+  const [id, setId] = usePropState(props.id);
+  const [numberOfSeats, setNumberOfSeats] = usePropState(props.numberOfSeats);
+  const [tableStatus, setTableStatus] = usePropState(props.tableStatus);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSave = (e) => {
@@ -58,78 +58,76 @@ export default function TableDialogEdit(props) {
   };
 
   return (
-    <>
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog
-          sx={{
-            maxWidth: 500,
-            borderRadius: "md",
-            p: 3,
-            boxShadow: "lg",
-          }}
+    <Modal open={open} onClose={() => setOpen(false)}>
+      <ModalDialog
+        sx={{
+          maxWidth: 500,
+          borderRadius: "md",
+          p: 3,
+          boxShadow: "lg",
+        }}
+      >
+        <ModalClose />
+        <Typography
+          component="h2"
+          level="inherit"
+          fontSize="1.25em"
+          mb="0.25em"
         >
-          <ModalClose />
-          <Typography
-            component="h2"
-            level="inherit"
-            fontSize="1.25em"
-            mb="0.25em"
-          >
-            Edit table
-          </Typography>
-          <form>
-            <Stack>
-              <Stack spacing={2}>
-                <FormControl required>
-                  <FormLabel>ID</FormLabel>
-                  <Input
-                    disabled
-                    name="name"
-                    placeholder="Name"
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl required>
-                  <FormLabel>Capacity</FormLabel>
-                  <Input
-                    autoFocus
-                    name="capacity"
-                    placeholder="Number of seats"
-                    value={numberOfSeats}
-                    onChange={(e) => setNumberOfSeats(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    value={tableStatus}
-                    onChange={(e, newTableStatus) => {
-                      setTableStatus(newTableStatus);
-                    }}
-                  >
-                    {filterOpts.map((filterOpt) => (
-                      <Option key={filterOpt} value={filterOpt.status}>
-                        {filterOpt.status}
-                      </Option>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Stack>
-              <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
-                <Button
-                  type="button"
-                  onClick={(e) => handleSave(e)}
-                  startDecorator={<SaveRoundedIcon />}
-                  sx={{ flex: 1 }}
+          Edit table
+        </Typography>
+        <form>
+          <Stack>
+            <Stack spacing={2}>
+              <FormControl required>
+                <FormLabel>ID</FormLabel>
+                <Input
+                  disabled
+                  name="name"
+                  placeholder="Name"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
+              </FormControl>
+              <FormControl required>
+                <FormLabel>Capacity</FormLabel>
+                <Input
+                  autoFocus
+                  name="capacity"
+                  placeholder="Number of seats"
+                  value={numberOfSeats}
+                  onChange={(e) => setNumberOfSeats(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Status</FormLabel>
+                <Select
+                  value={tableStatus}
+                  onChange={(e, newTableStatus) => {
+                    setTableStatus(newTableStatus);
+                  }}
                 >
-                  Save
-                </Button>
-              </Box>
+                  {filterOpts.map((filterOpt) => (
+                    <Option key={filterOpt} value={filterOpt}>
+                      {filterOpt}
+                    </Option>
+                  ))}
+                </Select>
+              </FormControl>
             </Stack>
-          </form>
-        </ModalDialog>
-      </Modal>
-    </>
+            <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
+              <Button
+                type="button"
+                onClick={(e) => handleSave(e)}
+                startDecorator={<SaveRoundedIcon />}
+                sx={{ flex: 1 }}
+              >
+                Save
+              </Button>
+            </Box>
+          </Stack>
+        </form>
+      </ModalDialog>
+    </Modal>
   );
 }

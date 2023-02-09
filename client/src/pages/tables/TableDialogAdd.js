@@ -26,7 +26,7 @@ export default function TableDialogAdd({
 }) {
   const [id, setId] = useState("");
   const [numberOfSeats, setNumberOfSeats] = useState("");
-  const [tableStatus, setTableStatus] = useState(filterOpts[0].status);
+  const [tableStatus, setTableStatus] = useState(filterOpts[0]);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = () => {
@@ -53,7 +53,7 @@ export default function TableDialogAdd({
       }
       setId("");
       setNumberOfSeats("");
-      setTableStatus(filterOpts[0].status);
+      setTableStatus(filterOpts[0]);
     };
 
     submit();
@@ -116,8 +116,8 @@ export default function TableDialogAdd({
                   }}
                 >
                   {filterOpts.map((filterOpt) => (
-                    <Option key={filterOpt} value={filterOpt.status}>
-                      {filterOpt.status}
+                    <Option key={filterOpt} value={filterOpt}>
+                      {filterOpt}
                     </Option>
                   ))}
                 </Select>

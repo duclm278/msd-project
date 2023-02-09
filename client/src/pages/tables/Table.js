@@ -17,6 +17,7 @@ import MoreVert from "@mui/icons-material/MoreVert";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import tableApi from "../../api/tableApi";
+import AlertDialog from "../../components/AlertDialog";
 import status from "../../constants/status";
 import TableDialogEdit from "./TableDialogEdit";
 
@@ -30,6 +31,7 @@ export default function Table({
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const [openEdit, setOpenEdit] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const openMore = Boolean(anchorEl);
 
@@ -125,7 +127,13 @@ export default function Table({
                 </ListItemDecorator>
                 Edit table
               </MenuItem>
-              <MenuItem onClick={handleDelete} variant="soft" color="danger">
+              <MenuItem
+                onClick={() => {
+                  setOpenAlert(true);
+                }}
+                variant="soft"
+                color="danger"
+              >
                 <ListItemDecorator sx={{ color: "inherit" }}>
                   <DeleteForever />
                 </ListItemDecorator>
@@ -135,12 +143,22 @@ export default function Table({
           </Box>
           <TableDialogEdit
             id={id}
+            key={{ id }}
             numberOfSeats={numberOfSeats}
             tableStatus={tableStatus}
             open={openEdit}
             setOpen={setOpenEdit}
             setLoading={setLoading}
             fetchData={fetchData}
+          />
+          <AlertDialog
+            title="Confirmation"
+            content={`Are you sure you want to delete table ${id}?`}
+            dangerText="Delete"
+            normalText="Cancel"
+            open={openAlert}
+            setOpen={setOpenAlert}
+            handleConfirm={handleDelete}
           />
         </Box>
       </Card>

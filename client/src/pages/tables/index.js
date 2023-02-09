@@ -7,25 +7,27 @@ import Typography from "@mui/joy/Typography";
 import Add from "@mui/icons-material/Add";
 
 // Custom
-import { useContext, useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
+import { useContext, useEffect, useState } from "react";
+import tableApi from "../../api/tableApi";
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
+import Loading from "../../components/Loading";
 import SelectFilter from "../../components/SelectFilter";
 import SideBar from "../../components/SideBar";
 import SideDrawer, { SideDrawerContext } from "../../components/SideDrawer";
+import status from "../../constants/status";
 import Table from "./Table";
 import TableDialogAdd from "./TableDialogAdd";
-import tableApi from "../../api/tableApi";
-import status from "../../constants/status";
-import Loading from "../../components/Loading";
 
-export const filterOpts = [
+export const filterObjs = [
   { status: "Available", color: "success" },
   { status: "Reserved", color: "neutral" },
   { status: "Occupied", color: "primary" },
   { status: "Out of Order", color: "danger" },
 ];
+
+export const filterOpts = filterObjs.map((filterObj) => filterObj.status);
 
 export default function Tables() {
   const { drawerOpen } = useContext(SideDrawerContext);
@@ -107,7 +109,7 @@ export default function Tables() {
               <SelectFilter
                 filterOpt={filterOpt}
                 setFilterOpt={setFilterOpt}
-                filterOpts={filterOpts.map((item) => item.status)}
+                filterOpts={filterOpts}
               />
               <Button startDecorator={<Add />} onClick={() => setOpenAdd(true)}>
                 Add table
@@ -147,7 +149,7 @@ export default function Tables() {
                       numberOfSeats={table.number_of_seats}
                       tableStatus={table.table_status}
                       statusColor={
-                        filterOpts.find(
+                        filterObjs.find(
                           (item) => item.status === table.table_status
                         ).color
                       }
