@@ -100,9 +100,18 @@ exports.deleteDisk = async (id) => {
             statusCode: 404,
         };
 
-    await destroyFileCloudinary(disk.image_id);
+    const checkDiskInCombo = await Disk.checkExistedInCombo(id);
+
+    if (checkDiskInCombo)
+        return {
+            type: statusType.error,
+            message: `Disk is existed in combo "${checkDiskInCombo.combo_name}"!`,
+            statusCode: 404,
+        };
 
     await Disk.delete(id);
+
+    await destroyFileCloudinary(disk.image_id);
 
     return {
         type: statusType.success,

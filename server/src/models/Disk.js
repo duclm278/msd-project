@@ -45,6 +45,17 @@ class Disk {
         await sqlQuery(query);
     }
 
+    async checkExistedInCombo(id) {
+        const query = `
+            SELECT C.combo_name 
+            FROM DiskInCombo D
+            INNER JOIN Combo C
+                ON D.combo_id = C.combo_id
+            WHERE D.disk_id = ${id}
+        `;
+        return (await sqlQuery(query))[0];
+    }
+
     async update(id, data) {
         let query = `
             UPDATE Disk

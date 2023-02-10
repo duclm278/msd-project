@@ -115,9 +115,8 @@ exports.deleteEvent = async (id) => {
             statusCode: 404,
         };
 
-    await destroyFileCloudinary(event.poster_id);
-
     await Event.delete(id);
+    await destroyFileCloudinary(event.poster_id);
 
     return {
         type: statusType.success,
@@ -125,4 +124,3 @@ exports.deleteEvent = async (id) => {
         statusCode: 200,
     };
 };
-

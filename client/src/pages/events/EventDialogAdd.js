@@ -38,6 +38,8 @@ export default function EventDialogAdd({
     const [endTime, setEndTime] = useState(today);
     const { enqueueSnackbar } = useSnackbar();
 
+    
+
     // create a preview as a side effect, whenever selected file is changed
     useEffect(() => {
         if (!poster) {

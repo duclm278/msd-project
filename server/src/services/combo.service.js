@@ -8,7 +8,6 @@ const {
 
 exports.createCombo = async (data, image) => {
     // data.disks = JSON.parse(data.disks);
-
     if (!image)
         return {
             type: statusType.error,
@@ -72,8 +71,8 @@ exports.deleteCombo = async (comboId) => {
             statusCode: 404,
         };
 
-    await destroyFileCloudinary(combo.image_id);
     await Combo.delete(comboId);
+    await destroyFileCloudinary(combo.image_id);
 
     return {
         type: statusType.success,

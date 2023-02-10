@@ -40,7 +40,6 @@ export default function TableDialogEdit(props) {
 
         if (response?.data?.type === status.success) {
           fetchData();
-          setLoading(false);
           enqueueSnackbar(response?.data?.message, {
             variant: "success",
           });
