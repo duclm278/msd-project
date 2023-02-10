@@ -71,10 +71,10 @@ export default function DiskDialogAdd({
             const response = await diskApi.create(data);
 
             if (response?.data?.type === status.success) {
+                fetchData();
                 enqueueSnackbar(response.data.message, {
                     variant: "success",
                 });
-                fetchData();
             }
         } catch (err) {
             setLoading(false);

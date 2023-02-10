@@ -65,11 +65,10 @@ export default function DiskDialogEdit(props) {
                 });
 
                 if (response?.data?.type === status.success) {
+                    fetchData();
                     enqueueSnackbar(response.data.message, {
                         variant: "success",
                     });
-                    fetchData();
-                    setLoading(false);
                 }
             } catch (err) {
                 enqueueSnackbar(err.response.data?.message, {
@@ -90,11 +89,10 @@ export default function DiskDialogEdit(props) {
                 const response = await diskApi.delete(id);
 
                 if (response?.data?.type === status.success) {
+                    fetchData();
                     enqueueSnackbar(response.data.message, {
                         variant: "success",
                     });
-                    fetchData();
-                    setLoading(false);
                 }
             } catch (err) {
                 enqueueSnackbar(err.response.data?.message, {
