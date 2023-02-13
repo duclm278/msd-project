@@ -12,6 +12,9 @@ import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 import { useSnackbar } from "notistack";
 
+// Icons
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+
 // Custom
 import { useState } from "react";
 import { filterOpts } from ".";
@@ -123,8 +126,20 @@ export default function TableDialogAdd({
               </FormControl>
             </Stack>
             <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
-              <Button type="submit" sx={{ flex: 1 }}>
+              <Button
+                type="submit"
+                startDecorator={<SaveRoundedIcon />}
+                sx={{ flex: 1 }}
+              >
                 Save
+              </Button>
+              <Button
+                type="button"
+                variant="soft"
+                onClick={() => setOpen(false)}
+                sx={{ flex: 1 }}
+              >
+                Cancel
               </Button>
             </Box>
           </Stack>

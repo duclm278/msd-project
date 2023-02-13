@@ -1,10 +1,14 @@
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
+import Input from "@mui/joy/Input";
+import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
 // Icons
 import Add from "@mui/icons-material/Add";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import CircularProgress from "@mui/joy/CircularProgress";
 
 // Custom
 import { useSnackbar } from "notistack";
@@ -35,7 +39,8 @@ export default function Tables() {
   const [filterOpt, setFilterOpt] = useState(null);
   const [loading, setLoading] = useState(false);
   const [tables, setTables] = useState([]);
-
+  const [search, setSearch] = useState("");
+  const [processIcon, setProcessIcon] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const fetchData = async () => {
@@ -98,29 +103,46 @@ export default function Tables() {
                 Tables
               </Typography>
             </Box>
-            <Box
-              sx={{
-                my: 2,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              justifyContent="space-between"
+              sx={{ my: 2, gap: 2 }}
             >
-              <SelectFilter
-                filterOpt={filterOpt}
-                setFilterOpt={setFilterOpt}
-                filterOpts={filterOpts}
-              />
-              <Button startDecorator={<Add />} onClick={() => setOpenAdd(true)}>
-                Add table
-              </Button>
-              <TableDialogAdd
-                open={openAdd}
-                setOpen={setOpenAdd}
-                setLoading={setLoading}
-                fetchData={fetchData}
-              />
-            </Box>
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+                <Input
+                  name="search"
+                  placeholder="Search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  startDecorator={<SearchRoundedIcon />}
+                  endDecorator={
+                    processIcon && (
+                      <CircularProgress size="sm" color="primary" />
+                    )
+                  }
+                  sx={{ width: { md: 165 } }}
+                />
+                <SelectFilter
+                  filterOpt={filterOpt}
+                  setFilterOpt={setFilterOpt}
+                  filterOpts={filterOpts}
+                />
+              </Stack>
+              <Stack direction="row" spacing={{ xs: 1.5, sm: 2, md: 2 }}>
+                <Button
+                  startDecorator={<Add />}
+                  onClick={() => setOpenAdd(true)}
+                >
+                  Add table
+                </Button>
+                <TableDialogAdd
+                  open={openAdd}
+                  setOpen={setOpenAdd}
+                  setLoading={setLoading}
+                  fetchData={fetchData}
+                />
+              </Stack>
+            </Stack>
             <Divider />
           </Box>
           {loading && <Loading />}

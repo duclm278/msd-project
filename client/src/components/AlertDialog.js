@@ -44,9 +44,9 @@ export default function AlertDialog({
           <Button
             variant="solid"
             color="danger"
-            onClick={() => {
+            onClick={(e) => {
               setOpen(false);
-              handleConfirm();
+              handleConfirm(e);
             }}
           >
             {dangerText}

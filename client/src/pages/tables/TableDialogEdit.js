@@ -75,57 +75,63 @@ export default function TableDialogEdit(props) {
         >
           Edit table
         </Typography>
-        <form>
-          <Stack>
-            <Stack spacing={2}>
-              <FormControl required>
-                <FormLabel>ID</FormLabel>
-                <Input
-                  disabled
-                  name="name"
-                  placeholder="Name"
-                  value={id}
-                  onChange={(e) => setId(e.target.value)}
-                />
-              </FormControl>
-              <FormControl required>
-                <FormLabel>Capacity</FormLabel>
-                <Input
-                  autoFocus
-                  name="capacity"
-                  placeholder="Number of seats"
-                  value={numberOfSeats}
-                  onChange={(e) => setNumberOfSeats(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  value={tableStatus}
-                  onChange={(e, newTableStatus) => {
-                    setTableStatus(newTableStatus);
-                  }}
-                >
-                  {filterOpts.map((filterOpt) => (
-                    <Option key={filterOpt} value={filterOpt}>
-                      {filterOpt}
-                    </Option>
-                  ))}
-                </Select>
-              </FormControl>
-            </Stack>
-            <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
-              <Button
-                type="button"
-                onClick={(e) => handleSave(e)}
-                startDecorator={<SaveRoundedIcon />}
-                sx={{ flex: 1 }}
+        <Stack component="form">
+          <Stack spacing={2}>
+            <FormControl required>
+              <FormLabel>ID</FormLabel>
+              <Input
+                disabled
+                name="name"
+                placeholder="Name"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
+              />
+            </FormControl>
+            <FormControl required>
+              <FormLabel>Capacity</FormLabel>
+              <Input
+                autoFocus
+                name="capacity"
+                placeholder="Number of seats"
+                value={numberOfSeats}
+                onChange={(e) => setNumberOfSeats(e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Status</FormLabel>
+              <Select
+                value={tableStatus}
+                onChange={(e, newTableStatus) => {
+                  setTableStatus(newTableStatus);
+                }}
               >
-                Save
-              </Button>
-            </Box>
+                {filterOpts.map((filterOpt) => (
+                  <Option key={filterOpt} value={filterOpt}>
+                    {filterOpt}
+                  </Option>
+                ))}
+              </Select>
+            </FormControl>
           </Stack>
-        </form>
+          <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
+            <Button
+              type="button"
+              onClick={(e) => handleSave(e)}
+              startDecorator={<SaveRoundedIcon />}
+              sx={{ flex: 1 }}
+            >
+              Save
+            </Button>
+            <Button
+              type="button"
+              variant="soft"
+              onClick={() => setOpen(false)}
+              sx={{ flex: 1 }}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Stack>
       </ModalDialog>
     </Modal>
   );

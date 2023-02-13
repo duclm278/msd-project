@@ -44,6 +44,7 @@ export default function Table({
   };
 
   const handleDelete = (e) => {
+    e.preventDefault();
     const fetch = async () => {
       setLoading(true);
       try {
@@ -68,100 +69,98 @@ export default function Table({
   };
 
   return (
-    <>
-      <Card
-        variant="outlined"
+    <Card
+      variant="outlined"
+      sx={{
+        "--Card-radius": (theme) => theme.vars.radius.sm,
+        boxShadow: "none",
+      }}
+    >
+      <CardOverflow
         sx={{
-          "--Card-radius": (theme) => theme.vars.radius.sm,
-          boxShadow: "none",
+          borderBottom: "1px solid",
+          borderColor: "neutral.outlinedBorder",
         }}
       >
-        <CardOverflow
-          sx={{
-            borderBottom: "1px solid",
-            borderColor: "neutral.outlinedBorder",
-          }}
-        >
-          <AspectRatio ratio="2" color="primary">
-            <Typography
-              level="h3"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "primary.plainColor",
-              }}
-            >
-              {id}
-            </Typography>
-          </AspectRatio>
-        </CardOverflow>
-        <Box sx={{ pt: 2, display: "flex", alignItems: "center" }}>
-          <Box sx={{ flex: 1 }}>
-            <Typography>Seats: {numberOfSeats}</Typography>
-            <Typography color={statusColor}>{tableStatus}</Typography>
-          </Box>
-          <Box>
-            <IconButton
-              id="positioned-button"
-              aria-controls={openMore ? "positioned-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={openMore ? "true" : undefined}
-              variant="plain"
-              color="neutral"
-              onClick={handleMoreClick}
-            >
-              <MoreVert />
-            </IconButton>
-            <Menu
-              id="positioned-menu"
-              anchorEl={anchorEl}
-              open={openMore}
-              onClose={handleMoreClose}
-              aria-labelledby="positioned-button"
-              placement="bottom-end"
-            >
-              <MenuItem onClick={() => setOpenEdit(true)}>
-                <ListItemDecorator>
-                  <Edit />
-                </ListItemDecorator>
-                Edit table
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setOpenAlert(true);
-                }}
-                variant="soft"
-                color="danger"
-              >
-                <ListItemDecorator sx={{ color: "inherit" }}>
-                  <DeleteForever />
-                </ListItemDecorator>
-                Delete table
-              </MenuItem>
-            </Menu>
-          </Box>
-          <TableDialogEdit
-            id={id}
-            key={{ id }}
-            numberOfSeats={numberOfSeats}
-            tableStatus={tableStatus}
-            open={openEdit}
-            setOpen={setOpenEdit}
-            setLoading={setLoading}
-            fetchData={fetchData}
-          />
-          <AlertDialog
-            title="Confirmation"
-            content={`Are you sure you want to delete table ${id}?`}
-            dangerText="Delete"
-            normalText="Cancel"
-            open={openAlert}
-            setOpen={setOpenAlert}
-            handleConfirm={handleDelete}
-          />
+        <AspectRatio ratio="2" color="primary">
+          <Typography
+            level="h3"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "primary.plainColor",
+            }}
+          >
+            {id}
+          </Typography>
+        </AspectRatio>
+      </CardOverflow>
+      <Box sx={{ pt: 2, display: "flex", alignItems: "center" }}>
+        <Box sx={{ flex: 1 }}>
+          <Typography>Seats: {numberOfSeats}</Typography>
+          <Typography color={statusColor}>{tableStatus}</Typography>
         </Box>
-      </Card>
-    </>
+        <Box>
+          <IconButton
+            id="positioned-button"
+            aria-controls={openMore ? "positioned-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={openMore ? "true" : undefined}
+            variant="plain"
+            color="neutral"
+            onClick={handleMoreClick}
+          >
+            <MoreVert />
+          </IconButton>
+          <Menu
+            id="positioned-menu"
+            anchorEl={anchorEl}
+            open={openMore}
+            onClose={handleMoreClose}
+            aria-labelledby="positioned-button"
+            placement="bottom-end"
+          >
+            <MenuItem onClick={() => setOpenEdit(true)}>
+              <ListItemDecorator>
+                <Edit />
+              </ListItemDecorator>
+              Edit table
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setOpenAlert(true);
+              }}
+              variant="soft"
+              color="danger"
+            >
+              <ListItemDecorator sx={{ color: "inherit" }}>
+                <DeleteForever />
+              </ListItemDecorator>
+              Delete table
+            </MenuItem>
+          </Menu>
+        </Box>
+        <TableDialogEdit
+          id={id}
+          key={{ id }}
+          numberOfSeats={numberOfSeats}
+          tableStatus={tableStatus}
+          open={openEdit}
+          setOpen={setOpenEdit}
+          setLoading={setLoading}
+          fetchData={fetchData}
+        />
+        <AlertDialog
+          title="Confirmation"
+          content={`Are you sure you want to delete table ${id}?`}
+          dangerText="Delete"
+          normalText="Cancel"
+          open={openAlert}
+          setOpen={setOpenAlert}
+          handleConfirm={(e) => handleDelete(e)}
+        />
+      </Box>
+    </Card>
   );
 }
