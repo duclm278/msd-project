@@ -8,7 +8,7 @@ class Table {
         `;
 
         const response = await sqlQuery(query);
-        return response;
+        return response[0];
     }
 
     async getTableList() {

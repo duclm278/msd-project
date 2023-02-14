@@ -65,7 +65,7 @@ class Combo {
     async searchByName(name) {
         const query = `
             SELECT * FROM Combo
-            WHERE lower(combo_name) like lower('%${name}%')
+            WHERE lower(combo_name) like lower('%${name.trim()}%')
         `;
 
         return await sqlQuery(query);
