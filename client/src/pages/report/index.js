@@ -3,7 +3,7 @@ import Button from "@mui/joy/Button";
 import Typography from "@mui/joy/Typography";
 
 // Icons
-import Add from "@mui/icons-material/Add";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 // Custom
 import { useSnackbar } from "notistack";
@@ -16,8 +16,6 @@ import SideDrawer, { SideDrawerContext } from "../../components/SideDrawer";
 export default function Report() {
   const { drawerOpen } = useContext(SideDrawerContext);
   const [openAdd, setOpenAdd] = useState(false);
-
-  // TODO: Remove this after testing
   const { enqueueSnackbar } = useSnackbar();
 
   return (
@@ -68,20 +66,11 @@ export default function Report() {
                 justifyContent: "space-between",
               }}
             >
-              {/* Remove this after testing */}
               <Button
-                variant="outlined"
-                onClick={() =>
-                  enqueueSnackbar("This is a success message!", {
-                    variant: "success",
-                  })
-                }
+                startDecorator={<FileDownloadOutlinedIcon />}
+                onClick={() => setOpenAdd(true)}
               >
-                Test notify
-              </Button>
-
-              <Button startDecorator={<Add />} onClick={() => setOpenAdd(true)}>
-                Add report
+                Export report
               </Button>
             </Box>
           </Box>

@@ -12,10 +12,10 @@ import Remove from "@mui/icons-material/Remove";
 // Custom
 import React from "react";
 
-export default function OrderDiskList({ diskList, setDiskList }) {
+export default function OrderList({ list, setList }) {
   return (
     <Stack py={2} spacing={2}>
-      {diskList.map((diskItem, index) => (
+      {list.map((diskItem, index) => (
         <React.Fragment key={index}>
           <FormControl>
             <FormLabel>{diskItem.name}</FormLabel>
@@ -38,7 +38,7 @@ export default function OrderDiskList({ diskList, setDiskList }) {
                 size="sm"
                 variant="outlined"
                 onClick={() =>
-                  setDiskList((prevList) => [
+                  setList((prevList) => [
                     ...prevList.map((item, i) =>
                       i === index
                         ? {
@@ -59,7 +59,7 @@ export default function OrderDiskList({ diskList, setDiskList }) {
                 size="sm"
                 variant="outlined"
                 onClick={() =>
-                  setDiskList((prevList) => [
+                  setList((prevList) => [
                     ...prevList.map((item, i) =>
                       i === index
                         ? { ...item, quantity: item.quantity + 1 }

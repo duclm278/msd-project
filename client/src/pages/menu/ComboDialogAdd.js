@@ -42,7 +42,7 @@ export default function ComboDialogAdd({
   const [disks, setDisks] = useState([]);
   const [preview, setPreview] = useState();
   const [selectedDisks, setSelectedDisks] = useState([]);
-  const [processIcon, setProcessIcon] = useState(false);
+  const [progressIcon, setProgressIcon] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = () => {
@@ -84,7 +84,7 @@ export default function ComboDialogAdd({
   const debouncedValue = useDebounce(search, 500);
   useEffect(() => {
     const fetchApi = async () => {
-      setProcessIcon(true);
+      setProgressIcon(true);
       try {
         const response = await diskApi.search(debouncedValue);
         if (response?.data?.type === status.success) {
@@ -98,7 +98,7 @@ export default function ComboDialogAdd({
       } catch (err) {
         setDisks([]);
       }
-      setProcessIcon(false);
+      setProgressIcon(false);
     };
 
     fetchApi();
@@ -234,7 +234,7 @@ export default function ComboDialogAdd({
               <ComboDiskSelect
                 search={search}
                 setSearch={setSearch}
-                processIcon={processIcon}
+                progressIcon={progressIcon}
                 disks={disks}
                 setDisks={setDisks}
                 setSelectedDisks={setSelectedDisks}
@@ -269,7 +269,7 @@ export default function ComboDialogAdd({
               <ComboDiskSelect
                 search={search}
                 setSearch={setSearch}
-                processIcon={processIcon}
+                progressIcon={progressIcon}
                 disks={disks}
                 setDisks={setDisks}
                 setSelectedDisks={setSelectedDisks}
@@ -285,7 +285,7 @@ export default function ComboDialogAdd({
 function ComboDiskSelect({
   search,
   setSearch,
-  processIcon,
+  progressIcon,
   disks,
   setDisks,
   setSelectedDisks,
@@ -301,7 +301,7 @@ function ComboDiskSelect({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             endDecorator={
-              processIcon ? (
+              progressIcon ? (
                 <CircularProgress size="sm" color="primary" />
               ) : (
                 <SearchRoundedIcon color="neutral" />

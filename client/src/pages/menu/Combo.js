@@ -34,7 +34,7 @@ export default function Combo({
   const { enqueueSnackbar } = useSnackbar();
   const [openEdit, setOpenEdit] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
-  const [processIcon, setProcessIcon] = useState(false);
+  const [progressIcon, setProgressIcon] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const openMore = Boolean(anchorEl);
 
@@ -48,19 +48,19 @@ export default function Combo({
 
   const handleDelete = (e) => {
     e.preventDefault();
-    setProcessIcon(true);
+    setProgressIcon(true);
     const remove = async () => {
       try {
         const response = await comboApi.delete(id);
         if (response?.data?.type === status.success) {
-          setProcessIcon(false);
+          setProgressIcon(false);
           fetchData();
           enqueueSnackbar(response?.data?.message, {
             variant: "success",
           });
         }
       } catch (err) {
-        setProcessIcon(false);
+        setProgressIcon(false);
         enqueueSnackbar(err.response?.data?.message, {
           variant: "error",
         });
@@ -110,11 +110,11 @@ export default function Combo({
           aria-expanded={openMore ? "true" : undefined}
           variant="plain"
           color="neutral"
-          onClick={(e) => !processIcon && handleMoreClick(e)}
+          onClick={(e) => !progressIcon && handleMoreClick(e)}
           sx={{ color: "#fff" }}
         >
-          {processIcon && <CircularProgress size="sm" color="primary" />}
-          {!processIcon && <MoreVert />}
+          {progressIcon && <CircularProgress size="sm" color="primary" />}
+          {!progressIcon && <MoreVert />}
         </IconButton>
         <Menu
           id="positioned-menu"

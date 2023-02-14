@@ -14,12 +14,12 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 // Custom
 import { useContext, useEffect, useState } from "react";
-import Layout from "./Layout";
-import HeaderMenu from "./HeaderMenu";
-import { SideDrawerContext } from "./SideDrawer";
+import { Link as RouterLink } from "react-router-dom";
 import { UserContext } from "../contexts/UserProvider";
-
 import authentication from "../utils/authentication";
+import HeaderMenu from "./HeaderMenu";
+import Layout from "./Layout";
+import { SideDrawerContext } from "./SideDrawer";
 
 function ColorSchemeToggle() {
   const { mode, setMode } = useColorScheme();
@@ -75,6 +75,8 @@ export default function Header() {
         <IconButton
           size="sm"
           variant="solid"
+          component="a"
+          href="/home"
           sx={{ display: { xs: "none", sm: "inline-flex" } }}
         >
           <GroupRoundedIcon />
