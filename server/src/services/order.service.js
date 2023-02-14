@@ -4,6 +4,7 @@ const Customer = require("../models/Customer");
 const moment = require("moment");
 const Disk = require("../models/Disk");
 const Combo = require("../models/Combo");
+const Table = require("../models/Table");
 
 exports.createOrder = async (data) => {
     if (data.customerId) {
@@ -21,6 +22,15 @@ exports.createOrder = async (data) => {
         data.phone = customer.phone;
     }
 
+    const table = await Table.checkTableIdExisted(data.tableId);
+
+    if (!table)
+        return {
+            type: statusType.error,
+            message: "Table not found!",
+            statusCode: 404,
+        };
+
     if (!data.reservedTime) {
         data.reservedTime = moment().format("YYYY-MM-DD HH:mm:ss");
     } else {
@@ -29,7 +39,43 @@ exports.createOrder = async (data) => {
         );
     }
 
+    for (let disk of data.disks) {
+        const diskDoc = await Disk.getById(disk.id);
+
+        if (!diskDoc)
+            return {
+                type: statusType.error,
+                message: `Disk with id ${disk.id} not found!`,
+                statusCode: 404,
+            };
+    }
+
+    for (let combo of data.combos) {
+        const comboDoc = await Combo.getComboById(combo.id);
+
+        if (!comboDoc)
+            return {
+                type: statusType.error,
+                message: `Combo with id ${combo.id} not found!`,
+                statusCode: 404,
+            };
+    }
+
     const order = await Order.create(data);
+
+    if (data.disks) {
+        for (let disk of data.disks) {
+            await Order.insertDisk(order.order_id, disk.id, disk.quantity);
+        }
+    }
+
+    if (data.combos) {
+        for (let combo of data.combos) {
+            await Order.insertCombo(order.order_id, combo.id, combo.quantity);
+        }
+    }
+
+    await Order.calculateTotalCost(order.order_id);
 
     return {
         type: statusType.success,
