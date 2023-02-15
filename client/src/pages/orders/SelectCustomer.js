@@ -14,8 +14,14 @@ export function SelectCustomer({
 }) {
     return (
         <Autocomplete
-            placeholder="Apply event to discount"
+            placeholder="Search customer"
             value={customer}
+            onOpen={(e) => {
+                e.preventDefault();
+            }}
+            onClose={(e) => {
+                e.preventDefault();
+            }}
             onChange={(e, newValue) => {
                 setCustomer(newValue);
                 if (newValue) {

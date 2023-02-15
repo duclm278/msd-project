@@ -27,8 +27,14 @@ import comboApi from "../../api/comboApi";
 import status from "../../constants/status";
 import customerApi from "../../api/customerApi";
 import eventApi from "../../api/eventApi";
+import orderApi from "../../api/orderApi";
 
-export default function OrderDialogAdd({ open, setOpen }) {
+export default function OrderDialogAdd({
+    open,
+    setOpen,
+    setLoading,
+    fetchData,
+}) {
     let today = new Date();
     today.setUTCHours(0, 0, 0, 0);
     today = today.toISOString().replace(/:\d{2}.\d{3}Z$/, "");
@@ -153,18 +159,38 @@ export default function OrderDialogAdd({ open, setOpen }) {
             const data = {
                 tableId: table,
                 reservedTime,
-                disks: selectedDisks,
-                combos: selectedCombos,
-                totalCost: afterCost,
+                disks: selectedDisks.filter((item) => item.quantity !== 0),
+                combos: selectedCombos.filter((item) => item.quantity !== 0),
+                beforeCost,
+                afterCost,
             };
             if (customer) {
                 data.customerId = customer.id;
             } else {
+                data.customerId = null;
                 data.customerName = name;
                 data.phone = phone;
             }
-
-            console.log(data);
+            if (event) {
+                data.eventId = event.event_id;
+            } else {
+                data.eventId = null;
+            }
+            setLoading(true);
+            try {
+                const response = await orderApi.create(data);
+                if (response.data?.type === status.success) {
+                    fetchData();
+                    enqueueSnackbar(response.data?.message, {
+                        variant: "success",
+                    });
+                }
+            } catch (err) {
+                setLoading(false);
+                enqueueSnackbar(err.response.data?.message, {
+                    variant: "false",
+                });
+            }
         };
 
         submit();
@@ -172,6 +198,7 @@ export default function OrderDialogAdd({ open, setOpen }) {
         setPhone("");
         setReservedTime(today);
         setEvent(null);
+        setTable(0);
         setCustomer(null);
         setSelectedCombos([]);
         setSelectedDisks([]);
@@ -223,11 +250,11 @@ export default function OrderDialogAdd({ open, setOpen }) {
                                 <FormControl required>
                                     <FormLabel>Name</FormLabel>
                                     <Input
-                                        name="phone"
-                                        placeholder="Phone"
+                                        name="name"
+                                        placeholder="Name"
                                         value={name}
                                         onChange={(e) =>
-                                            setName(e.target.value.trim())
+                                            setName(e.target.value.trimStart())
                                         }
                                     />
                                 </FormControl>
@@ -238,7 +265,7 @@ export default function OrderDialogAdd({ open, setOpen }) {
                                         placeholder="Phone"
                                         value={phone}
                                         onChange={(e) =>
-                                            setPhone(e.target.value.trim())
+                                            setPhone(e.target.value.trimStart())
                                         }
                                     />
                                 </FormControl>
@@ -576,7 +603,7 @@ function OrderSelector({
                         name="search"
                         placeholder="Search"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value.trim())}
+                        onChange={(e) => setSearch(e.target.value.trimStart())}
                         endDecorator={
                             progressIcon ? (
                                 <CircularProgress size="sm" color="primary" />

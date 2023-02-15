@@ -15,7 +15,6 @@ import Typography from "@mui/joy/Typography";
 
 // Icons
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
 // Custom
@@ -41,7 +40,6 @@ export default function EventDialogEdit(props) {
   const [posterChanged, setPosterChanged] = useState(false);
   const [preview, setPreview] = useState();
   const { enqueueSnackbar } = useSnackbar();
-
   useEffect(() => {
     setPreview(poster);
     // eslint-disable-next-line

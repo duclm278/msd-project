@@ -102,7 +102,7 @@ export default function Orders() {
                                 placeholder="Search"
                                 value={search}
                                 onChange={(e) =>
-                                    setSearch(e.target.value.trim())
+                                    setSearch(e.target.value.trimStart())
                                 }
                                 startDecorator={<SearchRoundedIcon />}
                                 sx={{ width: { md: 300 } }}
@@ -114,12 +114,20 @@ export default function Orders() {
                                 Add order
                             </Button>
                             <OrderDialogAdd
+                                setLoading={setLoading}
                                 open={openAdd}
                                 setOpen={setOpenAdd}
+                                fetchData={fetchData}
                             />
                         </Box>
                         {loading && <Loading />}
-                        {!loading && <TableView data={data} />}
+                        {!loading && (
+                            <TableView
+                                data={data}
+                                setLoading={setLoading}
+                                fetchData={fetchData}
+                            />
+                        )}
                     </Box>
                 </Layout.Main>
             </Layout.Root>

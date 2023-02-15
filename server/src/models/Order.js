@@ -2,23 +2,30 @@ const sqlQuery = require("../database/connect");
 
 class Order {
     async create(data) {
-        if (data.eventId) {
-            const query = `
-                INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost, phone, status, event_id)
-                values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', 0, ${data.totalCost}, ${data.eventId})
+        const query = `
+                INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost_before_discount, total_cost_after_discount, phone, status, event_id)
+                values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', ${data.beforeCost}, ${data.afterCost}, '${data.phone}', 'Unpiad', ${data.eventId})
                 returning *
             `;
+        return (await sqlQuery(query))[0];
+    }
 
-            return (await sqlQuery(query))[0];
-        } else {
-            const query = `
-                INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost, phone, status)
-                values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', ${data.totalCost}, '${data.phone}')
-                returning *
-            `;
-
-            return (await sqlQuery(query))[0];
-        }
+    async updateOrder(id, data) {
+        let query = `
+            UPDATE "Order"
+            SET
+                customer_id = ${data.customerId},
+                customer_name = '${data.customerName}',
+                table_id = ${data.tableId},
+                reserved_time = '${data.reservedTime}',
+                total_cost_before_discount = ${data.beforeCost},
+                total_cost_after_discount =  ${data.afterCost},
+                phone = '${data.phone}',
+                status = '${data.status}',
+                event_id = ${data.eventId}
+            WHERE order_id = ${id}
+        `;
+        return await sqlQuery(query);
     }
 
     async delete(orderId) {
@@ -122,6 +129,26 @@ class Order {
                 lower(customer_name) like lower('%${searchData}%') 
             or  lower(phone) like lower('%${searchData}%')
         `;
+        return await sqlQuery(query);
+    }
+
+    async getDisksInOrder(orderId) {
+        let query = `
+        SELECT DIO.disk_id id, D.disk_name "name", quantity, D.price FROM DiskInOrder DIO
+        inner join Disk D
+            on DIO.disk_id = D.disk_id
+        WHERE order_id = ${orderId}
+    `;
+        return await sqlQuery(query);
+    }
+
+    async getCombosInOrder(orderId) {
+        let query = `
+        SELECT CIO.combo_id id, C.combo_name "name", quantity, C.combo_price price FROM ComboInOrder CIO
+        inner join Combo C
+            on CIO.combo_id = C.combo_id
+        WHERE order_id = ${orderId}
+    `;
         return await sqlQuery(query);
     }
 }

@@ -9,6 +9,12 @@ export function SelectEvent({ event, setEvent, events, loading }) {
         <Autocomplete
             placeholder="Apply event to discount"
             value={event}
+            onOpen={(e) => {
+                e.preventDefault();
+            }}
+            onClose={(e) => {
+                e.preventDefault();
+            }}
             onChange={(e, newValue) => {
                 setEvent(newValue);
             }}

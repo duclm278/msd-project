@@ -19,9 +19,17 @@ const orderApi = {
         const url = `${PREFIX}/cost/${id}`;
         return httpRequest.patch(url, data);
     },
+    getOrderById(id) {
+        const url = `${PREFIX}/${id}`;
+        return httpRequest.get(url);
+    },
     search(name) {
         const url = `${PREFIX}/search`;
         return httpRequest.get(url, { params: { name } });
+    },
+    getComboAndDisk(id) {
+        const url = `${PREFIX}/combo-and-disk/${id}`;
+        return httpRequest.get(url);
     },
 };
 
