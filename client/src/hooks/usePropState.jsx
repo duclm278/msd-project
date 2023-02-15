@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 
 export default function usePropState(prop) {
+    // eslint-disable-next-line
     const [counter, setCounter] = useState(0);
     const currentPropRef = useRef(prop);
     const currentStateRef = useRef(prop);

@@ -28,8 +28,10 @@ exports.createEvent = async (body, image) => {
     };
 };
 
-exports.getEventList = async () => {
-    const events = await Event.getEventList();
+exports.searchEvent = async (name, price) => {
+    let events;
+    if (price) events = await Event.search(name, price);
+    else events = await Event.search(name);
 
     if (events.length < 1)
         return {

@@ -13,9 +13,9 @@ const eventApi = {
         const url = `${PREFIX}/${id}`;
         return httpRequest.get(url);
     },
-    getListOfEvent() {
-        const url = `${PREFIX}`;
-        return httpRequest.get(url);
+    searchEvent(name, price) {
+        const url = `${PREFIX}/search`;
+        return httpRequest.get(url, { params: { name, price } });
     },
     delete(id) {
         const url = `${PREFIX}/${id}`;
