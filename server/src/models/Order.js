@@ -2,13 +2,23 @@ const sqlQuery = require("../database/connect");
 
 class Order {
     async create(data) {
-        const query = `
-            INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost, phone, status)
-            values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', 0, '${data.phone}', 'Unpaid')
-            returning *
-        `;
+        if (data.eventId) {
+            const query = `
+                INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost, phone, status, event_id)
+                values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', 0, ${data.totalCost}, ${data.eventId})
+                returning *
+            `;
 
-        return (await sqlQuery(query))[0];
+            return (await sqlQuery(query))[0];
+        } else {
+            const query = `
+                INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost, phone, status)
+                values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', ${data.totalCost}, '${data.phone}')
+                returning *
+            `;
+
+            return (await sqlQuery(query))[0];
+        }
     }
 
     async delete(orderId) {

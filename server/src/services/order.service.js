@@ -75,8 +75,6 @@ exports.createOrder = async (data) => {
         }
     }
 
-    await Order.calculateTotalCost(order.order_id);
-
     return {
         type: statusType.success,
         message: "Order created!",

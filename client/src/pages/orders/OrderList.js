@@ -7,7 +7,6 @@ import Typography from "@mui/joy/Typography";
 
 // Icons
 import Add from "@mui/icons-material/Add";
-import Remove from "@mui/icons-material/Remove";
 
 // Custom
 import React from "react";

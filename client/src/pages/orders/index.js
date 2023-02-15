@@ -6,7 +6,6 @@ import Typography from "@mui/joy/Typography";
 // Icons
 import Add from "@mui/icons-material/Add";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import CircularProgress from "@mui/joy/CircularProgress";
 
 // Custom
 import { useContext, useEffect, useState } from "react";
@@ -19,6 +18,7 @@ import TableView from "./TableView";
 import useDebounce from "../../hooks/useDebounce";
 import orderApi from "../../api/orderApi";
 import status from "../../constants/status";
+import Loading from "../../components/Loading";
 
 export default function Orders() {
     const { drawerOpen } = useContext(SideDrawerContext);
@@ -26,7 +26,6 @@ export default function Orders() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
-    const [progressIcon, setProgressIcon] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
@@ -45,6 +44,7 @@ export default function Orders() {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line
     }, [debounceValue]);
 
     return (
@@ -105,15 +105,7 @@ export default function Orders() {
                                     setSearch(e.target.value.trim())
                                 }
                                 startDecorator={<SearchRoundedIcon />}
-                                endDecorator={
-                                    progressIcon && (
-                                        <CircularProgress
-                                            size="sm"
-                                            color="primary"
-                                        />
-                                    )
-                                }
-                                sx={{ width: { md: 165 } }}
+                                sx={{ width: { md: 300 } }}
                             />
                             <Button
                                 startDecorator={<Add />}
@@ -126,7 +118,8 @@ export default function Orders() {
                                 setOpen={setOpenAdd}
                             />
                         </Box>
-                        <TableView data={data} />
+                        {loading && <Loading />}
+                        {!loading && <TableView data={data} />}
                     </Box>
                 </Layout.Main>
             </Layout.Root>

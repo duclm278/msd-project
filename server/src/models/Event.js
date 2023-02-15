@@ -53,11 +53,11 @@ class Event {
         await sqlQuery(query);
     }
 
-    async getEventList() {
+    async search(name, price = Number.MAX_SAFE_INTEGER) {
         const query = `
             SELECT * FROM Event
+            WHERE lower(event_name) like lower('%${name.trim()}%') and min_cost <= ${price}
         `;
-
         return await sqlQuery(query);
     }
 }

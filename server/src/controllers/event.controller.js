@@ -20,10 +20,10 @@ exports.createEvent = async (req, res, next) => {
     }
 };
 
-exports.getEventList = async (req, res, next) => {
+exports.searchEvent = async (req, res, next) => {
     try {
         const { type, message, statusCode, events } =
-            await eventService.getEventList();
+            await eventService.searchEvent(req.query.name, req.query.price);
 
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));
