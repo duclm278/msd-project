@@ -182,3 +182,21 @@ exports.updateCost = async (id, cost) => {
         order: updatedOrder,
     };
 };
+
+exports.getListOrder = async (search) => {
+    const orders = await Order.search(search);
+
+    if (orders.length < 1)
+        return {
+            type: statusType.error,
+            message: "No order found!",
+            statusCode: 404,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Order found!",
+        statusCode: 200,
+        orders,
+    };
+};

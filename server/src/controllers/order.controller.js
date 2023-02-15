@@ -74,3 +74,21 @@ exports.updateCost = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.searchOrder = async (req, res, next) => {
+    try {
+        const { type, message, statusCode, orders } =
+            await orderService.getListOrder(req.query.name);
+
+        if (type === statusType.error)
+            return next(new CustomErrorHandler(statusCode, message));
+
+        res.status(statusCode).json({
+            type,
+            message,
+            orders,
+        });
+    } catch (err) {
+        next(err);
+    }
+};

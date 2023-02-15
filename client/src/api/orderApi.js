@@ -19,6 +19,10 @@ const orderApi = {
         const url = `${PREFIX}/cost/${id}`;
         return httpRequest.patch(url, data);
     },
+    search(name) {
+        const url = `${PREFIX}/search`;
+        return httpRequest.get(url, { params: { name } });
+    },
 };
 
 export default orderApi;
