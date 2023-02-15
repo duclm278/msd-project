@@ -1,8 +1,4 @@
 import Box from "@mui/joy/Box";
-// import Button from "@mui/joy/Button";
-// import CircularProgress from "@mui/joy/CircularProgress";
-// import Divider from "@mui/joy/Divider";
-// import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
@@ -37,32 +33,55 @@ export default function Home() {
         >
           <Stack spacing={2}>
             <Typography fontWeight="bold" level="h3" component="h1">
-              Home
+              Welcome to RMS!
             </Typography>
+            <img
+              src="/responsive-design.png"
+              alt=""
+              loading="lazy"
+              style={{ maxWidth: 500 }}
+            />
+            {/* </Stack> */}
             <Typography fontWeight="bold" level="h5" component="h2">
-              Which devices does this app support?
+              INTRODUCTION
             </Typography>
             <Stack>
               <Box>
-                Typically, there are four types of screen sizes that responsive
-                design is tailored to smartphones and tablets including:
+                What is RMS? A restaurant management system is a type of
+                point-of-sale (POS) software specifically designed for
+                restaurants, bars, food trucks and others in the food service
+                industry. Unlike a POS system, RMS encompasses all back-end
+                needs, such as inventory and staff management. This RMS prepares
+                your website for use on all devices. Responsive websites
+                dynamically resizes content and images for all different screen
+                sizes for use on any device. With more than 50% of internet
+                traffic coming from devices other than laptops and desktops, a
+                site which isn’t responsive potentially loses half of its
+                customers.
               </Box>
-              <ul>
-                <li>Tablets: 768-959 pixels</li>
-                <li>Widescreen desktop: 1220 + pixels</li>
-                <li>Smaller desktop (laptops): 960-1219 pixels</li>
-                <li>Widescreen desktop: 1220+ pixels</li>
+              <ul style={{ marginTop: 10 }}>
                 <li>
-                  Mobile phones: 480-767 pixels (wide), 479 or fewer pixels
-                  (vertical)
+                  We make sure your site is responsive across devices of all
+                  types.
                 </li>
+                <li>
+                  The code of your responsive website design makes sure that
+                  your site functions on future mobile web platforms.
+                </li>
+                <li>Your website is not one-size-fits-all.</li>
               </ul>
+              <Typography fontWeight="bold" level="h5" component="h2">
+                RESPONSIVE DESIGN: THE SITE FITS ALL DEVICES
+              </Typography>
               <Box>
-                Depending on the device you use, the content on the screen will
-                shift around to best display the page. But saying that it shifts
-                to fit the size of the device is putting it too simply. The
-                reason it shifts is that it is a responsive layout or adaptive
-                web design.
+                As a consumer, you expect responsive website design when you go
+                online. Responsive design means your single website will adapt
+                to the device of every unique visitor. Whether your potential
+                customers are on a desktop or on their phones, you want your
+                site to look beautiful across all devices. RMS considers the
+                responsiveness of your website in our complete website
+                development process. We make sure your site not only functions,
+                but also looks great, on every device.
               </Box>
             </Stack>
           </Stack>
