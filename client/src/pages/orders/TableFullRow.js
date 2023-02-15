@@ -11,12 +11,10 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useState } from "react";
 import OrderDialogEdit from "./OrderDialogEdit";
 
-export default function TableFullRow({ no, data }) {
+export default function TableFullRow({ data, setLoading, fetchData }) {
     const [openEdit, setOpenEdit] = useState(false);
 
-    const date = moment(new Date(data.reserved_time)).format(
-        "DD/MM/YYYY HH:mm:ss"
-    );
+    const date = moment.utc(data.reserved_time).format("DD/MM/YYYY HH:mm:ss");
 
     return (
         <>
@@ -33,7 +31,9 @@ export default function TableFullRow({ no, data }) {
                 <Typography level="body2">{data.table_id}</Typography>
             </Stack>
             <Stack justifyContent="center">
-                <Typography level="body2">{data.total_cost}</Typography>
+                <Typography level="body2">
+                    {data.total_cost_after_discount.toLocaleString()}đ
+                </Typography>
             </Stack>
             <Stack justifyContent="center">
                 {data.status === "Paid" ? (
@@ -56,15 +56,15 @@ export default function TableFullRow({ no, data }) {
                 >
                     <EditOutlinedIcon color="primary" />
                 </IconButton>
-                <OrderDialogEdit
-                    id={data.id}
-                    phone={data.phone}
-                    table={data.table_id}
-                    eventName={data.eventName}
-                    reservedTime={data.reserved_time}
-                    open={openEdit}
-                    setOpen={setOpenEdit}
-                />
+                {openEdit && (
+                    <OrderDialogEdit
+                        id={data.order_id}
+                        open={openEdit}
+                        setOpen={setOpenEdit}
+                        setLoading={setLoading}
+                        fetchData={fetchData}
+                    />
+                )}
             </Box>
         </>
     );

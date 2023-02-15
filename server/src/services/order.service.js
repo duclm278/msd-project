@@ -60,7 +60,6 @@ exports.createOrder = async (data) => {
                 statusCode: 404,
             };
     }
-
     const order = await Order.create(data);
 
     if (data.disks) {
@@ -114,6 +113,15 @@ exports.updateOrder = async (id, data) => {
             statusCode: 404,
         };
 
+    const table = await Table.checkTableIdExisted(data.tableId);
+
+    if (!table)
+        return {
+            type: statusType.error,
+            message: "Table not found!",
+            statusCode: 404,
+        };
+
     for (let disk of data.disks) {
         const diskDoc = await Disk.getById(disk.id);
 
@@ -135,6 +143,23 @@ exports.updateOrder = async (id, data) => {
                 statusCode: 404,
             };
     }
+
+    if (data.customerId) {
+        const customer = await Customer.getCustomerById(data.customerId);
+
+        if (!customer) {
+            return {
+                type: statusType.error,
+                message: "No customer found!",
+                statusCode: 404,
+            };
+        }
+
+        data.customerName = customer.name;
+        data.phone = customer.phone;
+    }
+    console.log(data);
+    await Order.updateOrder(id, data)
 
     if (data.disks) {
         await Order.deleteDisk(id);
@@ -181,6 +206,24 @@ exports.updateCost = async (id, cost) => {
     };
 };
 
+exports.getOrderById = async (id) => {
+    const order = await Order.getOrderById(id);
+
+    if (!order)
+        return {
+            type: statusType.error,
+            message: "Order not found!",
+            statusCode: 404,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Order found!",
+        statusCode: 200,
+        order,
+    };
+};
+
 exports.getListOrder = async (search) => {
     const orders = await Order.search(search);
 
@@ -196,5 +239,23 @@ exports.getListOrder = async (search) => {
         message: "Order found!",
         statusCode: 200,
         orders,
+    };
+};
+
+exports.getCombosAndDisks = async (orderId) => {
+    const order = await Order.getOrderById(orderId);
+
+    if (!order)
+        return {
+            type: statusType.error,
+            message: "No order found!",
+            statusCode: 404,
+        };
+    return {
+        type: statusType.success,
+        message: "Get combo and disk!",
+        statusCode: 200,
+        disks: await Order.getDisksInOrder(orderId),
+        combos: await Order.getCombosInOrder(orderId),
     };
 };

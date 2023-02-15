@@ -120,7 +120,7 @@ export default function Members() {
                                     placeholder="Search"
                                     value={search}
                                     onChange={(e) =>
-                                        setSearch(e.target.value.trim())
+                                        setSearch(e.target.value.trimStart())
                                     }
                                     startDecorator={<SearchRoundedIcon />}
                                     sx={{ width: { md: 300 } }}
