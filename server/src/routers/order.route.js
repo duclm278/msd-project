@@ -11,4 +11,6 @@ router
 
 router.patch("/cost/:orderId", orderController.updateCost);
 
+router.get("/search", orderController.searchOrder);
+
 module.exports = router;

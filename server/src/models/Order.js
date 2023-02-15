@@ -3,8 +3,8 @@ const sqlQuery = require("../database/connect");
 class Order {
     async create(data) {
         const query = `
-            INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost, phone)
-            values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', 0, '${data.phone}')
+            INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost, phone, status)
+            values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', 0, '${data.phone}', 'Unpaid')
             returning *
         `;
 
@@ -103,6 +103,16 @@ class Order {
             returning *
         `;
         return (await sqlQuery(query))[0];
+    }
+
+    async search(searchData) {
+        let query = `
+            SELECT * FROM "Order"
+            WHERE 
+                lower(customer_name) like lower('%${searchData}%') 
+            or  lower(phone) like lower('%${searchData}%')
+        `;
+        return await sqlQuery(query);
     }
 }
 

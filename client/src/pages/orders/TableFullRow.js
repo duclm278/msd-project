@@ -14,7 +14,7 @@ import OrderDialogEdit from "./OrderDialogEdit";
 export default function TableFullRow({ no, data }) {
     const [openEdit, setOpenEdit] = useState(false);
 
-    const date = moment(new Date(data.reservedTime)).format(
+    const date = moment(new Date(data.reserved_time)).format(
         "DD/MM/YYYY HH:mm:ss"
     );
 
@@ -24,18 +24,16 @@ export default function TableFullRow({ no, data }) {
                 <Typography level="body2">{date}</Typography>
             </Stack>
             <Stack justifyContent="center">
-                <Typography level="body2">{data.name}</Typography>
+                <Typography level="body2">{data.customer_name}</Typography>
             </Stack>
             <Stack justifyContent="center">
                 <Typography level="body2">{data.phone}</Typography>
             </Stack>
             <Stack justifyContent="center">
-                <Typography level="body2">{data.table}</Typography>
+                <Typography level="body2">{data.table_id}</Typography>
             </Stack>
             <Stack justifyContent="center">
-                <Typography level="body2">
-                    {data.money.toLocaleString()}
-                </Typography>
+                <Typography level="body2">{data.total_cost}</Typography>
             </Stack>
             <Stack justifyContent="center">
                 {data.status === "Paid" ? (
@@ -61,9 +59,9 @@ export default function TableFullRow({ no, data }) {
                 <OrderDialogEdit
                     id={data.id}
                     phone={data.phone}
-                    table={data.table}
+                    table={data.table_id}
                     eventName={data.eventName}
-                    reservedTime={data.reservedTime}
+                    reservedTime={data.reserved_time}
                     open={openEdit}
                     setOpen={setOpenEdit}
                 />
