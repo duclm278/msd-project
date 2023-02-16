@@ -1,9 +1,33 @@
 const Combo = require("../models/Combo");
 const statusType = require("../constants/statusType");
 const Disk = require("../models/Disk");
+const {
+    uploadFileCloudinary,
+    destroyFileCloudinary,
+} = require("../utils/cloudinary");
 
-exports.createCombo = async (data) => {
-    const combo = await Combo.create(data.name, data.description);
+exports.createCombo = async (data, image) => {
+    // data.disks = JSON.parse(data.disks);
+    if (!image)
+        return {
+            type: statusType.error,
+            message: "Image required!",
+            statusCode: 400,
+        };
+
+    const folder = `Combos/${data.name.trim().split(" ").join("-")}`;
+
+    const imageUploadResponse = await uploadFileCloudinary(
+        image.buffer,
+        folder
+    );
+    const combo = await Combo.create(
+        data.name,
+        data.description,
+        data.price,
+        imageUploadResponse.secure_url,
+        imageUploadResponse.public_id
+    );
 
     if (!combo)
         return {
@@ -31,7 +55,7 @@ exports.createCombo = async (data) => {
         message: "Create combo successfully!",
         statusCode: 200,
         combo: {
-            name: (await Combo.getComboById(combo.combo_id)).combo_name,
+            ...(await Combo.getComboById(combo.combo_id)),
             disks: await Combo.getDiskInComboById(combo.combo_id),
         },
     };
@@ -48,6 +72,7 @@ exports.deleteCombo = async (comboId) => {
         };
 
     await Combo.delete(comboId);
+    await destroyFileCloudinary(combo.image_id);
 
     return {
         type: statusType.success,
@@ -71,5 +96,94 @@ exports.searchByName = async (name) => {
         message: "Found!",
         statusCode: 200,
         combos,
+    };
+};
+
+exports.getComboList = async () => {
+    const combos = await Combo.getComboList();
+
+    if (combos.length < 1)
+        return {
+            type: statusType.error,
+            message: "No combo found!",
+            statusCode: 404,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Combos found!",
+        statusCode: 200,
+        combos,
+    };
+};
+
+exports.getComboDetail = async (id) => {
+    const combo = await Combo.getComboById(id);
+
+    if (!combo)
+        return {
+            type: statusType.error,
+            message: "No combo found!",
+            statusCode: 404,
+        };
+
+    const disks = await Combo.getDiskInComboById(id);
+
+    return {
+        type: statusType.success,
+        message: "Combo found!",
+        statusCode: 200,
+        combo: { ...combo, disks },
+    };
+};
+
+exports.updateCombo = async (id, data, image) => {
+    const combo = await Combo.getComboById(id);
+
+    if (!combo)
+        return {
+            type: statusType.error,
+            message: "No combo found!",
+            statusCode: 404,
+        };
+
+    if (image) {
+        await destroyFileCloudinary(combo.image_id);
+
+        const folder = `Combos/${
+            data.name
+                ? data.name.trim().split(" ").join("-")
+                : combo.combo_name.trim().split(" ").join("-")
+        }`;
+
+        const imageUploadResponse = await uploadFileCloudinary(
+            image.buffer,
+            folder
+        );
+
+        data.image = imageUploadResponse.secure_url;
+        data.imageId = imageUploadResponse.public_id;
+    } else {
+        data.image = combo.image;
+        data.imageId = combo.image_id;
+    }
+
+    if (data.disks) {
+        await Combo.removeDiskInCombo(id);
+        for (let disk of data.disks) {
+            await Combo.insertDiskIntoCombo(id, disk.id, disk.quantity);
+        }
+    }
+
+    await Combo.update(id, data);
+
+    return {
+        type: statusType.success,
+        message: "Combo updated!",
+        statusCode: 200,
+        combo: {
+            ...(await Combo.getComboById(id)),
+            disks: await Combo.getDiskInComboById(id),
+        },
     };
 };

@@ -1,22 +1,51 @@
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
+import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 
 // Icons
 import Add from "@mui/icons-material/Add";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 // Custom
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import orderApi from "../../api/orderApi";
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
+import Loading from "../../components/Loading";
 import SideBar from "../../components/SideBar";
 import SideDrawer, { SideDrawerContext } from "../../components/SideDrawer";
+import status from "../../constants/status";
+import useDebounce from "../../hooks/useDebounce";
 import OrderDialogAdd from "./OrderDialogAdd";
 import TableView from "./TableView";
 
 export default function Orders() {
   const { drawerOpen } = useContext(SideDrawerContext);
   const [openAdd, setOpenAdd] = useState(false);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await orderApi.search(debounceValue);
+      if (response.data?.type === status.success) {
+        setData(response.data.orders);
+      }
+    } catch (err) {
+      setData([]);
+    }
+    setLoading(false);
+  };
+
+  const debounceValue = useDebounce(search, 500);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, [debounceValue]);
 
   return (
     <>
@@ -38,6 +67,7 @@ export default function Orders() {
           <Box
             sx={{
               pt: 1,
+              pb: 0.5,
               bgcolor: "background.surface",
               position: "sticky",
               top: 64, // TODO: Fix hard code
@@ -64,13 +94,33 @@ export default function Orders() {
                 justifyContent: "space-between",
               }}
             >
+              <Input
+                name="search"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value.trimStart())}
+                startDecorator={<SearchRoundedIcon />}
+                sx={{ width: { md: 300 } }}
+              />
               <Button startDecorator={<Add />} onClick={() => setOpenAdd(true)}>
                 Add order
               </Button>
-              <OrderDialogAdd open={openAdd} setOpen={setOpenAdd} />
+              <OrderDialogAdd
+                setLoading={setLoading}
+                open={openAdd}
+                setOpen={setOpenAdd}
+                fetchData={fetchData}
+              />
             </Box>
-            <TableView />
           </Box>
+          {loading && <Loading />}
+          {!loading && (
+            <TableView
+              data={data}
+              setLoading={setLoading}
+              fetchData={fetchData}
+            />
+          )}
         </Layout.Main>
       </Layout.Root>
     </>

@@ -6,71 +6,81 @@ import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
 // Icons
-import Add from "@mui/icons-material/Add";
-import Remove from "@mui/icons-material/Remove";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 // Custom
 import React from "react";
 
-export default function ComboDiskList({ diskList, setDiskList }) {
+export default function ComboDiskList({
+  diskList,
+  setSelectedDisks,
+  selectedDisks,
+}) {
   return (
     <Stack py={2} spacing={2}>
       {diskList.map((diskItem, index) => (
         <React.Fragment key={index}>
           <FormControl>
-            <FormLabel>{diskItem.name}</FormLabel>
-            <Typography level="body3">
-              Price: {diskItem.price.toLocaleString()}
-            </Typography>
-            <Box
+            <Stack
+              direction={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
               sx={{
-                display: "flex",
-                gap: 2,
-                alignItems: "center",
-                pt: 1,
-                pr: 2,
-                mr: 3,
-                borderTop: "1px solid",
+                borderBottom: "1px solid",
                 borderColor: "background.level2",
               }}
             >
-              <IconButton
-                size="sm"
-                variant="outlined"
-                onClick={() =>
-                  setDiskList((prevList) => [
-                    ...prevList.map((item, i) =>
-                      i === index
-                        ? {
-                            ...item,
-                            quantity: Math.max(0, item.quantity - 1),
-                          }
-                        : item
-                    ),
-                  ])
-                }
+              <Stack>
+                <FormLabel>{diskItem.disk_name}</FormLabel>
+                <Typography level="body3">
+                  Price: {diskItem.price.toLocaleString()}đ
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="end"
+                spacing={1}
+                marginRight={"12px"}
+                marginBottom={"4px"}
               >
-                <Remove />
-              </IconButton>
-              <Typography fontWeight="md" textColor="text.secondary">
-                {diskItem.quantity}
-              </Typography>
-              <IconButton
-                size="sm"
-                variant="outlined"
-                onClick={() =>
-                  setDiskList((prevList) => [
-                    ...prevList.map((item, i) =>
-                      i === index
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                    ),
-                  ])
-                }
-              >
-                <Add />
-              </IconButton>
-            </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    alignItems: "center",
+                    pt: 1,
+                  }}
+                >
+                  <IconButton
+                    size="sm"
+                    variant="outlined"
+                    onClick={() => {
+                      const itemIndex = selectedDisks.findIndex(
+                        (item) => item.id === diskItem.disk_id
+                      );
+
+                      if (itemIndex === -1) {
+                        setSelectedDisks((prev) => [
+                          ...prev,
+                          {
+                            id: diskItem.disk_id,
+                            quantity: 1,
+                            price: diskItem.price,
+                          },
+                        ]);
+                      } else {
+                        setSelectedDisks((prev) => {
+                          prev[itemIndex].quantity += 1;
+                          return [...prev];
+                        });
+                      }
+                    }}
+                  >
+                    <AddRoundedIcon />
+                  </IconButton>
+                </Box>
+              </Stack>
+            </Stack>
           </FormControl>
         </React.Fragment>
       ))}

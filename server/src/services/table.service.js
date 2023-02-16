@@ -3,7 +3,7 @@ const Table = require("../models/Table");
 
 exports.createTable = async (id, numberOfSeats, tableStatus) => {
     const table = await Table.checkTableIdExisted(id);
-    if (table.length > 0)
+    if (table)
         return {
             type: statusType.error,
             message: "Table existed!",
@@ -20,10 +20,27 @@ exports.createTable = async (id, numberOfSeats, tableStatus) => {
     };
 };
 
+exports.getTableList = async () => {
+    const tables = await Table.getTableList();
+    if (tables.length < 1)
+        return {
+            type: statusType.error,
+            message: "Table existed!",
+            statusCode: 400,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Create table successfully!",
+        statusCode: 200,
+        tables: tables,
+    };
+};
+
 exports.updateTable = async (id, body) => {
     const table = await Table.checkTableIdExisted(id);
 
-    if (table.length < 1)
+    if (!table)
         return {
             type: statusType.error,
             message: "No table found!",
@@ -41,9 +58,9 @@ exports.updateTable = async (id, body) => {
 };
 
 exports.getTableDetail = async (id) => {
-    const tables = await Table.checkTableIdExisted(id);
+    const table = await Table.checkTableIdExisted(id);
 
-    if (tables.length < 1)
+    if (!table)
         return {
             type: statusType.error,
             message: "No table found!",
@@ -54,14 +71,14 @@ exports.getTableDetail = async (id) => {
         type: statusType.success,
         message: "Get table detail!",
         statusCode: 200,
-        table: tables[0],
+        table,
     };
 };
 
 exports.deleteTable = async (id) => {
-    const tables = await Table.checkTableIdExisted(id);
+    const table = await Table.checkTableIdExisted(id);
 
-    if (tables.length < 1)
+    if (!table)
         return {
             type: statusType.error,
             message: "No table found!",

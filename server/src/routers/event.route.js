@@ -4,6 +4,7 @@ const { uploadSingleFile } = require("../utils/multer");
 const router = express.Router();
 
 router.post("/create", uploadSingleFile("image"), eventController.createEvent);
+router.get("/search", eventController.searchEvent);
 router
     .route("/:id")
     .get(eventController.getEventById)

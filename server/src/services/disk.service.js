@@ -1,4 +1,5 @@
 const statusType = require("../constants/statusType");
+const Category = require("../models/Category");
 const Disk = require("../models/Disk");
 const {
     uploadFileCloudinary,
@@ -6,6 +7,7 @@ const {
 } = require("../utils/cloudinary");
 
 exports.createDisk = async (data, image) => {
+    console.log(data);
     if (!image)
         return {
             type: statusType.error,
@@ -28,7 +30,7 @@ exports.createDisk = async (data, image) => {
 
     return {
         type: statusType.success,
-        message: "Create disk successfully!",
+        message: "Disk created!",
         statusCode: 200,
         disk,
     };
@@ -46,9 +48,27 @@ exports.getListOfDisks = async () => {
 
     return {
         type: statusType.success,
-        message: "Get list of disk!",
+        message: "Disk found!",
         statusCode: 200,
         disks,
+    };
+};
+
+exports.getDiskDetail = async (id) => {
+    const disk = await Disk.getById(id);
+
+    if (!disk)
+        return {
+            type: statusType.error,
+            message: "No disk found!",
+            statusCode: 404,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Disk found!",
+        statusCode: 200,
+        disk,
     };
 };
 
@@ -80,9 +100,18 @@ exports.deleteDisk = async (id) => {
             statusCode: 404,
         };
 
-    await destroyFileCloudinary(disk.image_id);
+    const checkDiskInCombo = await Disk.checkExistedInCombo(id);
+
+    if (checkDiskInCombo)
+        return {
+            type: statusType.error,
+            message: `Disk is existed in combo "${checkDiskInCombo.combo_name}"!`,
+            statusCode: 404,
+        };
 
     await Disk.delete(id);
+
+    await destroyFileCloudinary(disk.image_id);
 
     return {
         type: statusType.success,

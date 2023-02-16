@@ -1,7 +1,10 @@
+import AspectRatio from "@mui/joy/AspectRatio";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
+import CircularProgress from "@mui/joy/CircularProgress";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
+import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -10,36 +13,130 @@ import Stack from "@mui/joy/Stack";
 import Textarea from "@mui/joy/Textarea";
 import Typography from "@mui/joy/Typography";
 
+// Icons
+import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+
 // Custom
-import { useState } from "react";
+import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import comboApi from "../../api/comboApi";
+import diskApi from "../../api/diskApi";
+import status from "../../constants/status";
+import { useDebounce } from "../../hooks";
 import ComboDiskList from "./ComboDiskList";
+import ComboDiskListSelected from "./ComboDiskListSelected";
 
-// TODO: Fetch data from API
-const data = Array.from({ length: 15 }, () => ({
-  name: "Fried Rice",
-  price: 150000,
-  image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?fm=jpg",
-  category: "Main Menu",
-  quantity: 0,
-}));
-
-export default function ComboDialogAdd({ open, setOpen }) {
+export default function ComboDialogAdd({
+  open,
+  setOpen,
+  setLoading,
+  fetchData,
+}) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
-  const [diskList, setDiskList] = useState(data);
-  const [openSubModal, setOpenSubModal] = useState(false);
+  const [openDiskListSubModal, setOpenDiskListSubModal] = useState(false);
+  const [openSelectedSubModal, setOpenSelectedSubModal] = useState(false);
+  const [search, setSearch] = useState("");
+  const [disks, setDisks] = useState([]);
+  const [preview, setPreview] = useState();
+  const [selectedDisks, setSelectedDisks] = useState([]);
+  const [progressIcon, setProgressIcon] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = () => {
-    // TODO: Handle response
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const save = async () => {
+      setLoading(true);
+      try {
+        const response = await comboApi.create({
+          name,
+          description,
+          price,
+          image,
+          disks: selectedDisks,
+        });
+        if (response?.data?.type === status.success) {
+          fetchData();
+          enqueueSnackbar(response?.data?.message, {
+            variant: "success",
+          });
+          setName("");
+          setDescription("");
+          setPrice("");
+          setImage("");
+          setOpenDiskListSubModal(false);
+          setSearch("");
+          setPreview();
+          setSelectedDisks([]);
+        }
+      } catch (err) {
+        setLoading(false);
+        enqueueSnackbar(err.response?.data?.message, {
+          variant: "error",
+        });
+      }
+    };
+    setOpen(false);
+    save();
+  };
+
+  const debouncedValue = useDebounce(search, 500);
+  useEffect(() => {
+    const fetchApi = async () => {
+      setProgressIcon(true);
+      try {
+        const response = await diskApi.search(debouncedValue);
+        if (response?.data?.type === status.success) {
+          setDisks(() => {
+            return response.data.disks.map((item) => {
+              item.quantity = 0;
+              return item;
+            });
+          });
+        }
+      } catch (err) {
+        setDisks([]);
+      }
+      setProgressIcon(false);
+    };
+
+    fetchApi();
+  }, [debouncedValue]);
+
+  // create a preview as a side effect, whenever selected file is changed
+  useEffect(() => {
+    if (!image) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(image);
+    setPreview(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [image]);
+
+  const onSelectFile = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setImage(undefined);
+      return;
+    }
+    // I've kept this example simple by using the first image instead of multiple
+    setImage(e.target.files[0]);
   };
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <ModalDialog
         sx={{
-          maxWidth: 500,
+          maxWidth: "100vw",
+          maxHeight: "95vh",
+          overflowY: "auto",
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
@@ -54,16 +151,9 @@ export default function ComboDialogAdd({ open, setOpen }) {
         >
           Add new combo
         </Typography>
-        <Stack
-          component="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-            setOpen(false);
-          }}
-        >
-          <Stack direction="row" spacing={4}>
-            <Stack className="col-1" flexGrow={1}>
+        <Stack component="form" onSubmit={handleSubmit}>
+          <Stack direction="row" spacing={3}>
+            <Stack className="col-1" width={250} flex={1}>
               <Stack spacing={2}>
                 <FormControl required>
                   <FormLabel>Name</FormLabel>
@@ -76,13 +166,12 @@ export default function ComboDialogAdd({ open, setOpen }) {
                   />
                 </FormControl>
                 <FormControl>
-                  <FormLabel>Desc.</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <Textarea
                     name="description"
                     minRows={2}
                     maxRows={2}
                     placeholder="This is a combo composed of..."
-                    required
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
@@ -90,10 +179,10 @@ export default function ComboDialogAdd({ open, setOpen }) {
                 <FormControl required>
                   <FormLabel>
                     {"Price (Original: "}
-                    {diskList
+                    {selectedDisks
                       .reduce((sum, cur) => sum + cur.price * cur.quantity, 0)
                       .toLocaleString()}
-                    {")"}
+                    {"đ)"}
                   </FormLabel>
                   <Input
                     name="price"
@@ -106,60 +195,191 @@ export default function ComboDialogAdd({ open, setOpen }) {
                   <FormLabel>Disks</FormLabel>
                   <Button
                     variant="outlined"
-                    onClick={() => setOpenSubModal(true)}
+                    onClick={() => setOpenDiskListSubModal(true)}
                   >
                     Select disks
                   </Button>
-                  <Modal
-                    open={openSubModal}
-                    onClose={() => setOpenSubModal(false)}
-                  >
-                    <ModalDialog layout="fullscreen">
-                      <ModalClose />
-                      <Typography component="h2" fontSize="1.25em">
-                        Select disks
-                      </Typography>
-                      <Stack
-                        py={2}
-                        sx={{ maxHeight: "100%", overflow: "auto" }}
-                      >
-                        <ComboDiskList
-                          diskList={diskList}
-                          setDiskList={setDiskList}
-                        />
-                      </Stack>
-                    </ModalDialog>
-                  </Modal>
                 </FormControl>
-                <FormControl>
+                <FormControl sx={{ display: { xs: "flex", md: "none" } }}>
+                  <FormLabel>Selected</FormLabel>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setOpenSelectedSubModal(true)}
+                  >
+                    View selected
+                  </Button>
+                </FormControl>
+                <FormControl required>
                   <FormLabel>Image</FormLabel>
-                  <Input
-                    name="image"
-                    placeholder="Image"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
-                  />
+                  <IconButton component="label">
+                    <AddPhotoAlternateRoundedIcon />
+                    <input type="file" hidden onChange={onSelectFile} />
+                  </IconButton>
+                  {image && (
+                    <AspectRatio
+                      ratio="4 / 3"
+                      maxHeight={175}
+                      objectFit="cover"
+                      sx={{ marginTop: 1 }}
+                    >
+                      <img src={preview} alt="Preview" />
+                    </AspectRatio>
+                  )}
                 </FormControl>
               </Stack>
             </Stack>
 
             <Stack
               className="col-2"
-              sx={{ display: { xs: "none", sm: "flex" } }}
+              sx={{ display: { xs: "none", md: "flex" } }}
+              width={250}
+              flex={1}
             >
-              <Box flexBasis={0} flexGrow={1} sx={{ overflow: "auto" }}>
-                <ComboDiskList diskList={diskList} setDiskList={setDiskList} />
-              </Box>
+              <ComboViewSelected
+                diskList={selectedDisks}
+                setDiskList={setSelectedDisks}
+              />
+            </Stack>
+
+            <Stack
+              className="col-3"
+              sx={{ display: { xs: "none", sm: "flex" } }}
+              width={250}
+              flex={1}
+            >
+              <ComboDiskSelect
+                search={search}
+                setSearch={setSearch}
+                progressIcon={progressIcon}
+                disks={disks}
+                setDisks={setDisks}
+                setSelectedDisks={setSelectedDisks}
+                selectedDisks={selectedDisks}
+              />
             </Stack>
           </Stack>
 
-          <Box mt={3} display="flex" gap={2}>
-            <Button type="submit" sx={{ flex: 1 }}>
+          <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
+            <Button
+              type="submit"
+              startDecorator={<SaveRoundedIcon />}
+              sx={{ flex: 1 }}
+            >
               Save
+            </Button>
+            <Button
+              type="button"
+              variant="soft"
+              color="danger"
+              onClick={() => setOpen(false)}
+              sx={{ flex: 1 }}
+            >
+              Cancel
             </Button>
           </Box>
         </Stack>
+
+        <Modal
+          open={openDiskListSubModal}
+          onClose={() => setOpenDiskListSubModal(false)}
+        >
+          <ModalDialog layout="fullscreen">
+            <ModalClose />
+            <Typography component="h2" fontSize="1.25em" mb={2}>
+              Select disks
+            </Typography>
+            <ComboDiskSelect
+              search={search}
+              setSearch={setSearch}
+              progressIcon={progressIcon}
+              disks={disks}
+              setSelectedDisks={setSelectedDisks}
+              selectedDisks={selectedDisks}
+            />
+          </ModalDialog>
+        </Modal>
+
+        <Modal
+          open={openSelectedSubModal}
+          onClose={() => setOpenSelectedSubModal(false)}
+        >
+          <ModalDialog layout="fullscreen">
+            <ModalClose />
+            <Typography component="h2" fontSize="1.25em" mb={2}>
+              View selected
+            </Typography>
+            <ComboViewSelected
+              diskList={selectedDisks}
+              setDiskList={setSelectedDisks}
+            />
+          </ModalDialog>
+        </Modal>
       </ModalDialog>
     </Modal>
+  );
+}
+
+function ComboViewSelected({ diskList, setDiskList }) {
+  return (
+    <Stack
+      flexBasis={0}
+      flexGrow={1}
+      sx={{
+        pb: 2,
+        maxHeight: { xs: "100%" },
+        overflowY: "auto",
+      }}
+    >
+      <ComboDiskListSelected diskList={diskList} setDiskList={setDiskList} />
+    </Stack>
+  );
+}
+
+function ComboDiskSelect({
+  search,
+  setSearch,
+  progressIcon,
+  disks,
+  setSelectedDisks,
+  selectedDisks,
+}) {
+  return (
+    <>
+      <Box>
+        <FormControl>
+          <FormLabel>Disks</FormLabel>
+          <Input
+            name="search"
+            placeholder="Search diskes"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            endDecorator={
+              progressIcon ? (
+                <CircularProgress size="sm" color="primary" />
+              ) : (
+                <SearchRoundedIcon color="neutral" />
+              )
+            }
+            sx={{ width: "95%" }}
+          />
+        </FormControl>
+      </Box>
+      <Stack
+        flexBasis={0}
+        flexGrow={1}
+        sx={{
+          mt: 2,
+          pb: 2,
+          maxHeight: { xs: "100%" },
+          overflow: "auto",
+        }}
+      >
+        <ComboDiskList
+          diskList={disks}
+          selectedDisks={selectedDisks}
+          setSelectedDisks={setSelectedDisks}
+        />
+      </Stack>
+    </>
   );
 }

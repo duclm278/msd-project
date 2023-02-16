@@ -22,8 +22,8 @@ exports.createCustomer = async (body) => {
     };
 };
 
-exports.searchCustomersByName = async (name) => {
-    const customers = await Customer.searchByName(name);
+exports.searchCustomersByNameOrRank = async (query) => {
+    const customers = await Customer.search(query);
 
     if (customers.length < 1) {
         return {

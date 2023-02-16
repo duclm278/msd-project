@@ -1,48 +1,22 @@
 import TableFull from "./TableFull";
 
-const rows = [
-  {
-    id: 100,
-    phone: "0123456789",
-    table: 1,
-    money: 100000,
-    status: "Canceled",
-  },
-  {
-    id: 200,
-    phone: "0123456789",
-    table: 2,
-    money: 300000,
-    status: "Paid",
-  },
-  {
-    id: 300,
-    phone: "0123456789",
-    table: 3,
-    money: 200000,
-    status: "Paid",
-  },
-];
-
 const cols = [
-  { field: "edit", headerName: "" },
-  { field: "no", headerName: "NO." },
-  { field: "id", headerName: "ID" },
-  { field: "phone", headerName: "PHONE" },
-  { field: "table", headerName: "TABLE" },
-  { field: "money", headerName: "MONEY" },
-  { field: "status", headerName: "STATUS" },
+    { field: "reserved_time", headerName: "RESERVED TIME" },
+    { field: "customer_name", headerName: "NAME" },
+    { field: "phone", headerName: "PHONE" },
+    { field: "table_id", headerName: "TABLE" },
+    { field: "total_cost_after_discount", headerName: "TOTAL COST" },
+    { field: "status", headerName: "STATUS" },
+    { field: "action", headerName: "" },
 ];
 
-export default function TableView({ filterOpt }) {
-  let filterRows = rows;
-  if (filterOpt !== null) {
-    filterRows = rows.filter((row) => row.rank === filterOpt);
-  }
-
-  return (
-    <>
-      <TableFull rows={filterRows} cols={cols} />
-    </>
-  );
+export default function TableView({ data, setLoading, fetchData }) {
+    return (
+        <TableFull
+            rows={data}
+            cols={cols}
+            setLoading={setLoading}
+            fetchData={fetchData}
+        />
+    );
 }

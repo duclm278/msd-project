@@ -11,20 +11,45 @@ class Customer {
     }
 
     async create(data) {
-        const query = `
-            INSERT INTO Customer (name, email, phone)
-            VALUES ('${data.name}', '${data.email}', '${data.phone}')
-            RETURNING *
-        `;
+        let query;
+
+        if (data.email)
+            query = `
+                INSERT INTO Customer (name, email, phone, point, rank_id)
+                VALUES ('${data.name}', '${data.email}', '${data.phone}', ${data.point}, ${data.rankId})
+                RETURNING *
+            `;
+        else {
+            query = `
+                INSERT INTO Customer (name, phone, point, rank_id)
+                VALUES ('${data.name}', '${data.phone}', ${data.point}, ${data.rankId})
+                RETURNING *
+            `;
+        }
         const response = await sqlQuery(query);
         return response[0];
     }
 
-    async searchByName(name) {
-        const query = `
-            SELECT customer_id, name FROM Customer
-            WHERE lower(name) LIKE lower('%${name}%')
-        `;
+    async search({ name, rank }) {
+        let query;
+
+        if (rank) {
+            query = `
+                SELECT C.customer_id id, C.email, C.name, C.phone, C.point, R.rank, C.rank_id
+                FROM Customer C
+                inner join Rank R
+                    on C.rank_id = R.rank_id
+                WHERE lower(C.name) LIKE lower('%${name}%') and C.rank_id = ${rank}
+            `;
+        } else {
+            query = `
+                SELECT C.customer_id id, C.email, C.name, C.phone, C.point, R.rank, C.rank_id
+                FROM Customer C
+                inner join Rank R
+                    on C.rank_id = R.rank_id
+                WHERE lower(C.name) LIKE lower('%${name}%')
+            `;
+        }
         const response = await sqlQuery(query);
         return response;
     }
@@ -48,28 +73,15 @@ class Customer {
     }
 
     async updateCustomerById(id, data) {
-        let query = `
+        console.log(data);
+        const query = `
             UPDATE Customer
             SET
-        `;
-        if (data.name) {
-            query += `name = '${data.name}',`;
-        }
-        if (data.email) {
-            query += `email = '${data.email}',`;
-        }
-        if (data.phone) {
-            query += `phone = '${data.phone}',`;
-        }
-        if (data.point) {
-            query += `point = ${data.point},`;
-        }
-        if (data.rank_id) {
-            query += `rank_id = ${data.rank_id},`;
-        }
-
-        query = query.substring(0, query.length - 1);
-        query += ` 
+                name = '${data.name}',
+                email = '${data.email}',
+                phone = '${data.phone}',
+                point = ${data.point},
+                rank_id = ${data.rankId}
             WHERE customer_id = ${id}
             RETURNING *
         `;

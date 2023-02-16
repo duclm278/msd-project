@@ -14,8 +14,10 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 // Custom
 import { useContext, useEffect, useState } from "react";
-import Layout from "./Layout";
+import { UserContext } from "../contexts/UserProvider";
+import authentication from "../utils/authentication";
 import HeaderMenu from "./HeaderMenu";
+import Layout from "./Layout";
 import { SideDrawerContext } from "./SideDrawer";
 
 function ColorSchemeToggle() {
@@ -48,6 +50,9 @@ function ColorSchemeToggle() {
 
 export default function Header() {
   const { setDrawerOpen } = useContext(SideDrawerContext);
+
+  const { user } = useContext(UserContext);
+
   return (
     <Layout.Header>
       <Box
@@ -69,12 +74,14 @@ export default function Header() {
         <IconButton
           size="sm"
           variant="solid"
+          component="a"
+          href="/home"
           sx={{ display: { xs: "none", sm: "inline-flex" } }}
         >
           <GroupRoundedIcon />
         </IconButton>
         <Typography component="h1" fontWeight="xl">
-          Admin
+          {user.name}
         </Typography>
       </Box>
       <Input
@@ -126,6 +133,9 @@ export default function Header() {
             {
               label: "Sign out",
               href: "/login",
+              onClick: () => {
+                authentication.logout();
+              },
             },
           ]}
         />

@@ -28,6 +28,26 @@ exports.createEvent = async (body, image) => {
     };
 };
 
+exports.searchEvent = async (name, price) => {
+    let events;
+    if (price) events = await Event.search(name, price);
+    else events = await Event.search(name);
+
+    if (events.length < 1)
+        return {
+            type: statusType.error,
+            message: "No event found!",
+            statusCode: 404,
+        };
+
+    return {
+        type: statusType.success,
+        message: "Event found!",
+        statusCode: 200,
+        events,
+    };
+};
+
 exports.getEventById = async (id) => {
     const event = await Event.getEventById(id);
 
@@ -72,6 +92,9 @@ exports.updateEvent = async (id, body, image) => {
 
         data.poster = uploadImageResponse.secure_url;
         data.posterId = uploadImageResponse.public_id;
+    } else {
+        data.poster = event.poster;
+        data.posterId = event.poster_id;
     }
 
     const newEvent = await Event.update(id, data);
@@ -94,9 +117,8 @@ exports.deleteEvent = async (id) => {
             statusCode: 404,
         };
 
-    await destroyFileCloudinary(event.poster_id);
-
     await Event.delete(id);
+    await destroyFileCloudinary(event.poster_id);
 
     return {
         type: statusType.success,
