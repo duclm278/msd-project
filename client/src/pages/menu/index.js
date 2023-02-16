@@ -140,8 +140,7 @@ export default function Menu() {
               </Stack>
               <Stack direction="row" spacing={{ xs: 1.5, sm: 2, md: 2 }}>
                 <Button
-                  color="primary"
-                  variant="outlined"
+                  color="success"
                   startDecorator={<Add />}
                   onClick={() => setOpenDiskAdd(true)}
                 >
