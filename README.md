@@ -19,7 +19,7 @@ dependencies by doing the followings:
   $ psql -h localhost -d restaurant -p 5432 -U postgres -f ".\msd-project\restaurant.sql"
 
   ```
-
+- Or you can you use backup file, create database and restore by pgadmin using backup file
 - Go to https://cloudinary.com and register, get the cloud detail.
 - Install dependencies for both client and server:
 
