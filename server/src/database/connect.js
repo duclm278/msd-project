@@ -11,8 +11,6 @@ const pool = new Pool({
 
 const sqlQuery = async (query) => {
     const response = await pool.query(query);
-    // console.log(query);
-    // console.log(response);
     return response.rows;
 };
 

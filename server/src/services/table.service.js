@@ -25,7 +25,7 @@ exports.getTableList = async () => {
     if (tables.length < 1)
         return {
             type: statusType.error,
-            message: "Table existed!",
+            message: "No table found!",
             statusCode: 400,
         };
 
