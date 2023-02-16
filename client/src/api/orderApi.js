@@ -31,6 +31,18 @@ const orderApi = {
         const url = `${PREFIX}/combo-and-disk/${id}`;
         return httpRequest.get(url);
     },
+    getStatistic(data) {
+        const url = `${PREFIX}/statistic`;
+        return httpRequest.get(url, {
+            params: { beginDate: data.beginDate, endDate: data.endDate },
+        });
+    },
+    getOrdersBetweenDate(data) {
+        const url = `${PREFIX}/orderBetweenDate`;
+        return httpRequest.get(url, {
+            params: { beginDate: data.beginDate, endDate: data.endDate },
+        });
+    },
 };
 
 export default orderApi;

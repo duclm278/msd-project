@@ -5,6 +5,8 @@ const orderController = require("../controllers/order.controller");
 router.get("/combo-and-disk/:orderId", orderController.getComboAndDisk);
 router.post("/create", orderController.createOrder);
 router.get("/search", orderController.searchOrder);
+router.get("/statistic", orderController.getStatistic);
+router.get("/orderBetweenDate", orderController.getOrdersBetweenDate);
 
 router
     .route("/:orderId")

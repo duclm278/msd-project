@@ -310,27 +310,15 @@ export default function OrderDialogEdit(props) {
                             <Stack className="col-1" flexGrow={1}>
                                 <Stack spacing={2}>
                                     <FormControl>
-                                        <FormLabel>Search customer</FormLabel>
+                                        <FormLabel>Customer name</FormLabel>
                                         <SelectCustomer
                                             customer={customer}
                                             setCustomer={setCustomer}
                                             customers={customers}
+                                            name={name}
                                             setName={setName}
                                             setPhone={setPhone}
                                             loading={customerSearchProgress}
-                                        />
-                                    </FormControl>
-                                    <FormControl required>
-                                        <FormLabel>Name</FormLabel>
-                                        <Input
-                                            name="phone"
-                                            placeholder="Phone"
-                                            value={name}
-                                            onChange={(e) =>
-                                                setName(
-                                                    e.target.value.trimStart()
-                                                )
-                                            }
                                         />
                                     </FormControl>
                                     <FormControl required>

@@ -9,6 +9,7 @@ export function SelectCustomer({
     setCustomer,
     customers,
     loading,
+    name,
     setName,
     setPhone,
 }) {
@@ -32,6 +33,9 @@ export function SelectCustomer({
                     setPhone("");
                 }
             }}
+            inputValue={name}
+            onInputChange={e => setName(e.target.value)}
+            freeSolo
             slotProps={{
                 input: {
                     autoComplete: "new-password", // disable autocomplete and autofill

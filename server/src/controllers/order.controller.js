@@ -128,3 +128,37 @@ exports.getComboAndDisk = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.getStatistic = async (req, res, next) => {
+    try {
+        const { type, message, statusCode, orders } =
+            await orderService.getStatistic(req.query);
+        if (type === statusType.error)
+            return next(new CustomErrorHandler(statusCode, message));
+
+        res.status(statusCode).json({
+            type,
+            message,
+            orders,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.getOrdersBetweenDate = async (req, res, next) => {
+    try {
+        const { type, message, statusCode, orders } =
+            await orderService.getOrdersBetweenDate(req.query);
+        if (type === statusType.error)
+            return next(new CustomErrorHandler(statusCode, message));
+
+        res.status(statusCode).json({
+            type,
+            message,
+            orders,
+        });
+    } catch (err) {
+        next(err);
+    }
+};

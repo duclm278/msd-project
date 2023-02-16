@@ -14,7 +14,6 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 // Custom
 import { useContext, useEffect, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
 import { UserContext } from "../contexts/UserProvider";
 import authentication from "../utils/authentication";
 import HeaderMenu from "./HeaderMenu";

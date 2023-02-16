@@ -16,7 +16,6 @@ export default function ComboDiskList({
   setSelectedDisks,
   selectedDisks,
 }) {
-  console.log(selectedDisks);
   return (
     <Stack py={2} spacing={2}>
       {diskList.map((diskItem, index) => (

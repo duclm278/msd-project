@@ -22,129 +22,140 @@ import tableApi from "../../api/tableApi";
 import status from "../../constants/status";
 
 export default function TableDialogAdd({
-  open,
-  setOpen,
-  setLoading,
-  fetchData,
+    open,
+    setOpen,
+    setLoading,
+    fetchData,
 }) {
-  const [id, setId] = useState("");
-  const [numberOfSeats, setNumberOfSeats] = useState("");
-  const [tableStatus, setTableStatus] = useState(filterOpts[0]);
-  const { enqueueSnackbar } = useSnackbar();
+    const [id, setId] = useState("");
+    const [numberOfSeats, setNumberOfSeats] = useState("");
+    const [tableStatus, setTableStatus] = useState(filterOpts[0]);
+    const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = () => {
-    const submit = async () => {
-      setLoading(true);
-      try {
-        const response = await tableApi.createTable({
-          id,
-          numberOfSeats,
-          tableStatus,
-        });
-        if (response?.data?.type === status.success) {
-          fetchData();
-          enqueueSnackbar(response?.data?.message, {
-            variant: "success",
-          });
-        }
-      } catch (err) {
-        setLoading(false);
-        enqueueSnackbar(err.response?.data?.message, {
-          variant: "error",
-        });
-      }
-      setId("");
-      setNumberOfSeats("");
-      setTableStatus(filterOpts[0]);
+    const handleSubmit = () => {
+        const submit = async () => {
+            setLoading(true);
+            try {
+                const response = await tableApi.createTable({
+                    id,
+                    numberOfSeats,
+                    tableStatus,
+                });
+                if (response?.data?.type === status.success) {
+                    fetchData();
+                    enqueueSnackbar(response?.data?.message, {
+                        variant: "success",
+                    });
+                }
+            } catch (err) {
+                setLoading(false);
+                enqueueSnackbar(err.response?.data?.message, {
+                    variant: "error",
+                });
+            }
+            setId("");
+            setNumberOfSeats("");
+            setTableStatus(filterOpts[0]);
+        };
+
+        submit();
     };
 
-    submit();
-  };
-
-  return (
-    <>
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog
-          sx={{
-            maxWidth: 500,
-            borderRadius: "md",
-            p: 3,
-            boxShadow: "lg",
-          }}
-        >
-          <ModalClose />
-          <Typography
-            component="h2"
-            level="inherit"
-            fontSize="1.25em"
-            mb="0.25em"
-          >
-            Add new table
-          </Typography>
-          <Stack
-            component="form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit();
-              setOpen(false);
-            }}
-          >
-            <Stack spacing={2}>
-              <FormControl required>
-                <FormLabel>ID</FormLabel>
-                <Input
-                  autoFocus
-                  name="id"
-                  placeholder="ID"
-                  value={id}
-                  onChange={(e) => setId(e.target.value)}
-                />
-              </FormControl>
-              <FormControl required>
-                <FormLabel>Capacity</FormLabel>
-                <Input
-                  name="capacity"
-                  placeholder="Number of seats"
-                  value={numberOfSeats}
-                  onChange={(e) => setNumberOfSeats(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  value={tableStatus}
-                  onChange={(e, newTableStatus) => {
-                    setTableStatus(newTableStatus);
-                  }}
+    return (
+        <>
+            <Modal open={open} onClose={() => setOpen(false)}>
+                <ModalDialog
+                    sx={{
+                        maxWidth: 500,
+                        borderRadius: "md",
+                        p: 3,
+                        boxShadow: "lg",
+                    }}
                 >
-                  {filterOpts.map((filterOpt) => (
-                    <Option key={filterOpt} value={filterOpt}>
-                      {filterOpt}
-                    </Option>
-                  ))}
-                </Select>
-              </FormControl>
-            </Stack>
-            <Box mt={3} display="flex" gap={2} sx={{ width: "100%" }}>
-              <Button
-                type="submit"
-                startDecorator={<SaveRoundedIcon />}
-                sx={{ flex: 1 }}
-              >
-                Save
-              </Button>
-              <Button
-                type="button"
-                variant="soft"
-                onClick={() => setOpen(false)}
-                sx={{ flex: 1 }}
-              >
-                Cancel
-              </Button>
-            </Box>
-          </Stack>
-        </ModalDialog>
-      </Modal>
-    </>
-  );
+                    <ModalClose />
+                    <Typography
+                        component="h2"
+                        level="inherit"
+                        fontSize="1.25em"
+                        mb="0.25em"
+                    >
+                        Add new table
+                    </Typography>
+                    <Stack
+                        component="form"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleSubmit();
+                            setOpen(false);
+                        }}
+                    >
+                        <Stack spacing={2}>
+                            <FormControl required>
+                                <FormLabel>ID</FormLabel>
+                                <Input
+                                    autoFocus
+                                    name="id"
+                                    placeholder="ID"
+                                    value={id}
+                                    onChange={(e) => setId(e.target.value)}
+                                />
+                            </FormControl>
+                            <FormControl required>
+                                <FormLabel>Capacity</FormLabel>
+                                <Input
+                                    name="capacity"
+                                    placeholder="Number of seats"
+                                    value={numberOfSeats}
+                                    onChange={(e) =>
+                                        setNumberOfSeats(e.target.value)
+                                    }
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel>Status</FormLabel>
+                                <Select
+                                    value={tableStatus}
+                                    onChange={(e, newTableStatus) => {
+                                        setTableStatus(newTableStatus);
+                                    }}
+                                >
+                                    {filterOpts.map((filterOpt) => (
+                                        <Option
+                                            key={filterOpt}
+                                            value={filterOpt}
+                                        >
+                                            {filterOpt}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Stack>
+                        <Box
+                            mt={3}
+                            display="flex"
+                            gap={2}
+                            sx={{ width: "100%" }}
+                        >
+                            <Button
+                                type="submit"
+                                startDecorator={<SaveRoundedIcon />}
+                                sx={{ flex: 1 }}
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="soft"
+                                onClick={() => setOpen(false)}
+                                color="danger"
+                                sx={{ flex: 1 }}
+                            >
+                                Cancel
+                            </Button>
+                        </Box>
+                    </Stack>
+                </ModalDialog>
+            </Modal>
+        </>
+    );
 }
