@@ -128,6 +128,7 @@ class Order {
             WHERE 
                 lower(customer_name) like lower('%${searchData}%') 
             or  lower(phone) like lower('%${searchData}%')
+            ORDER BY reserved_time desc
         `;
         return await sqlQuery(query);
     }
