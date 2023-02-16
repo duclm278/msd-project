@@ -243,7 +243,7 @@ export default function DiskDialogEdit(props) {
                     View selected
                   </Button>
                 </FormControl>
-                <FormControl>
+                <FormControl required>
                   <FormLabel>Image</FormLabel>
                   <IconButton component="label">
                     <AddPhotoAlternateRoundedIcon />

@@ -9,6 +9,14 @@ const cols = [
   { field: "action", headerName: "" },
 ];
 
+export const rankColors = [
+  { id: 1, color: "danger" },
+  { id: 2, color: "neutral" },
+  { id: 3, color: "warning" },
+  { id: 4, color: "primary" },
+  { id: 5, color: "info" },
+];
+
 export default function TableView({ data, setLoading, fetchData }) {
   return (
     <>
