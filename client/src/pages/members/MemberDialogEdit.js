@@ -31,6 +31,27 @@ export default function MemberDialogEdit(props) {
   const [rank, setRank] = useState(props.rank);
   const { enqueueSnackbar } = useSnackbar();
 
+  const handleDelete = (e, id) => {
+    e.preventDefault();
+    const remove = async () => {
+      try {
+        const response = await customerApi.deleteCustomerById(id);
+
+        if (response?.data?.type === status.success) {
+          fetchData();
+          enqueueSnackbar(response.data.message, {
+            variant: "success",
+          });
+        }
+      } catch (err) {
+        enqueueSnackbar(err.response.data?.message, {
+          variant: "error",
+        });
+      }
+    };
+    remove();
+  };
+
   const handleSave = (e) => {
     e.preventDefault();
     const save = async () => {
@@ -150,9 +171,31 @@ export default function MemberDialogEdit(props) {
               variant="soft"
               color="danger"
               onClick={(e) => setOpen(false)}
-              sx={{ flex: 1 }}
+              sx={{
+                flex: 1,
+                display: {
+                  xs: "none",
+                  sm: "flex",
+                },
+              }}
             >
               Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="soft"
+              color="danger"
+              onClick={(e) => handleDelete(e)}
+              startDecorator={<DeleteForeverRoundedIcon />}
+              sx={{
+                flex: 1,
+                display: {
+                  xs: "flex",
+                  sm: "none",
+                },
+              }}
+            >
+              Delete
             </Button>
           </Box>
         </Stack>

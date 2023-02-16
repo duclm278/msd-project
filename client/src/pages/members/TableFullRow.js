@@ -37,12 +37,12 @@ export default function TableFullRow({ data, setLoading, fetchData }) {
     setAnchorEl(null);
   };
 
-  const handleDelete = (e, id) => {
+  const handleDelete = (e) => {
     e.preventDefault();
     setProgressIcon(true);
     const remove = async () => {
       try {
-        const response = await customerApi.deleteCustomerById(id);
+        const response = await customerApi.deleteCustomerById(data.id);
 
         if (response?.data?.type === status.success) {
           setProgressIcon(false);
@@ -139,7 +139,7 @@ export default function TableFullRow({ data, setLoading, fetchData }) {
           normalText="Cancel"
           open={openAlert}
           setOpen={setOpenAlert}
-          handleConfirm={(e) => handleDelete(e, data.id)}
+          handleConfirm={(e) => handleDelete(e)}
         />
       </Box>
     </>
