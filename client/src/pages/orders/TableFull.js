@@ -19,7 +19,7 @@ export default function TableFull({ rows, cols, setLoading, fetchData }) {
 
                 "& > *": {
                     p: 2,
-                    [`&:nth-of-type(n):not(:nth-last-child(-n+${cols.length}))`]:
+                    [`&:nth-of-type(n)`]:
                         {
                             borderBottom: "1px solid",
                             borderColor: "divider",

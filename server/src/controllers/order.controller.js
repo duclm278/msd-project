@@ -96,7 +96,7 @@ exports.getOrderById = async (req, res, next) => {
 exports.searchOrder = async (req, res, next) => {
     try {
         const { type, message, statusCode, orders } =
-            await orderService.getListOrder(req.query.name);
+            await orderService.getListOrder(req.query.name, req.query.date);
 
         if (type === statusType.error)
             return next(new CustomErrorHandler(statusCode, message));

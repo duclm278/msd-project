@@ -12,87 +12,108 @@ import Remove from "@mui/icons-material/Remove";
 import React from "react";
 
 export default function ComboDiskListSelected({ diskList, setDiskList }) {
-  const handleIncrease = (id, list, setList) => {
-    setList((prev) => {
-      const index = list.findIndex((item) => item.id === id);
-      prev[index].quantity += 1;
-      return [...prev];
-    });
-  };
+    const handleIncrease = (id, list, setList) => {
+        setList((prev) => {
+            const index = list.findIndex((item) => item.id === id);
+            prev[index].quantity += 1;
+            return [...prev];
+        });
+    };
 
-  const handleDecrease = (id, list, setList) => {
-    setList((prev) => {
-      const index = list.findIndex((item) => item.id === id);
-      if (prev[index].quantity !== 0) {
-        prev[index].quantity -= 1;
-      }
-      if (prev[index].quantity === 0) {
-        prev.splice(index, 1);
-      }
-      return [...prev];
-    });
-  };
+    const handleDecrease = (id, list, setList) => {
+        setList((prev) => {
+            const index = list.findIndex((item) => item.id === id);
+            if (prev[index].quantity !== 0) {
+                prev[index].quantity -= 1;
+            }
+            if (prev[index].quantity === 0) {
+                prev.splice(index, 1);
+            }
+            return [...prev];
+        });
+    };
 
-  return (
-    <>
-      {diskList.length > 0 ? (
+    return (
         <>
-          <Typography level="h6" fontWeight="bold" textColor="text.secondary">
-            Disk{diskList.length > 1 ? "s" : ""}
-          </Typography>
-          {diskList.map((item) => (
-            <React.Fragment key={item.id}>
-              <FormControl>
-                <FormLabel>{item.name}</FormLabel>
-                <Typography level="body3">
-                  Price: {item.price.toLocaleString()}
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    pt: 1,
-                    pr: 2,
-                    mr: 3,
-                    borderTop: "1px solid",
-                    borderColor: "background.level2",
-                  }}
-                >
-                  <IconButton
-                    size="sm"
-                    variant="outlined"
-                    onClick={() =>
-                      handleDecrease(item.id, diskList, setDiskList)
-                    }
-                  >
-                    <Remove />
-                  </IconButton>
-                  <Typography fontWeight="md" textColor="text.secondary">
-                    {item.quantity}
-                  </Typography>
-                  <IconButton
-                    size="sm"
-                    variant="outlined"
-                    onClick={() =>
-                      handleIncrease(item.id, diskList, setDiskList)
-                    }
-                  >
-                    <Add />
-                  </IconButton>
-                </Box>
-              </FormControl>
-            </React.Fragment>
-          ))}
+            {diskList.length > 0 ? (
+                <>
+                    <Typography
+                        level="h6"
+                        fontWeight="bold"
+                        textColor="text.secondary"
+                    >
+                        Disk{diskList.length > 1 ? "s" : ""}
+                    </Typography>
+                    {diskList.map((item) => (
+                        <React.Fragment key={item.id}>
+                            <FormControl>
+                                <FormLabel>{item.name}</FormLabel>
+                                <Typography level="body3">
+                                    Price: {item.price.toLocaleString()}
+                                </Typography>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        gap: 2,
+                                        alignItems: "center",
+                                        pt: 1,
+                                        pr: 2,
+                                        mr: 3,
+                                        borderTop: "1px solid",
+                                        borderColor: "background.level2",
+                                    }}
+                                >
+                                    <IconButton
+                                        size="sm"
+                                        variant="outlined"
+                                        onClick={() =>
+                                            handleDecrease(
+                                                item.id,
+                                                diskList,
+                                                setDiskList
+                                            )
+                                        }
+                                    >
+                                        <Remove />
+                                    </IconButton>
+                                    <Typography
+                                        fontWeight="md"
+                                        textColor="text.secondary"
+                                    >
+                                        {item.quantity}
+                                    </Typography>
+                                    <IconButton
+                                        size="sm"
+                                        variant="outlined"
+                                        onClick={() =>
+                                            handleIncrease(
+                                                item.id,
+                                                diskList,
+                                                setDiskList
+                                            )
+                                        }
+                                    >
+                                        <Add />
+                                    </IconButton>
+                                </Box>
+                            </FormControl>
+                        </React.Fragment>
+                    ))}
+                </>
+            ) : (
+                <>
+                    <Typography
+                        level="h6"
+                        fontWeight="bold"
+                        textColor="text.secondary"
+                    >
+                        Selected
+                    </Typography>
+                    <Typography mt={1}>
+                        You haven't selected any dishes yet.
+                    </Typography>
+                </>
+            )}
         </>
-      ) : (
-        <>
-          <Typography level="h6" fontWeight="bold" textColor="text.secondary">
-            Selected
-          </Typography>
-          <Typography mt={1}>You haven't selected any dishes yet.</Typography>
-        </>
-      )}
-    </>
-  );
+    );
 }

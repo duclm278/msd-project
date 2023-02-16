@@ -23,9 +23,9 @@ const orderApi = {
         const url = `${PREFIX}/${id}`;
         return httpRequest.get(url);
     },
-    search(name) {
+    search(name, date) {
         const url = `${PREFIX}/search`;
-        return httpRequest.get(url, { params: { name } });
+        return httpRequest.get(url, { params: { name, date } });
     },
     getComboAndDisk(id) {
         const url = `${PREFIX}/combo-and-disk/${id}`;
