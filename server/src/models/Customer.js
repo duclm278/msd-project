@@ -35,7 +35,7 @@ class Customer {
 
         if (rank) {
             query = `
-                SELECT C.customer_id id, C.email, C.name, C.phone, C.point, R.rank
+                SELECT C.customer_id id, C.email, C.name, C.phone, C.point, R.rank, C.rank_id
                 FROM Customer C
                 inner join Rank R
                     on C.rank_id = R.rank_id
@@ -43,7 +43,7 @@ class Customer {
             `;
         } else {
             query = `
-                SELECT C.customer_id id, C.email, C.name, C.phone, C.point, R.rank
+                SELECT C.customer_id id, C.email, C.name, C.phone, C.point, R.rank, C.rank_id
                 FROM Customer C
                 inner join Rank R
                     on C.rank_id = R.rank_id

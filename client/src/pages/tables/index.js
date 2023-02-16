@@ -1,13 +1,11 @@
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Divider from "@mui/joy/Divider";
-import Input from "@mui/joy/Input";
 import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
 
 // Icons
 import Add from "@mui/icons-material/Add";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 // Custom
 import { useSnackbar } from "notistack";
@@ -38,7 +36,6 @@ export default function Tables() {
     const [filterOpt, setFilterOpt] = useState(null);
     const [loading, setLoading] = useState(false);
     const [tables, setTables] = useState([]);
-    const [search, setSearch] = useState("");
     const { enqueueSnackbar } = useSnackbar();
 
     const fetchData = async () => {
@@ -114,14 +111,6 @@ export default function Tables() {
                                 direction={{ xs: "column", sm: "row" }}
                                 spacing={1.5}
                             >
-                                <Input
-                                    name="search"
-                                    placeholder="Search"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    startDecorator={<SearchRoundedIcon />}
-                                    sx={{ width: { md: 165 } }}
-                                />
                                 <SelectFilter
                                     filterOpt={filterOpt}
                                     setFilterOpt={setFilterOpt}

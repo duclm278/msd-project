@@ -159,7 +159,7 @@ exports.updateOrder = async (id, data) => {
         data.phone = customer.phone;
     }
     console.log(data);
-    await Order.updateOrder(id, data)
+    await Order.updateOrder(id, data);
 
     if (data.disks) {
         await Order.deleteDisk(id);
@@ -255,5 +255,40 @@ exports.getCombosAndDisks = async (orderId) => {
         statusCode: 200,
         disks: await Order.getDisksInOrder(orderId),
         combos: await Order.getCombosInOrder(orderId),
+    };
+};
+
+exports.getStatistic = async (data) => {
+    const orders = await Order.getStatistic(data.beginDate, data.endDate);
+    if (orders.length < 1)
+        return {
+            type: statusType.error,
+            message: "No order found!",
+            statusCode: 404,
+        };
+    return {
+        type: statusType.success,
+        message: "Order found!",
+        statusCode: 200,
+        orders,
+    };
+};
+
+exports.getOrdersBetweenDate = async (data) => {
+    const orders = await Order.getOrderBetweenDate(
+        data.beginDate,
+        data.endDate
+    );
+    if (orders.length < 1)
+        return {
+            type: statusType.error,
+            message: "No order found!",
+            statusCode: 404,
+        };
+    return {
+        type: statusType.success,
+        message: "Order found!",
+        statusCode: 200,
+        orders,
     };
 };

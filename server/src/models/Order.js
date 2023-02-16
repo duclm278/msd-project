@@ -4,7 +4,7 @@ class Order {
     async create(data) {
         const query = `
                 INSERT INTO "Order" (customer_id, customer_name, table_id, reserved_time, total_cost_before_discount, total_cost_after_discount, phone, status, event_id)
-                values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', ${data.beforeCost}, ${data.afterCost}, '${data.phone}', 'Unpiad', ${data.eventId})
+                values (${data.customerId}, '${data.customerName}', ${data.tableId}, '${data.reservedTime}', ${data.beforeCost}, ${data.afterCost}, '${data.phone}', 'Unpaid', ${data.eventId})
                 returning *
             `;
         return (await sqlQuery(query))[0];
@@ -150,6 +150,25 @@ class Order {
             on CIO.combo_id = C.combo_id
         WHERE order_id = ${orderId}
     `;
+        return await sqlQuery(query);
+    }
+
+    async getStatistic(fromDate, toDate) {
+        const query = `
+            select DATE(reserved_time) "date", sum(total_cost_after_discount) earned from "Order"
+            where DATE(reserved_time) between DATE('${fromDate}') and DATE('${toDate}')
+            group by DATE(reserved_time) 
+        `;
+
+        return await sqlQuery(query);
+    }
+
+    async getOrderBetweenDate(fromDate, toDate) {
+        const query = `
+        select * from "Order"
+        where DATE(reserved_time) between DATE('${fromDate}') and DATE('${toDate}')
+    `;
+
         return await sqlQuery(query);
     }
 }

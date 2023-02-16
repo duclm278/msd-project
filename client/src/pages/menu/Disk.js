@@ -130,7 +130,7 @@ export default function Disk({
             <ListItemDecorator>
               <Edit />
             </ListItemDecorator>
-            Edit combo
+            Edit disk
           </MenuItem>
           <MenuItem
             onClick={() => {
@@ -142,7 +142,7 @@ export default function Disk({
             <ListItemDecorator sx={{ color: "inherit" }}>
               <DeleteForever />
             </ListItemDecorator>
-            Delete combo
+            Delete disk
           </MenuItem>
         </Menu>
         <DiskDialogEdit
