@@ -180,7 +180,7 @@ export default function EventDialogAdd({
                   />
                 </FormControl>
                 <FormControl required>
-                  <FormLabel>Min price</FormLabel>
+                  <FormLabel>Min price{"(đ)"}</FormLabel>
                   <Input
                     type="number"
                     name="Min price"

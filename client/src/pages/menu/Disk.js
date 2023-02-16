@@ -102,7 +102,7 @@ export default function Disk({
         <Box sx={{ flex: 1 }}>
           <Typography textColor="#fff">{name}</Typography>
           <Typography level="body3" mt={0.5} textColor="rgba(255,255,255,0.72)">
-            Price: {price.toLocaleString()} đ
+            Price: {price.toLocaleString()}đ
           </Typography>
         </Box>
         <IconButton

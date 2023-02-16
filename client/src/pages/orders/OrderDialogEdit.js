@@ -125,6 +125,7 @@ export default function OrderDialogEdit(props) {
             setEventProgress(false);
         };
         fetch();
+        // eslint-disable-next-line
     }, [beforeCost]);
 
     useEffect(() => {
