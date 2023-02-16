@@ -7,6 +7,9 @@ import Typography from "@mui/joy/Typography";
 // Icons
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 
+// Custom
+import { rankColors } from "./TableView";
+
 export default function TableMiniRow({ data }) {
   return (
     <ListItem>
@@ -26,9 +29,7 @@ export default function TableMiniRow({ data }) {
             >
               {data.name}
             </Typography>
-            <Typography level="body2" sx={{ color: "success.400" }}>
-              {data.point}
-            </Typography>
+            <Typography level="body2">{data.point}</Typography>
           </Box>
           <Box
             sx={{
@@ -38,7 +39,12 @@ export default function TableMiniRow({ data }) {
             }}
           >
             <Typography level="body2">{data.phone}</Typography>
-            <Typography level="body2">{data.rank}</Typography>
+            <Typography
+              level="body2"
+              color={rankColors.find((item) => item.id === data.rank_id).color}
+            >
+              {data.rank}
+            </Typography>
           </Box>
         </ListItemContent>
       </ListItemButton>
