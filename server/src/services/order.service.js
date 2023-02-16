@@ -177,8 +177,6 @@ exports.updateOrder = async (id, data) => {
         }
     }
 
-    await Order.calculateTotalCost(id);
-
     return {
         type: statusType.success,
         message: `Order ${id} updated!`,
