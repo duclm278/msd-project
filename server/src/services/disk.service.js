@@ -7,7 +7,6 @@ const {
 } = require("../utils/cloudinary");
 
 exports.createDisk = async (data, image) => {
-    console.log(data);
     if (!image)
         return {
             type: statusType.error,

@@ -73,7 +73,6 @@ class Customer {
     }
 
     async updateCustomerById(id, data) {
-        console.log(data);
         const query = `
             UPDATE Customer
             SET

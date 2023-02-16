@@ -158,7 +158,6 @@ exports.updateOrder = async (id, data) => {
         data.customerName = customer.name;
         data.phone = customer.phone;
     }
-    console.log(data);
     await Order.updateOrder(id, data);
 
     if (data.disks) {
