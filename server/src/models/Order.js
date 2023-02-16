@@ -158,6 +158,7 @@ class Order {
             select DATE(reserved_time) "date", sum(total_cost_after_discount) earned from "Order"
             where DATE(reserved_time) between DATE('${fromDate}') and DATE('${toDate}')
             group by DATE(reserved_time) 
+            order by DATE(reserved_time)
         `;
 
         return await sqlQuery(query);
