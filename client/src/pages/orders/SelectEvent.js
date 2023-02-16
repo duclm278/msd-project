@@ -5,7 +5,6 @@ import ListItemContent from "@mui/joy/ListItemContent";
 import Typography from "@mui/joy/Typography";
 
 export function SelectEvent({ event, setEvent, events, loading }) {
-  console.log("SelectEvent", event);
   return (
     <Autocomplete
       placeholder="Apply event to discount"
