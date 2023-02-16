@@ -57,7 +57,10 @@ export default function Report() {
                 });
                 if (response.data?.type === status.success) {
                     const orders = response.data?.orders.map((item) => ({
-                        Date: moment.utc(item.date).format("DD-MM-YYYY"),
+                        Date: moment
+                            .utc(item.date)
+                            .add(1, "d")
+                            .format("DD-MM-YYYY"),
                         Earned: item.earned,
                     }));
                     setData(orders);

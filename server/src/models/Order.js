@@ -155,8 +155,8 @@ class Order {
 
     async getStatistic(fromDate, toDate) {
         const query = `
-            select DATE(reserved_time) "date", sum(total_cost_after_discount) earned from "Order"
-            where DATE(reserved_time) between DATE('${fromDate}') and DATE('${toDate}')
+            select DATE(reserved_time) "date", sum(total_cost_after_discount) earned from "Order" O
+            where (DATE(reserved_time) between DATE('${fromDate}') and DATE('${toDate}')) and O.status = 'Paid'
             group by DATE(reserved_time) 
             order by DATE(reserved_time)
         `;
