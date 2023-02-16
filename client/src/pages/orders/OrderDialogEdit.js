@@ -12,24 +12,23 @@ import TextField from "@mui/joy/TextField";
 import Typography from "@mui/joy/Typography";
 
 // Icons
-import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 // Custom
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
+import comboApi from "../../api/comboApi";
+import customerApi from "../../api/customerApi";
+import diskApi from "../../api/diskApi";
+import eventApi from "../../api/eventApi";
+import orderApi from "../../api/orderApi";
+import Loading from "../../components/Loading";
+import status from "../../constants/status";
 import OrderList from "./OrderList";
 import OrderListSelected from "./OrderListSelected";
 import { SelectCustomer } from "./SelectCustomer";
 import { SelectEvent } from "./SelectEvent";
-import diskApi from "../../api/diskApi";
-import comboApi from "../../api/comboApi";
-import status from "../../constants/status";
-import orderApi from "../../api/orderApi";
-import eventApi from "../../api/eventApi";
-import customerApi from "../../api/customerApi";
-import Loading from "../../components/Loading";
 
 export default function OrderDialogEdit(props) {
   const { id, open, setOpen, setLoading, fetchData } = props;
@@ -199,6 +198,7 @@ export default function OrderDialogEdit(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleSave = (e) => {
     e.preventDefault();
     const save = async () => {
@@ -246,28 +246,28 @@ export default function OrderDialogEdit(props) {
     setOpen(() => false);
   };
 
-  const handleDelete = (e) => {
-    e.preventDefault();
-    const remove = async () => {
-      setLoading(true);
-      try {
-        const response = await orderApi.delete(id);
-        if (response.data?.type === status.success) {
-          fetchData();
-          enqueueSnackbar(response.data?.message, {
-            variant: "success",
-          });
-        }
-      } catch (err) {
-        setLoading(false);
-        enqueueSnackbar(err.response.data?.message, {
-          variant: "error",
-        });
-      }
-    };
-    remove();
-    setOpen(() => false);
-  };
+  // const handleDelete = (e) => {
+  //   e.preventDefault();
+  //   const remove = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await orderApi.delete(id);
+  //       if (response.data?.type === status.success) {
+  //         fetchData();
+  //         enqueueSnackbar(response.data?.message, {
+  //           variant: "success",
+  //         });
+  //       }
+  //     } catch (err) {
+  //       setLoading(false);
+  //       enqueueSnackbar(err.response.data?.message, {
+  //         variant: "error",
+  //       });
+  //     }
+  //   };
+  //   remove();
+  //   setOpen(() => false);
+  // };
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -528,11 +528,10 @@ export default function OrderDialogEdit(props) {
                 type="button"
                 variant="soft"
                 color="danger"
-                onClick={(e) => handleDelete(e)}
-                startDecorator={<DeleteForeverRoundedIcon />}
+                onClick={(e) => setOpen(false)}
                 sx={{ flex: 1 }}
               >
-                Delete
+                Cancel
               </Button>
             </Box>
 

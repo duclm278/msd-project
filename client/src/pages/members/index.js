@@ -1,26 +1,25 @@
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
-import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 // Icons
 import Add from "@mui/icons-material/Add";
 
 // Custom
+import { Input, Stack } from "@mui/joy";
 import { useContext, useEffect, useState } from "react";
+import customerApi from "../../api/customerApi";
 import Header from "../../components/Header";
 import Layout from "../../components/Layout";
+import Loading from "../../components/Loading";
 import SelectFilter from "../../components/SelectFilter";
 import SideBar from "../../components/SideBar";
 import SideDrawer, { SideDrawerContext } from "../../components/SideDrawer";
+import status from "../../constants/status";
+import { useDebounce } from "../../hooks";
 import MemberDialogAdd from "./MemberDialogAdd";
 import TableView from "./TableView";
-import status from "../../constants/status";
-import Loading from "../../components/Loading";
-import customerApi from "../../api/customerApi";
-import { Input, Stack } from "@mui/joy";
-import { useDebounce } from "../../hooks";
 
 export const filterOpts = ["Bronze", "Silver", "Gold", "Platinum", "Diamond"];
 
