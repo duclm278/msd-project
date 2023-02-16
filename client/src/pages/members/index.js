@@ -1,5 +1,6 @@
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
+import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
@@ -79,6 +80,7 @@ export default function Members() {
           <Box
             sx={{
               pt: 1,
+              pb: 0.5,
               bgcolor: "background.surface",
               position: "sticky",
               top: 64, // TODO: Fix hard code
@@ -96,66 +98,56 @@ export default function Members() {
                 Members
               </Typography>
             </Box>
-            <Box
-              sx={{
-                my: 2,
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                gap: 1,
-                justifyContent: "space-between",
-              }}
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              justifyContent="space-between"
+              sx={{ my: 2, gap: 2 }}
             >
-              <Stack
-                direction={{ xs: "column", md: "row" }}
-                justifyContent="space-between"
-                sx={{ my: 2, gap: 2 }}
-              >
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
-                  <Input
-                    name="search"
-                    placeholder="Search"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value.trimStart())}
-                    startDecorator={<SearchRoundedIcon />}
-                    sx={{ width: { md: 300 } }}
-                  />
-                  <SelectFilter
-                    filterOpt={currentOpt}
-                    setFilterOpt={setCurrentOpt}
-                    filterOpts={filterOpts}
-                  />
-                </Stack>
-                <Stack direction="row" spacing={{ xs: 1.5, sm: 2, md: 2 }}>
-                  <Button
-                    startDecorator={<Add />}
-                    onClick={() => setOpenAdd(true)}
-                  >
-                    Add member
-                  </Button>
-                </Stack>
-                <MemberDialogAdd
-                  open={openAdd}
-                  setOpen={setOpenAdd}
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+                <Input
+                  name="search"
+                  placeholder="Search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value.trimStart())}
+                  startDecorator={<SearchRoundedIcon />}
+                  sx={{ width: { md: 165 } }}
+                />
+                <SelectFilter
+                  filterOpt={currentOpt}
+                  setFilterOpt={setCurrentOpt}
+                  filterOpts={filterOpts}
+                />
+              </Stack>
+              <Stack direction="row" spacing={{ xs: 1.5, sm: 2, md: 2 }}>
+                <Button
+                  startDecorator={<Add />}
+                  onClick={() => setOpenAdd(true)}
+                >
+                  Add member
+                </Button>
+              </Stack>
+              <MemberDialogAdd
+                open={openAdd}
+                setOpen={setOpenAdd}
+                setLoading={setLoading}
+                fetchData={fetchData}
+              />
+            </Stack>
+          </Box>
+          {loading && <Loading />}
+          {!loading && (
+            <>
+              {data.length === 0 ? (
+                "No customer!"
+              ) : (
+                <TableView
+                  data={data}
                   setLoading={setLoading}
                   fetchData={fetchData}
                 />
-              </Stack>
-            </Box>
-            {loading && <Loading />}
-            {!loading && (
-              <>
-                {data.length === 0 ? (
-                  "No customer!"
-                ) : (
-                  <TableView
-                    data={data}
-                    setLoading={setLoading}
-                    fetchData={fetchData}
-                  />
-                )}
-              </>
-            )}
-          </Box>
+              )}
+            </>
+          )}
         </Layout.Main>
       </Layout.Root>
     </>
