@@ -222,8 +222,8 @@ exports.getOrderById = async (id) => {
     };
 };
 
-exports.getListOrder = async (search) => {
-    const orders = await Order.search(search);
+exports.getListOrder = async (search, date) => {
+    const orders = await Order.search(search, date);
 
     if (orders.length < 1)
         return {

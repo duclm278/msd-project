@@ -19,6 +19,7 @@ import useDebounce from "../../hooks/useDebounce";
 import orderApi from "../../api/orderApi";
 import status from "../../constants/status";
 import Loading from "../../components/Loading";
+import { Stack } from "@mui/joy";
 
 export default function Orders() {
     const { drawerOpen } = useContext(SideDrawerContext);
@@ -97,16 +98,18 @@ export default function Orders() {
                                 justifyContent: "space-between",
                             }}
                         >
-                            <Input
-                                name="search"
-                                placeholder="Search"
-                                value={search}
-                                onChange={(e) =>
-                                    setSearch(e.target.value.trimStart())
-                                }
-                                startDecorator={<SearchRoundedIcon />}
-                                sx={{ width: { md: 300 } }}
-                            />
+                            <Stack direction={"row"} spacing={2}>
+                                <Input
+                                    name="search"
+                                    placeholder="Search"
+                                    value={search}
+                                    onChange={(e) =>
+                                        setSearch(e.target.value.trimStart())
+                                    }
+                                    startDecorator={<SearchRoundedIcon />}
+                                    sx={{ width: { md: 300 } }}
+                                />
+                            </Stack>
                             <Button
                                 startDecorator={<Add />}
                                 onClick={() => setOpenAdd(true)}
